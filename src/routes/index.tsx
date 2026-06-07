@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ShoppingBag, ChevronDown, ChevronLeft, ChevronRight, Compass } from 'lucide-react'
+import { ShoppingBag, ChevronDown, Compass } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 
@@ -10,13 +10,11 @@ export const Route = createFileRoute('/')({
 function Home() {
   const [isScrolled, setIsScrolled] = useState(false)
 
-  // 3D Carousel State & Configuration
-  const [active3dIndex, setActive3dIndex] = useState(0)
-  const [carouselRotation, setCarouselRotation] = useState(0)
-  const [radius, setRadius] = useState(300)
-  const [isHovered3d, setIsHovered3d] = useState(false)
+  // 3D Workshop Tabletop State & Configuration
+  const [activeWorkshopIndex, setActiveWorkshopIndex] = useState(0)
+  const [tilt, setTilt] = useState({ x: 52, y: -10 })
 
-  const carouselItems = [
+  const workshopItems = [
     {
       id: 'jewellery',
       title: 'Handmade Jewellery',
@@ -42,14 +40,6 @@ function Home() {
       anchor: 'arts-crafts'
     },
     {
-      id: 'gifts',
-      title: 'Bespoke Return Gifts',
-      category: 'HANDMADE MEMORIES',
-      desc: 'Curated, handcrafted keepsakes that turn your milestones into lifetime memories for your guests.',
-      img: 'https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&q=80&w=600',
-      anchor: 'services'
-    },
-    {
       id: 'painting',
       title: 'Face Painting & Body Art',
       category: 'CELEBRATION ART',
@@ -59,56 +49,25 @@ function Home() {
     }
   ]
 
-  useEffect(() => {
-    const updateRadius = () => {
-      if (window.innerWidth < 640) {
-        setRadius(150)
-      } else if (window.innerWidth < 1024) {
-        setRadius(220)
-      } else {
-        setRadius(320)
-      }
-    }
-    updateRadius()
-    window.addEventListener('resize', updateRadius)
-    return () => window.removeEventListener('resize', updateRadius)
-  }, [])
-
-  const rotateCarousel = (direction: number) => {
-    const nextIdx = (active3dIndex + direction + 5) % 5
-    setActive3dIndex(nextIdx)
-    setCarouselRotation(prev => prev - (direction * 72))
+  const handleMouseMoveDesk = (e: React.MouseEvent) => {
+    if (window.innerWidth < 768) return
+    const { clientX, clientY } = e
+    const width = window.innerWidth
+    const height = window.innerHeight
+    
+    // Normalize mouse position between -0.5 and 0.5
+    const normX = (clientX / width) - 0.5
+    const normY = (clientY / height) - 0.5
+    
+    // Apply slight modifications to 3D X & Z rotation vectors
+    setTilt({
+      x: 52 + (normY * 12),
+      y: -10 + (normX * 14)
+    })
   }
 
-  const jumpToCard = (idx: number) => {
-    let diff = idx - active3dIndex
-    if (diff > 2) diff -= 5
-    if (diff < -2) diff += 5
-    setActive3dIndex(idx)
-    setCarouselRotation(prev => prev - (diff * 72))
-  }
-
-  useEffect(() => {
-    if (isHovered3d) return
-    const interval = setInterval(() => {
-      rotateCarousel(1)
-    }, 5500)
-    return () => clearInterval(interval)
-  }, [isHovered3d, active3dIndex])
-
-  // Drag/Touch gesture capturing for 3D Carousel
-  const [touchStart3d, setTouchStart3d] = useState(0)
-  const handleTouchStart3d = (e: React.TouchEvent) => {
-    setTouchStart3d(e.targetTouches[0].clientX)
-  }
-  const handleTouchEnd3d = (e: React.TouchEvent) => {
-    const touchEnd = e.changedTouches[0].clientX
-    const diff = touchStart3d - touchEnd
-    if (diff > 40) {
-      rotateCarousel(1)
-    } else if (diff < -40) {
-      rotateCarousel(-1)
-    }
+  const handleMouseLeaveDesk = () => {
+    setTilt({ x: 52, y: -10 })
   }
 
   // Initialize scroll listener for sticky header background transition
@@ -345,14 +304,14 @@ function Home() {
         </div>
       </header>
 
-      {/* Hero Section - The Artisan's Infinite 3D Carousel */}
+      {/* Hero Section - The Artisan's 3D Interactive Workshop Tabletop */}
       <section 
         className="relative min-h-screen w-full flex flex-col justify-between items-center text-center px-4 overflow-hidden pt-24 md:pt-28 pb-10"
         style={{
           background: 'radial-gradient(ellipse 72% 68% at 50% 52%, #1C6038 0%, #134A2A 28%, #0C3220 55%, #071A10 80%, #040C07 100%)'
         }}
-        onMouseEnter={() => setIsHovered3d(true)}
-        onMouseLeave={() => setIsHovered3d(false)}
+        onMouseMove={handleMouseMoveDesk}
+        onMouseLeave={handleMouseLeaveDesk}
       >
         {/* Layered vignette overlay */}
         <div 
@@ -377,9 +336,9 @@ function Home() {
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
             zIndex: 0,
-            opacity: 0.45,
+            opacity: 0.35,
             mixBlendMode: 'multiply',
-            filter: 'sepia(1) hue-rotate(2deg) saturate(1.4) brightness(0.50) contrast(1.15)',
+            filter: 'sepia(1) hue-rotate(2deg) saturate(1.4) brightness(0.45) contrast(1.15)',
             WebkitMaskImage: 'radial-gradient(ellipse 90% 85% at 50% 55%, black 30%, black 55%, transparent 80%)',
             maskImage: 'radial-gradient(ellipse 90% 85% at 50% 55%, black 30%, black 55%, transparent 80%)'
           }}
@@ -387,11 +346,11 @@ function Home() {
 
         {/* Brand Header & Title */}
         <div className="relative z-10 flex flex-col items-center justify-center max-w-4xl px-4 select-none">
-          {/* Logo SVG (Compact size for vertical spacing) */}
-          <div className="mb-2 flex items-center justify-center">
+          {/* Logo SVG */}
+          <div className="mb-1.5 flex items-center justify-center">
             <svg 
               viewBox="0 0 100 80" 
-              className="w-16 h-14 md:w-20 md:h-18 shiny-logo-hover" 
+              className="w-14 h-12 md:w-16 md:h-14 shiny-logo-hover" 
               fill="none" 
               stroke="currentColor" 
               strokeWidth="2.0" 
@@ -414,9 +373,9 @@ function Home() {
           </div>
 
           <h1 
-            className="font-serif text-[clamp(1.6rem,4.8vw,3.2rem)] leading-none text-[#D4A843] uppercase select-none font-bold tracking-[0.25em] md:tracking-[0.35em] pl-[0.25em] md:pl-[0.35em] mb-1.5"
+            className="font-serif text-[clamp(1.5rem,4.5vw,2.8rem)] leading-none text-[#D4A843] uppercase select-none font-bold tracking-[0.25em] md:tracking-[0.35em] pl-[0.25em] md:pl-[0.35em] mb-1"
             style={{
-              textShadow: '0 0 40px rgba(190, 145, 50, 0.25), 0 2px 8px rgba(0, 0, 0, 0.5)'
+              textShadow: '0 0 30px rgba(190, 145, 50, 0.2), 0 2px 6px rgba(0, 0, 0, 0.5)'
             }}
           >
             {"CRAFT NEST".split("").map((letter, index) => (
@@ -430,119 +389,152 @@ function Home() {
             ))}
           </h1>
           
-          <div className="w-[180px] h-[1px] bg-gradient-to-r from-transparent via-[#EDD06A] to-transparent mb-2" />
+          <div className="w-[150px] h-[1px] bg-gradient-to-r from-transparent via-[#EDD06A] to-transparent mb-1" />
           
-          <p className="font-sans text-[10px] md:text-xs text-[#C4A050] uppercase tracking-[0.28em] font-medium pl-[0.28em]">
-            EXQUISITE HANDICRAFTS & CELEBRATION SERVICES
+          <p className="font-sans text-[8px] md:text-[10px] text-[#C4A050] uppercase tracking-[0.3em] font-semibold pl-[0.3em]">
+            Interactive Artisan Workspace
           </p>
         </div>
 
-        {/* 3D Carousel Cylinder Stage */}
-        <div 
-          className="relative w-full max-w-lg h-[260px] md:h-[340px] flex items-center justify-center z-10"
-          onTouchStart={handleTouchStart3d}
-          onTouchEnd={handleTouchEnd3d}
-        >
-          {/* Main 3D Perspective Scene Wrapper */}
-          <div className="carousel-3d-scene w-[220px] h-[220px] md:w-[280px] md:h-[280px] relative">
+        {/* 3D Tabletop Stage */}
+        <div className="relative w-full max-w-4xl flex justify-center items-center z-10 py-6 workshop-scene">
+          <div 
+            className="workshop-desk w-full max-w-[340px] md:max-w-[760px] h-[360px] md:h-[380px] relative rounded-[28px] border-4 border-[#3e2b1e] bg-gradient-to-br from-[#2a1c12] via-[#1c120b] to-[#0f0a06] overflow-hidden p-6"
+            style={{
+              transform: `rotateX(${tilt.x}deg) rotateZ(${tilt.y}deg) scale(0.95)`,
+              boxShadow: '0 40px 100px rgba(0, 0, 0, 0.75), inset 0 0 50px rgba(0, 0, 0, 0.9)'
+            }}
+          >
+            {/* Wooden Grain Overlay lines */}
+            <div className="absolute inset-0 opacity-10 pointer-events-none bg-[repeating-linear-gradient(0deg,transparent,transparent_4px,rgba(0,0,0,0.4)_4px,rgba(0,0,0,0.4)_8px)]" />
+
+            {/* Interactive Items inside the desk */}
+            
+            {/* 1. Handmade Jewellery Area (Top Left) */}
             <div 
-              className="carousel-3d-track relative w-full h-full"
-              style={{
-                transform: `rotateY(${carouselRotation}deg) rotateX(-8deg)`
-              }}
+              onClick={() => setActiveWorkshopIndex(0)}
+              className={`absolute top-[8%] left-[6%] md:top-[12%] md:left-[10%] w-[120px] md:w-[150px] text-center cursor-pointer group desk-item-container ${
+                activeWorkshopIndex === 0 ? 'scale-105 filter-none' : 'opacity-70 filter grayscale-[30%] hover:opacity-100 hover:grayscale-0'
+              }`}
+              style={{ transform: 'translateZ(20px)' }}
             >
-              {carouselItems.map((item, idx) => {
-                const isActive = idx === active3dIndex
-                const rotateYAngle = idx * 72
-                
-                return (
-                  <div
-                    key={item.id}
-                    onClick={() => jumpToCard(idx)}
-                    className={`carousel-3d-card w-[150px] h-[200px] md:w-[200px] md:h-[270px] cursor-pointer rounded-[20px] bg-[#071F14]/90 border border-[#C9A84C]/35 overflow-hidden flex flex-col justify-between p-3 select-none ${
-                      isActive ? 'active' : 'inactive'
-                    }`}
-                    style={{
-                      transform: `rotateY(${rotateYAngle}deg) translateZ(${radius}px)`,
-                      transformOrigin: '50% 50%'
-                    }}
-                  >
-                    {/* Visual Preview */}
-                    <div className="relative w-full h-[62%] rounded-[12px] overflow-hidden bg-black/40 border border-[#C9A84C]/15">
-                      <img 
-                        src={item.img} 
-                        alt={item.title} 
-                        className="w-full h-full object-cover select-none pointer-events-none"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#071F14]/90 via-transparent to-transparent" />
-                    </div>
-
-                    {/* Meta info inside Card */}
-                    <div className="text-left mt-2 flex-grow flex flex-col justify-center">
-                      <span className="text-[7px] md:text-[8px] font-sans font-extrabold tracking-widest text-[#C9A84C] block uppercase mb-0.5">
-                        {item.category}
-                      </span>
-                      <h4 className="font-serif text-[11px] md:text-[14px] text-white font-medium tracking-wide leading-tight">
-                        {item.title}
-                      </h4>
-                    </div>
-
-                    {/* Small Glow Indicator at bottom */}
-                    {isActive && (
-                      <div className="w-12 h-[2px] bg-[#E8C96B] mx-auto rounded-full mt-1.5 shadow-[0_0_8px_#E8C96B]" />
-                    )}
-                  </div>
-                )
-              })}
+              <span className="text-[7px] md:text-[9px] font-sans font-bold text-[#E8C96B] tracking-widest block uppercase mb-2">Jewellery Box</span>
+              <div className="jewellery-box-3d relative w-20 h-16 md:w-28 md:h-20 mx-auto bg-[#521313] border-2 border-[#C9A84C]/50 rounded-[12px] shadow-lg flex items-center justify-center">
+                {/* Rotating Lid */}
+                <div className="jewellery-lid-3d absolute inset-x-0 -top-1 h-3 bg-[#6e1e1e] border-b border-[#C9A84C]/60 rounded-t-[12px] z-10 flex items-center justify-center shadow-inner">
+                  <div className="w-4 h-1 bg-[#E8C96B] rounded-full" />
+                </div>
+                {/* Inside base */}
+                <div className="absolute inset-2 bg-[#2d0505] rounded-[8px] flex items-center justify-center">
+                  <span className="text-[18px] md:text-[24px] filter drop-shadow-[0_0_8px_#E8C96B] animate-pulse">💎</span>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Left/Right Navigation Chevron Knobs */}
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-between px-2 md:-px-8 z-20 pointer-events-none">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                rotateCarousel(-1);
-              }}
-              className="p-2 md:p-3 rounded-full border border-[#C9A84C]/30 bg-[#04140E]/80 text-[#C9A84C] hover:text-[#E8C96B] hover:border-[#E8C96B] transition-all pointer-events-auto cursor-pointer"
-              aria-label="Previous service"
+            {/* 2. Pooja & Event Rentals Area (Top Right) */}
+            <div 
+              onClick={() => setActiveWorkshopIndex(1)}
+              className={`absolute top-[8%] right-[6%] md:top-[10%] md:right-[10%] w-[120px] md:w-[160px] text-center cursor-pointer group desk-item-container ${
+                activeWorkshopIndex === 1 ? 'scale-105 filter-none' : 'opacity-70 filter grayscale-[30%] hover:opacity-100 hover:grayscale-0'
+              }`}
+              style={{ transform: 'translateZ(18px)' }}
             >
-              <ChevronLeft className="w-4 h-4 md:w-5 h-5" />
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                rotateCarousel(1);
-              }}
-              className="p-2 md:p-3 rounded-full border border-[#C9A84C]/30 bg-[#04140E]/80 text-[#C9A84C] hover:text-[#E8C96B] hover:border-[#E8C96B] transition-all pointer-events-auto cursor-pointer"
-              aria-label="Next service"
+              <span className="text-[7px] md:text-[9px] font-sans font-bold text-[#E8C96B] tracking-widest block uppercase mb-2">Pooja Urli Bowl</span>
+              <div className="relative w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full bg-gradient-to-br from-[#d4af37] via-[#aa820a] to-[#735503] p-1.5 border border-[#E8C96B]/50 shadow-lg flex items-center justify-center overflow-hidden">
+                {/* Water surface */}
+                <div className="absolute inset-1 rounded-full bg-[#1b4353]/80 backdrop-blur-xs flex items-center justify-center overflow-hidden">
+                  {/* Floating marigolds */}
+                  <div className="absolute top-[20%] left-[25%] text-[10px] md:text-[14px] flower-floating">🌸</div>
+                  <div className="absolute bottom-[22%] right-[20%] text-[10px] md:text-[14px] flower-floating" style={{ animationDelay: '2s' }}>🌺</div>
+                  <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 text-[12px] md:text-[16px] flower-floating" style={{ animationDelay: '1s' }}>🌼</div>
+
+                  {/* Water Ripples */}
+                  <div className="absolute inset-0 rounded-full border border-white/20 pointer-events-none ripple-ring" />
+                  <div className="absolute inset-0 rounded-full border border-white/20 pointer-events-none ripple-ring-delayed" />
+                </div>
+              </div>
+            </div>
+
+            {/* 3. Arts & Crafts Area (Bottom Left) */}
+            <div 
+              onClick={() => setActiveWorkshopIndex(2)}
+              className={`absolute bottom-[8%] left-[6%] md:bottom-[10%] md:left-[12%] w-[120px] md:w-[160px] text-center cursor-pointer group desk-item-container ${
+                activeWorkshopIndex === 2 ? 'scale-105 filter-none' : 'opacity-70 filter grayscale-[30%] hover:opacity-100 hover:grayscale-0'
+              }`}
+              style={{ transform: 'translateZ(25px)' }}
             >
-              <ChevronRight className="w-4 h-4 md:w-5 h-5" />
-            </button>
+              <span className="text-[7px] md:text-[9px] font-sans font-bold text-[#E8C96B] tracking-widest block uppercase mb-2">Mandala Clay Plate</span>
+              <div className="relative w-20 h-20 md:w-24 md:h-24 mx-auto">
+                {/* Mandala Lippan Plate */}
+                <div 
+                  className="w-full h-full rounded-full bg-cover shadow-lg border border-[#C9A84C]/40 relative flex items-center justify-center"
+                  style={{ backgroundImage: `url('https://res.cloudinary.com/diancfp03/image/upload/v1780162699/home_sa22ka.png')` }}
+                >
+                  <div className="absolute inset-0 bg-[#0B3D2E]/20 rounded-full mix-blend-overlay" />
+                  {/* Mirrors */}
+                  <div className="absolute w-2 h-2 bg-white/70 border border-black/10 rotate-45 top-[15%] left-[45%]" />
+                  <div className="absolute w-2 h-2 bg-white/70 border border-black/10 rotate-45 bottom-[15%] left-[45%]" />
+                  <div className="absolute w-2 h-2 bg-white/70 border border-black/10 rotate-45 top-[45%] left-[15%]" />
+                  <div className="absolute w-2 h-2 bg-white/70 border border-black/10 rotate-45 top-[45%] right-[15%]" />
+                </div>
+                {/* Floating paint brush */}
+                <div className="absolute -right-3 -top-2 w-14 h-14 md:w-16 md:h-16 pointer-events-none brush-anim-hover">
+                  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-md text-[#E8C96B]" fill="currentColor">
+                    <rect x="42" y="30" width="8" height="60" rx="3" transform="rotate(35 46 60)" />
+                    <path d="M 68 18 L 74 24 L 78 30 L 68 34 Z" fill="#fff" />
+                    <path d="M 78 30 L 85 24 L 88 15 L 75 18 Z" fill="#0B3D2E" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* 4. Face Painting & Body Art Area (Bottom Right) */}
+            <div 
+              onClick={() => setActiveWorkshopIndex(3)}
+              className={`absolute bottom-[8%] right-[6%] md:bottom-[8%] md:right-[12%] w-[120px] md:w-[160px] text-center cursor-pointer group desk-item-container ${
+                activeWorkshopIndex === 3 ? 'scale-105 filter-none' : 'opacity-70 filter grayscale-[30%] hover:opacity-100 hover:grayscale-0'
+              }`}
+              style={{ transform: 'translateZ(22px)' }}
+            >
+              <span className="text-[7px] md:text-[9px] font-sans font-bold text-[#E8C96B] tracking-widest block uppercase mb-2">Artist Palette</span>
+              <div className="relative w-20 h-16 md:w-26 md:h-20 mx-auto bg-amber-100/90 border border-[#C9A84C]/50 rounded-[16px] shadow-lg flex items-center justify-around p-2">
+                {/* Color spots */}
+                <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-[#c92a2a] shadow-inner" />
+                <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-[#2b8a3e] shadow-inner" />
+                <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-[#1864ab] shadow-inner" />
+                <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-[#e67e22] shadow-inner" />
+                {/* Henna Cone outline overlay */}
+                <div className="absolute -bottom-2 -left-2 w-8 h-12 md:w-10 md:h-14 rotate-[65deg]">
+                  <div className="w-full h-full bg-gradient-to-t from-[#2a3c24] to-[#405c38] rounded-t-[5px] rounded-b-[40px] shadow-md border border-[#E8C96B]/30 flex items-center justify-center">
+                    <span className="text-[6px] md:text-[8px] text-[#E8C96B] font-mono select-none">HENNA</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        {/* Detailed Description panel of Focused service */}
+        {/* Detailed Description Panel of the Selected Craft Item */}
         <div className="relative z-10 w-full max-w-xl px-4 select-none">
-          <div className="bg-[#051A10]/80 border border-[#C9A84C]/30 rounded-[20px] p-5 md:p-6 backdrop-blur-md shadow-2xl relative gold-glow">
-            {/* Compass / Category Pin */}
+          <div className="bg-[#051A10]/85 border border-[#C9A84C]/35 rounded-[20px] p-5 md:p-6 backdrop-blur-md shadow-2xl relative gold-glow">
             <div className="flex items-center justify-center gap-2 mb-2 text-[#C9A84C]">
               <Compass className="w-3.5 h-3.5 stroke-[1.8] animate-spin-slow" />
               <span className="text-[8px] md:text-[9px] font-sans font-bold tracking-[0.3em] uppercase">
-                {carouselItems[active3dIndex].category}
+                {workshopItems[activeWorkshopIndex].category}
               </span>
             </div>
 
             <h3 className="font-serif text-lg md:text-2xl text-white font-medium mb-2 leading-tight">
-              {carouselItems[active3dIndex].title}
+              {workshopItems[activeWorkshopIndex].title}
             </h3>
 
             <p className="font-sans text-[11px] md:text-xs text-[rgba(250,246,235,0.75)] leading-relaxed mb-4 max-w-md mx-auto">
-              {carouselItems[active3dIndex].desc}
+              {workshopItems[activeWorkshopIndex].desc}
             </p>
 
             <a
-              href={`#${carouselItems[active3dIndex].anchor}`}
+              href={`#${workshopItems[activeWorkshopIndex].anchor}`}
               className="inline-flex items-center gap-1.5 font-sans font-bold text-[9px] md:text-[10px] tracking-[0.2em] border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0B3D2E] rounded-full px-5 py-2.5 transition-all duration-300 uppercase cursor-pointer"
             >
               <span>EXPLORE THIS ART</span>
