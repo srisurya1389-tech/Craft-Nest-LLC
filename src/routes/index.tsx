@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ShoppingBag, ChevronDown } from 'lucide-react'
+import { ShoppingBag, ChevronDown, ChevronLeft, ChevronRight, Compass } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 
@@ -9,6 +9,107 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   const [isScrolled, setIsScrolled] = useState(false)
+
+  // 3D Carousel State & Configuration
+  const [active3dIndex, setActive3dIndex] = useState(0)
+  const [carouselRotation, setCarouselRotation] = useState(0)
+  const [radius, setRadius] = useState(300)
+  const [isHovered3d, setIsHovered3d] = useState(false)
+
+  const carouselItems = [
+    {
+      id: 'jewellery',
+      title: 'Handmade Jewellery',
+      category: 'ACCENTED BEAUTY',
+      desc: 'Elegant, masterfully crafted organic and stone accessories designed to turn heads.',
+      img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=600',
+      anchor: 'services'
+    },
+    {
+      id: 'rentals',
+      title: 'Pooja & Event Rentals',
+      category: 'DIVINE CELEBRATIONS',
+      desc: 'Vibrant classical event decorations, brass Samai lamps, and backdrop rentals for your home events.',
+      img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=600',
+      anchor: 'pooja-rentals'
+    },
+    {
+      id: 'crafts',
+      title: 'Arts & Crafts',
+      category: 'LIPPAN & MANDALA ART',
+      desc: 'Sacred concentric circular designs and traditional mud-mirror plaques reflecting divine symmetry.',
+      img: 'https://res.cloudinary.com/diancfp03/image/upload/v1780162699/home_sa22ka.png',
+      anchor: 'arts-crafts'
+    },
+    {
+      id: 'gifts',
+      title: 'Bespoke Return Gifts',
+      category: 'HANDMADE MEMORIES',
+      desc: 'Curated, handcrafted keepsakes that turn your milestones into lifetime memories for your guests.',
+      img: 'https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&q=80&w=600',
+      anchor: 'services'
+    },
+    {
+      id: 'painting',
+      title: 'Face Painting & Body Art',
+      category: 'CELEBRATION ART',
+      desc: 'Safe, premium skin-friendly pigment brushstrokes and henna/bridal Mehandi work for all occasions.',
+      img: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=600',
+      anchor: 'services'
+    }
+  ]
+
+  useEffect(() => {
+    const updateRadius = () => {
+      if (window.innerWidth < 640) {
+        setRadius(150)
+      } else if (window.innerWidth < 1024) {
+        setRadius(220)
+      } else {
+        setRadius(320)
+      }
+    }
+    updateRadius()
+    window.addEventListener('resize', updateRadius)
+    return () => window.removeEventListener('resize', updateRadius)
+  }, [])
+
+  const rotateCarousel = (direction: number) => {
+    const nextIdx = (active3dIndex + direction + 5) % 5
+    setActive3dIndex(nextIdx)
+    setCarouselRotation(prev => prev - (direction * 72))
+  }
+
+  const jumpToCard = (idx: number) => {
+    let diff = idx - active3dIndex
+    if (diff > 2) diff -= 5
+    if (diff < -2) diff += 5
+    setActive3dIndex(idx)
+    setCarouselRotation(prev => prev - (diff * 72))
+  }
+
+  useEffect(() => {
+    if (isHovered3d) return
+    const interval = setInterval(() => {
+      rotateCarousel(1)
+    }, 5500)
+    return () => clearInterval(interval)
+  }, [isHovered3d, active3dIndex])
+
+  // Drag/Touch gesture capturing for 3D Carousel
+  const [touchStart3d, setTouchStart3d] = useState(0)
+  const handleTouchStart3d = (e: React.TouchEvent) => {
+    setTouchStart3d(e.targetTouches[0].clientX)
+  }
+  const handleTouchEnd3d = (e: React.TouchEvent) => {
+    const touchEnd = e.changedTouches[0].clientX
+    const diff = touchStart3d - touchEnd
+    if (diff > 40) {
+      rotateCarousel(1)
+    } else if (diff < -40) {
+      rotateCarousel(-1)
+    }
+  }
 
   // Initialize scroll listener for sticky header background transition
   useEffect(() => {
@@ -244,14 +345,16 @@ function Home() {
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section - The Artisan's Infinite 3D Carousel */}
       <section 
-        className="relative min-h-screen w-full flex flex-col justify-between items-center text-center px-4 overflow-hidden pt-0"
+        className="relative min-h-screen w-full flex flex-col justify-between items-center text-center px-4 overflow-hidden pt-24 md:pt-28 pb-10"
         style={{
           background: 'radial-gradient(ellipse 72% 68% at 50% 52%, #1C6038 0%, #134A2A 28%, #0C3220 55%, #071A10 80%, #040C07 100%)'
         }}
+        onMouseEnter={() => setIsHovered3d(true)}
+        onMouseLeave={() => setIsHovered3d(false)}
       >
-        {/* Layered vignette overlay (NO warm colors) */}
+        {/* Layered vignette overlay */}
         <div 
           className="absolute inset-0 pointer-events-none z-[1]" 
           style={{
@@ -259,7 +362,7 @@ function Home() {
           }}
         />
 
-        {/* Embossed gold-brown mandala overlay (FULL SIZE, edge-to-edge) */}
+        {/* Embossed gold-brown mandala overlay */}
         <div 
           className="absolute pointer-events-none"
           style={{
@@ -274,66 +377,46 @@ function Home() {
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
             zIndex: 0,
-            opacity: 0.60,
+            opacity: 0.45,
             mixBlendMode: 'multiply',
-            filter: 'sepia(1) hue-rotate(2deg) saturate(1.4) brightness(0.55) contrast(1.15)',
+            filter: 'sepia(1) hue-rotate(2deg) saturate(1.4) brightness(0.50) contrast(1.15)',
             WebkitMaskImage: 'radial-gradient(ellipse 90% 85% at 50% 55%, black 30%, black 55%, transparent 80%)',
             maskImage: 'radial-gradient(ellipse 90% 85% at 50% 55%, black 30%, black 55%, transparent 80%)'
           }}
         />
 
-        {/* Dummy spacer */}
-        <div className="pt-24" />
-
-        {/* Centered Hero Content */}
-        <div 
-          className="relative flex flex-col items-center justify-center max-w-4xl px-4 py-8 reveal-element revealed"
-          style={{
-            position: 'relative',
-            zIndex: 2
-          }}
-        >
-          {/* Custom Hand-Drawn Paint Palette & Brush SVG Logo (Increased Size & Ultra-Detaled Line-Art Outline) */}
-          <div className="mb-6 flex flex-col items-center justify-center group select-none">
+        {/* Brand Header & Title */}
+        <div className="relative z-10 flex flex-col items-center justify-center max-w-4xl px-4 select-none">
+          {/* Logo SVG (Compact size for vertical spacing) */}
+          <div className="mb-2 flex items-center justify-center">
             <svg 
               viewBox="0 0 100 80" 
-              className="w-36 h-30 md:w-48 md:h-40 shiny-logo-hover" 
+              className="w-16 h-14 md:w-20 md:h-18 shiny-logo-hover" 
               fill="none" 
               stroke="currentColor" 
               strokeWidth="2.0" 
               strokeLinecap="round" 
               strokeLinejoin="round"
             >
-              {/* Paint Palette Outer Shape - Perfectly Matching Kidney Shape */}
               <path d="M 52 35 C 55 18, 38 12, 24 16 C 10 20, 8 38, 12 50 C 16 62, 30 70, 42 66 C 46 64, 48 58, 45 54 C 42 50, 48 44, 52 35 Z" strokeWidth="2.5" />
-              
-              {/* Large Thumb Hole (Perfect open circle shifted inward) */}
-              <circle cx="37" cy="51" r="5.5" strokeWidth="2.0" fill="none" />
-              
-              {/* 7 Uniform Paint Wells (Hollow circles shifted inward to prevent protrusion) */}
-              <circle cx="23" cy="49" r="3.2" strokeWidth="2.0" fill="none" />
-              <circle cx="20" cy="40" r="3.2" strokeWidth="2.0" fill="none" />
-              <circle cx="22" cy="31" r="3.2" strokeWidth="2.0" fill="none" />
-              <circle cx="28" cy="23" r="3.2" strokeWidth="2.0" fill="none" />
-              <circle cx="36" cy="23" r="3.2" strokeWidth="2.0" fill="none" />
-              <circle cx="43" cy="27" r="3.2" strokeWidth="2.0" fill="none" />
-              <circle cx="46" cy="35" r="3.2" strokeWidth="2.0" fill="none" />
-              
-              {/* Precision Aligned Paintbrush */}
-              {/* Hollow Handle (Rounded Pill shape) */}
-              <rect x="57.5" y="32" width="3.0" height="40" rx="1.5" strokeWidth="2.0" fill="none" />
-              {/* Tapered Ferrule / Collar Shape (Narrow top/bottom, wider middle) */}
-              <path d="M 57.5 32 L 56.5 29 L 57.5 24 H 60.5 L 61.5 29 L 60.5 32 Z" strokeWidth="2.0" fill="none" />
-              {/* Bristles Outer Outline (Leaf/Flame shape pointing up) */}
-              <path d="M 57.5 24 C 54.5 19, 54.5 13, 59 7 C 62.5 11, 62.5 19, 60.5 24 Z" strokeWidth="2.0" fill="none" />
+              <circle cx="37" cy="51" r="5.5" strokeWidth="2.0" />
+              <circle cx="23" cy="49" r="3.2" strokeWidth="2.0" />
+              <circle cx="20" cy="40" r="3.2" strokeWidth="2.0" />
+              <circle cx="22" cy="31" r="3.2" strokeWidth="2.0" />
+              <circle cx="28" cy="23" r="3.2" strokeWidth="2.0" />
+              <circle cx="36" cy="23" r="3.2" strokeWidth="2.0" />
+              <circle cx="43" cy="27" r="3.2" strokeWidth="2.0" />
+              <circle cx="46" cy="35" r="3.2" strokeWidth="2.0" />
+              <rect x="57.5" y="32" width="3.0" height="40" rx="1.5" strokeWidth="2.0" />
+              <path d="M 57.5 32 L 56.5 29 L 57.5 24 H 60.5 L 61.5 29 L 60.5 32 Z" strokeWidth="2.0" />
+              <path d="M 57.5 24 C 54.5 19, 54.5 13, 59 7 C 62.5 11, 62.5 19, 60.5 24 Z" strokeWidth="2.0" />
             </svg>
           </div>
 
-          {/* Heading with text-shadow glow */}
           <h1 
-            className="font-serif text-[clamp(2.0rem,6.8vw,4.8rem)] leading-none text-[#D4A843] uppercase select-none font-bold tracking-[0.25em] md:tracking-[0.38em] pl-[0.25em] md:pl-[0.38em]"
+            className="font-serif text-[clamp(1.6rem,4.8vw,3.2rem)] leading-none text-[#D4A843] uppercase select-none font-bold tracking-[0.25em] md:tracking-[0.35em] pl-[0.25em] md:pl-[0.35em] mb-1.5"
             style={{
-              textShadow: '0 0 60px rgba(190, 145, 50, 0.3), 0 0 20px rgba(190, 145, 50, 0.15), 0 3px 12px rgba(0, 0, 0, 0.6)'
+              textShadow: '0 0 40px rgba(190, 145, 50, 0.25), 0 2px 8px rgba(0, 0, 0, 0.5)'
             }}
           >
             {"CRAFT NEST".split("").map((letter, index) => (
@@ -346,62 +429,136 @@ function Home() {
               )
             ))}
           </h1>
-
-          {/* Decorative Horizontal Divider */}
-          <div 
-            className="mx-auto block"
-            style={{
-              width: '280px',
-              height: '1px',
-              background: 'linear-gradient(90deg, transparent 0%, rgba(237, 208, 106, 0.2) 15%, #EDD06A 50%, rgba(237, 208, 106, 0.2) 85%, transparent 100%)',
-              margin: '12px auto 20px'
-            }}
-          />
-
-          {/* Tagline */}
-          <p className="font-serif italic text-xl md:text-3xl text-[#C4A050] tracking-wide mb-10 flex flex-wrap items-center justify-center gap-x-3">
-            {"Handmade with Love".split(" ").map((word, index) => (
-              <span key={index} className="shiny-word">
-                {word}
-              </span>
-            ))}
+          
+          <div className="w-[180px] h-[1px] bg-gradient-to-r from-transparent via-[#EDD06A] to-transparent mb-2" />
+          
+          <p className="font-sans text-[10px] md:text-xs text-[#C4A050] uppercase tracking-[0.28em] font-medium pl-[0.28em]">
+            EXQUISITE HANDICRAFTS & CELEBRATION SERVICES
           </p>
+        </div>
 
-          {/* Explore Button */}
-          <a 
-            href="#services"
-            className="font-sans font-semibold transition-all duration-300 uppercase cursor-pointer"
-            style={{
-              border: '1.5px solid rgba(201, 168, 76, 0.75)',
-              color: '#D4AA56',
-              background: 'transparent',
-              letterSpacing: '0.2em',
-              padding: '14px 40px',
-              fontSize: '12px'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(201, 168, 76, 0.12)';
-              e.currentTarget.style.borderColor = '#E8C96B';
-              e.currentTarget.style.color = '#F0D070';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent';
-              e.currentTarget.style.borderColor = 'rgba(201, 168, 76, 0.75)';
-              e.currentTarget.style.color = '#D4AA56';
-            }}
-          >
-            EXPLORE OUR ART
-          </a>
+        {/* 3D Carousel Cylinder Stage */}
+        <div 
+          className="relative w-full max-w-lg h-[260px] md:h-[340px] flex items-center justify-center z-10"
+          onTouchStart={handleTouchStart3d}
+          onTouchEnd={handleTouchEnd3d}
+        >
+          {/* Main 3D Perspective Scene Wrapper */}
+          <div className="carousel-3d-scene w-[220px] h-[220px] md:w-[280px] md:h-[280px] relative">
+            <div 
+              className="carousel-3d-track relative w-full h-full"
+              style={{
+                transform: `rotateY(${carouselRotation}deg) rotateX(-8deg)`
+              }}
+            >
+              {carouselItems.map((item, idx) => {
+                const isActive = idx === active3dIndex
+                const rotateYAngle = idx * 72
+                
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => jumpToCard(idx)}
+                    className={`carousel-3d-card w-[150px] h-[200px] md:w-[200px] md:h-[270px] cursor-pointer rounded-[20px] bg-[#071F14]/90 border border-[#C9A84C]/35 overflow-hidden flex flex-col justify-between p-3 select-none ${
+                      isActive ? 'active' : 'inactive'
+                    }`}
+                    style={{
+                      transform: `rotateY(${rotateYAngle}deg) translateZ(${radius}px)`,
+                      transformOrigin: '50% 50%'
+                    }}
+                  >
+                    {/* Visual Preview */}
+                    <div className="relative w-full h-[62%] rounded-[12px] overflow-hidden bg-black/40 border border-[#C9A84C]/15">
+                      <img 
+                        src={item.img} 
+                        alt={item.title} 
+                        className="w-full h-full object-cover select-none pointer-events-none"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#071F14]/90 via-transparent to-transparent" />
+                    </div>
+
+                    {/* Meta info inside Card */}
+                    <div className="text-left mt-2 flex-grow flex flex-col justify-center">
+                      <span className="text-[7px] md:text-[8px] font-sans font-extrabold tracking-widest text-[#C9A84C] block uppercase mb-0.5">
+                        {item.category}
+                      </span>
+                      <h4 className="font-serif text-[11px] md:text-[14px] text-white font-medium tracking-wide leading-tight">
+                        {item.title}
+                      </h4>
+                    </div>
+
+                    {/* Small Glow Indicator at bottom */}
+                    {isActive && (
+                      <div className="w-12 h-[2px] bg-[#E8C96B] mx-auto rounded-full mt-1.5 shadow-[0_0_8px_#E8C96B]" />
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Left/Right Navigation Chevron Knobs */}
+          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-between px-2 md:-px-8 z-20 pointer-events-none">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                rotateCarousel(-1);
+              }}
+              className="p-2 md:p-3 rounded-full border border-[#C9A84C]/30 bg-[#04140E]/80 text-[#C9A84C] hover:text-[#E8C96B] hover:border-[#E8C96B] transition-all pointer-events-auto cursor-pointer"
+              aria-label="Previous service"
+            >
+              <ChevronLeft className="w-4 h-4 md:w-5 h-5" />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                rotateCarousel(1);
+              }}
+              className="p-2 md:p-3 rounded-full border border-[#C9A84C]/30 bg-[#04140E]/80 text-[#C9A84C] hover:text-[#E8C96B] hover:border-[#E8C96B] transition-all pointer-events-auto cursor-pointer"
+              aria-label="Next service"
+            >
+              <ChevronRight className="w-4 h-4 md:w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Detailed Description panel of Focused service */}
+        <div className="relative z-10 w-full max-w-xl px-4 select-none">
+          <div className="bg-[#051A10]/80 border border-[#C9A84C]/30 rounded-[20px] p-5 md:p-6 backdrop-blur-md shadow-2xl relative gold-glow">
+            {/* Compass / Category Pin */}
+            <div className="flex items-center justify-center gap-2 mb-2 text-[#C9A84C]">
+              <Compass className="w-3.5 h-3.5 stroke-[1.8] animate-spin-slow" />
+              <span className="text-[8px] md:text-[9px] font-sans font-bold tracking-[0.3em] uppercase">
+                {carouselItems[active3dIndex].category}
+              </span>
+            </div>
+
+            <h3 className="font-serif text-lg md:text-2xl text-white font-medium mb-2 leading-tight">
+              {carouselItems[active3dIndex].title}
+            </h3>
+
+            <p className="font-sans text-[11px] md:text-xs text-[rgba(250,246,235,0.75)] leading-relaxed mb-4 max-w-md mx-auto">
+              {carouselItems[active3dIndex].desc}
+            </p>
+
+            <a
+              href={`#${carouselItems[active3dIndex].anchor}`}
+              className="inline-flex items-center gap-1.5 font-sans font-bold text-[9px] md:text-[10px] tracking-[0.2em] border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0B3D2E] rounded-full px-5 py-2.5 transition-all duration-300 uppercase cursor-pointer"
+            >
+              <span>EXPLORE THIS ART</span>
+              <span>→</span>
+            </a>
+          </div>
         </div>
 
         {/* Bouncing Chevron down scroll indicator */}
-        <div className="relative z-10 pb-10">
+        <div className="relative z-10 pt-4 pb-2">
           <a 
             href="#services" 
             aria-label="Scroll Down"
             className="text-[#C9A84C] hover:text-[#E8C96B] animate-bounce transition-colors inline-block"
           >
-            <ChevronDown className="w-7 h-7 stroke-[1.5]" />
+            <ChevronDown className="w-6 h-6 stroke-[1.5]" />
           </a>
         </div>
       </section>
