@@ -9,7 +9,8 @@
     "dev": "vite dev --port 3000",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "copy-border": "node -e \"const fs = require('fs'); fs.copyFileSync('C:/Users/haris/.gemini/antigravity/brain/d7b4f05f-2f5a-4bc3-aff8-94537e325eb4/media__1781450721245.png', 'C:/Users/haris/Desktop/OJAS/CRAFTNEST/CN/public/services_border.png')\""
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Mr+De+Haviland&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Mr+De+Haviland&display=swap');
 
 @import "tailwindcss";
 
@@ -6,6 +6,7 @@
   --font-serif: "Playfair Display", "Cormorant Garamond", serif;
   --font-sans: "DM Sans", "Inter", sans-serif;
   --font-cursive: "Alex Brush", "Mr De Haviland", cursive;
+  --font-cinzel: "Cinzel Decorative", "Playfair Display", serif;
   
   --color-primary-bg: #0B3D2E;
   --color-secondary-bg: #0F5C42;
@@ -67,6 +68,31 @@ body {
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+/* Panel enter and modal animations */
+@keyframes panelEnter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-panel-enter {
+  animation: panelEnter 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.animate-scale-in {
+  animation: scaleIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Custom fade-in and micro-animations */
@@ -172,99 +198,277 @@ body {
   text-shadow: 0 0 15px rgba(255, 231, 154, 0.8), 0 0 5px rgba(255, 231, 154, 0.4) !important;
 }
 
-/* --- 3D Artisan Workshop Tabletop Styles --- */
-.workshop-scene {
-  perspective: 1400px;
-  perspective-origin: 50% 30%;
-  transform-style: preserve-3d;
+/* Vintage Moving Film Strip Styles */
+.hero-film-reels-container {
+  position: absolute;
+  top: -55%;
+  bottom: -55%;
+  left: -40%;
+  right: -40%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-end; /* Align reels to the right side */
+  padding-right: 3%; /* Keeps top-right and bottom-right corners filled on mobile */
+  gap: 1.25rem;
+  transform: rotate(-26deg);
+  opacity: 0.55; /* Higher base opacity on mobile for clear visibility */
+  transition: all 0.5s ease;
 }
 
-.workshop-desk {
-  transform-style: preserve-3d;
-  transition: transform 0.3s cubic-bezier(0.1, 0.8, 0.2, 1);
-  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.65);
-}
-
-.desk-item-container {
-  transform-style: preserve-3d;
-  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.5s ease;
-}
-
-/* 3D Jewellery Box Specifics */
-.jewellery-box-3d {
-  transform-style: preserve-3d;
-  perspective: 800px;
-}
-
-.jewellery-lid-3d {
-  transform-origin: top;
-  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.group:hover .jewellery-lid-3d {
-  transform: rotateX(-105deg);
-}
-
-/* Floating paint brush animation */
-@keyframes brushDraw {
-  0%, 100% {
-    transform: translate3d(0, 0, 10px) rotateZ(0deg) rotateX(0deg);
-  }
-  50% {
-    transform: translate3d(-10px, -15px, 28px) rotateZ(-12deg) rotateX(15deg);
+@media (min-width: 768px) {
+  .hero-film-reels-container {
+    right: -10%;
+    padding-right: 8%; /* Perfect offset: shifts reels left without exposing top-right corner gaps on desktop */
+    opacity: 0.85; /* Extremely intense, clear, and easily visible on desktop */
   }
 }
 
-.brush-anim-hover {
-  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+/* Base film strip columns - responsive widths */
+.film-strip-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 200px; /* Increased photo size on mobile */
+  flex-shrink: 0;
+  position: relative;
 }
 
-.group:hover .brush-anim-hover {
-  animation: brushDraw 3.2s ease-in-out infinite;
+@media (min-width: 768px) {
+  .film-strip-column {
+    width: 280px; /* Increased photo size on desktop */
+  }
 }
 
-/* Water Ripple Animation for Urli Bowl */
-@keyframes waterRipple {
+.film-strip-track-up {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  animation: film-scroll-up 42s linear infinite;
+}
+
+.film-strip-track-up-slow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  animation: film-scroll-up 52s linear infinite; /* Scrolling up, but slower */
+}
+
+.film-strip-track-up-alt {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  animation: film-scroll-up 36s linear infinite; /* Scrolling up, slightly faster */
+}
+
+/* Sprocket holes using vintage borders */
+.vintage-film-frame {
+  position: relative;
+  background: #111111;
+  padding: 0.8rem 0.6rem; /* Decreased padding to maximize image area */
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+}
+
+/* Draw left sprocket holes */
+.vintage-film-frame::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 2px;
+  width: 4px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 3px,
+    #05140a 3px,
+    #05140a 8px
+  );
+  background-size: 100% 11px;
+}
+
+/* Draw right sprocket holes */
+.vintage-film-frame::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 2px;
+  width: 4px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 3px,
+    #05140a 3px,
+    #05140a 8px
+  );
+  background-size: 100% 11px;
+}
+
+.vintage-film-image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 2px;
+  filter: none; /* Removed filters: 100% clear, bright and easily visible */
+  border: 1px solid #000000;
+  display: block;
+}
+
+
+
+/* Infinite loop animations */
+@keyframes film-scroll-up {
   0% {
-    transform: scale(0.85);
-    opacity: 0.6;
+    transform: translate3d(0, 0, 0);
   }
   100% {
-    transform: scale(1.35);
+    transform: translate3d(0, -50%, 0);
+  }
+}
+
+@keyframes film-scroll-down {
+  0% {
+    transform: translate3d(0, -50%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Rotating Mandala Background Style */
+.rotating-mandala-bg {
+  animation: rotate-mandala 200s linear infinite;
+  transform-origin: center center;
+}
+
+@keyframes rotate-mandala {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Gold Star Mouse Trail Particles */
+.gold-star-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  animation: drift-and-fade 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes drift-and-fade {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--x-drift), var(--y-drift), 0) scale(0) rotate(var(--rot-drift));
     opacity: 0;
   }
 }
 
-.ripple-ring {
-  animation: waterRipple 2.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+/* Responsive Site Header */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  transition: all 0.4s ease;
 }
 
-.ripple-ring-delayed {
-  animation: waterRipple 2.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
-  animation-delay: 1.1s;
-}
-
-/* Floating Flower Petals animation */
-@keyframes flowerFloat {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+@media (min-width: 768px) {
+  .site-header {
+    padding-left: 4rem;
+    padding-right: 4rem;
   }
-  50% {
-    transform: translateY(-4px) rotate(6deg);
+}
+
+/* Scroll state 0 (Top) */
+.site-header-top {
+  background: rgba(4, 20, 10, 0.96); /* Fully visible dark green background on mobile/phone */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  height: 68px; /* Lower height on mobile for space */
+  border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+}
+
+@media (min-width: 768px) {
+  .site-header-top {
+    background: rgba(4, 20, 10, 0.88); /* Translucent on desktop */
+    height: 92px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
 }
 
-.flower-floating {
-  animation: flowerFloat 4s ease-in-out infinite;
+/* Scrolled state */
+.site-header-scrolled {
+  background: rgba(4, 20, 10, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  height: 56px;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.25);
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
-/* Mobile Fallback: Grid items stack nicely without preserve-3d glitches on tiny screens */
+/* Responsive Mandala Overlay in Hero */
+.hero-mandala-overlay {
+  position: absolute;
+  pointer-events: none;
+  width: 110vw;
+  height: 110vh;
+  max-width: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 0;
+  mix-blend-mode: multiply;
+  
+  /* Mobile default: Green color theme, low intensity */
+  opacity: 0.28;
+  filter: sepia(1) hue-rotate(90deg) saturate(1.8) brightness(0.35) contrast(1.1);
+  
+  /* Mask */
+  -webkit-mask-image: radial-gradient(ellipse 90% 85% at 50% 55%, black 30%, black 55%, transparent 80%);
+  mask-image: radial-gradient(ellipse 90% 85% at 50% 55%, black 30%, black 55%, transparent 80%);
+  
+  transition: all 0.5s ease;
+}
+
+@media (min-width: 768px) {
+  .hero-mandala-overlay {
+    /* PC/Laptop: Gold-brown theme, normal intensity */
+    opacity: 0.60;
+    filter: sepia(1) hue-rotate(2deg) saturate(1.4) brightness(0.55) contrast(1.15);
+  }
+}
+
+/* Premium Gold Corner Border Frame for Services Section */
+.services-border-frame {
+  border: 45px solid transparent;
+  border-image: url('/services_border.png') 180 fill stretch;
+}
+
 @media (max-width: 768px) {
-  .workshop-scene {
-    perspective: none;
-  }
-  .workshop-desk {
-    transform: none !important;
+  .services-border-frame {
+    border: 20px solid transparent;
+    border-image: url('/services_border.png') 180 fill stretch;
   }
 }
 

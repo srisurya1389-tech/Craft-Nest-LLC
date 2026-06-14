@@ -1,73 +1,75 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ShoppingBag, ChevronDown, Compass } from 'lucide-react'
+import { ShoppingBag, ChevronDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useScrollReveal } from '../hooks/useScrollReveal'
+import { useCart } from '../context/CartContext'
 
 export const Route = createFileRoute('/')({
   component: Home,
 })
 
+const heroReelImages = [
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.05.47_AM_6_zqnnzf.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.08.40_AM_1_apkkry.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_yjrp0j.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-11_at_9.19.32_AM_2_noq9ou.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_3_lerit5.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289145/WhatsApp_Image_2026-06-11_at_9.05.47_AM_gkzub9.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_11_eomsmr.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289145/WhatsApp_Image_2026-06-11_at_9.05.47_AM_3_iax90h.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-11_at_9.19.32_AM_1_goilu2.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.05.47_AM_5_io41wh.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_2_bc00k5.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_7_easj0i.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289144/WhatsApp_Image_2026-06-11_at_9.05.47_AM_2_cermbl.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.08.40_AM_2_pfm5vm.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_3_lerit5.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289149/WhatsApp_Image_2026-06-11_at_9.05.47_AM_4_h8ktwz.jpg",
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.08.40_AM_2_pfm5vm.jpg"
+];
+
+// Distinct permutations for columns to ensure they don't show the same image horizontally aligned
+const reel1Images = [
+  heroReelImages[0], heroReelImages[1], heroReelImages[2], heroReelImages[3],
+  heroReelImages[4], heroReelImages[5], heroReelImages[6], heroReelImages[7],
+  heroReelImages[8], heroReelImages[9], heroReelImages[10], heroReelImages[11],
+  heroReelImages[12], heroReelImages[13], heroReelImages[14], heroReelImages[15],
+  heroReelImages[16]
+];
+
+const reel2Images = [
+  heroReelImages[6], heroReelImages[11], heroReelImages[15], heroReelImages[0],
+  heroReelImages[8], heroReelImages[12], heroReelImages[1], heroReelImages[9],
+  heroReelImages[3], heroReelImages[13], heroReelImages[5], heroReelImages[2],
+  heroReelImages[10], heroReelImages[4], heroReelImages[7], heroReelImages[16],
+  heroReelImages[14]
+];
+
+const reel3Images = [
+  heroReelImages[12], heroReelImages[3], heroReelImages[7], heroReelImages[10],
+  heroReelImages[1], heroReelImages[14], heroReelImages[9], heroReelImages[5],
+  heroReelImages[15], heroReelImages[2], heroReelImages[13], heroReelImages[6],
+  heroReelImages[0], heroReelImages[11], heroReelImages[8], heroReelImages[4],
+  heroReelImages[16]
+];
+
+
 function Home() {
   const [isScrolled, setIsScrolled] = useState(false)
 
-  // 3D Workshop Tabletop State & Configuration
-  const [activeWorkshopIndex, setActiveWorkshopIndex] = useState(0)
-  const [tilt, setTilt] = useState({ x: 52, y: -10 })
+  // Selected items state for interactive booking catalog
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
 
-  const workshopItems = [
-    {
-      id: 'jewellery',
-      title: 'Handmade Jewellery',
-      category: 'ACCENTED BEAUTY',
-      desc: 'Elegant, masterfully crafted organic and stone accessories designed to turn heads.',
-      img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=600',
-      anchor: 'services'
-    },
-    {
-      id: 'rentals',
-      title: 'Pooja & Event Rentals',
-      category: 'DIVINE CELEBRATIONS',
-      desc: 'Vibrant classical event decorations, brass Samai lamps, and backdrop rentals for your home events.',
-      img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=600',
-      anchor: 'pooja-rentals'
-    },
-    {
-      id: 'crafts',
-      title: 'Arts & Crafts',
-      category: 'LIPPAN & MANDALA ART',
-      desc: 'Sacred concentric circular designs and traditional mud-mirror plaques reflecting divine symmetry.',
-      img: 'https://res.cloudinary.com/diancfp03/image/upload/v1780162699/home_sa22ka.png',
-      anchor: 'arts-crafts'
-    },
-    {
-      id: 'painting',
-      title: 'Face Painting & Body Art',
-      category: 'CELEBRATION ART',
-      desc: 'Safe, premium skin-friendly pigment brushstrokes and henna/bridal Mehandi work for all occasions.',
-      img: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=600',
-      anchor: 'services'
-    }
-  ]
-
-  const handleMouseMoveDesk = (e: React.MouseEvent) => {
-    if (window.innerWidth < 768) return
-    const { clientX, clientY } = e
-    const width = window.innerWidth
-    const height = window.innerHeight
-    
-    // Normalize mouse position between -0.5 and 0.5
-    const normX = (clientX / width) - 0.5
-    const normY = (clientY / height) - 0.5
-    
-    // Apply slight modifications to 3D X & Z rotation vectors
-    setTilt({
-      x: 52 + (normY * 12),
-      y: -10 + (normX * 14)
-    })
+  const toggleItemSelection = (itemName: string) => {
+    setSelectedItems(prev => 
+      prev.includes(itemName)
+        ? prev.filter(item => item !== itemName)
+        : [...prev, itemName]
+    )
   }
 
-  const handleMouseLeaveDesk = () => {
-    setTilt({ x: 52, y: -10 })
+  const clearSelection = () => {
+    setSelectedItems([])
   }
 
   // Initialize scroll listener for sticky header background transition
@@ -90,39 +92,16 @@ function Home() {
   const [slideIndices, setSlideIndices] = useState([0, 0, 0])
   // Modal state for product showcase
   const [activeModal, setActiveModal] = useState<string | null>(null)
-  // Our Arts & Crafts manual slideshow index
-  const [currentCraftIndex, setCurrentCraftIndex] = useState(0)
   // Pooja & Event Rentals manual slideshow index
-  const [currentPoojaIndex, setCurrentPoojaIndex] = useState(0)
+  // Active tab index for Our Services tabs section
+  const [activeServiceTab, setActiveServiceTab] = useState(0)
+  // Active craft index for Arts & Crafts masonry modal
+  const [activeCraftModal, setActiveCraftModal] = useState<number | null>(null)
+  // Cursor position for the 3D storytelling section (normalized -0.5 to 0.5)
+  const [storyMouse, setStoryMouse] = useState({ x: 0, y: 0 })
 
-  // Shopping Cart State
-  const [isCartOpen, setIsCartOpen] = useState(false)
-  const [cartItems, setCartItems] = useState<{ title: string; price: number; quantity: number; img?: string }[]>([])
-
-  const addToCart = (product: { title: string; price: number; img?: string }) => {
-    setCartItems(prev => {
-      const existing = prev.find(item => item.title === product.title);
-      if (existing) {
-        return prev.map(item => item.title === product.title ? { ...item, quantity: item.quantity + 1 } : item);
-      }
-      return [...prev, { ...product, quantity: 1 }];
-    });
-    setIsCartOpen(true);
-  };
-
-  const updateQuantity = (title: string, amount: number) => {
-    setCartItems(prev => prev.map(item => {
-      if (item.title === title) {
-        const newQty = item.quantity + amount;
-        return newQty > 0 ? { ...item, quantity: newQty } : item;
-      }
-      return item;
-    }).filter(item => item.quantity > 0));
-  };
-
-  const removeFromCart = (title: string) => {
-    setCartItems(prev => prev.filter(item => item.title !== title));
-  };
+  // Global Shopping Cart State
+  const { cartItems, setIsCartOpen, addToCart } = useCart()
 
   // Slideshow auto-timer
   useEffect(() => {
@@ -166,61 +145,98 @@ function Home() {
     card.style.transition = 'transform 0.5s ease-out';
   };
 
-  // Touch Swipe Navigation for Mobile/Tablets
-  const [touchStartX, setTouchStartX] = useState(0);
-  const [touchEndX, setTouchEndX] = useState(0);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEndX(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = (onSwipeLeft: () => void, onSwipeRight: () => void) => {
-    if (!touchStartX || !touchEndX) return;
-    const distance = touchStartX - touchEndX;
-    if (distance > 50) {
-      onSwipeLeft();
-    } else if (distance < -50) {
-      onSwipeRight();
-    }
-    setTouchStartX(0);
-    setTouchEndX(0);
-  };
 
   if (typeof window !== 'undefined') {
     (window as any).addToCart = addToCart;
   }
+
+  const servicesPanels = [
+    {
+      id: 'jewellery', num: '01', name: 'Handmade Jewellery',
+      tagline: 'Worn with pride, crafted with soul',
+      desc: 'Elegant, masterfully crafted organic and stone accessories designed to turn heads at every occasion — from intimate celebrations to grand events.',
+      features: ['Fully custom designs to order', 'Organic & semi-precious stones', 'Available in bulk for weddings & events'],
+      images: [
+        'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=900',
+      ],
+    },
+    {
+      id: 'gifts', num: '02', name: 'Return Gifts',
+      tagline: 'Memories wrapped in craftsmanship',
+      desc: 'Curated, handcrafted keepsakes that turn your celebrations into lifetime memories. Each piece is designed with intention — a lasting token of gratitude for every guest.',
+      features: ['Fully personalised per theme', 'Minimum 10 pieces per order', 'Gift-wrapped & ready to give'],
+      images: [
+        'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&q=80&w=900',
+      ],
+    },
+    {
+      id: 'painting', num: '03', name: 'Face Painting',
+      tagline: 'Art that wears the crowd',
+      desc: 'Whimsical, safe, and event-ready designs for every age and festive occasion — bringing joy and vibrant colour to every face at your celebration.',
+      features: ['Suitable for all age groups', 'Only certified skin-safe colours', 'Book for parties, schools & festivals'],
+      images: [
+        'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=900',
+      ],
+    },
+  ]
+
+  const craftItems = [
+    {
+      title: 'Lippan Art', tag: 'LIPPAN ART',
+      img: 'https://images.unsplash.com/photo-1561715276-a2d087060f1d?auto=format&fit=crop&q=80&w=900',
+      desc: 'Traditional clay and mirror work showcasing intricate patterns and radial geometry. Each piece is handcrafted to reflect light beautifully, bringing an ancient art form into contemporary spaces.',
+      spanClass: 'col-span-1 sm:col-span-2 md:col-span-2',
+      heightClass: 'h-60 sm:h-72 md:h-80',
+    },
+    {
+      title: 'Mandala Art', tag: 'MANDALA ART',
+      img: 'https://res.cloudinary.com/diancfp03/image/upload/v1780162699/home_sa22ka.png',
+      desc: 'Sacred concentric circular designs capturing cosmic symmetry, masterfully drafted using authentic artisan colours and precise geometric techniques passed down through generations.',
+      spanClass: '',
+      heightClass: 'h-60 sm:h-72 md:h-80',
+    },
+    {
+      title: 'Custom Name Plates', tag: 'NAME PLATES',
+      img: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=900',
+      desc: 'Bespoke hand-carved name plaques designed to represent family identity through stunning hand-painted wooden contours and personalised lettering for every home.',
+      spanClass: '',
+      heightClass: 'h-56 sm:h-72 md:h-72',
+    },
+    {
+      title: 'Canvas Painting', tag: 'CANVAS PAINTING',
+      img: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&q=80&w=900',
+      desc: 'Premium traditional paintings on high-quality stretched canvas, capturing cultural scenes, geometric alignments, and original artisan compositions in rich, lasting colour.',
+      spanClass: 'col-span-1 sm:col-span-2 md:col-span-2',
+      heightClass: 'h-56 sm:h-64 md:h-72',
+    },
+    {
+      title: 'Mehandi', tag: 'MEHANDI',
+      img: 'https://images.unsplash.com/photo-1590075865003-e48277faa558?auto=format&fit=crop&q=80&w=900',
+      desc: 'Intricate and traditional bridal-grade henna patterns hand-drawn with organic plant-based pastes — from elegant minimalist designs to elaborate full-hand bridal art.',
+      spanClass: 'col-span-1 md:col-span-2',
+      heightClass: 'h-56 sm:h-64 md:h-72',
+    },
+    {
+      title: 'Wood & Pot Painting', tag: 'WOOD & POT',
+      img: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=900',
+      desc: 'Vibrant acrylic detailing applied on natural clay vessels and high-quality seasoned wood, each hand-painted with traditional motifs that transform everyday objects into art.',
+      spanClass: '',
+      heightClass: 'h-56 sm:h-64 md:h-72',
+    },
+  ]
 
   return (
     <div className="relative min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-[#E8C96B]/30 selection:text-white">
       
       {/* Sticky Header / Navbar */}
       <header 
-        className="fixed top-0 left-0 w-full z-[50] flex items-center justify-between px-6 md:px-16"
-        style={
-          isScrolled 
-            ? {
-                background: 'rgba(4, 20, 10, 0.94)',
-                backdropFilter: 'blur(14px)',
-                WebkitBackdropFilter: 'blur(14px)',
-                height: '56px',
-                transition: 'all 0.4s ease',
-                borderBottom: '1px solid rgba(201, 168, 76, 0.25)',
-                paddingTop: '0px',
-                paddingBottom: '0px'
-              }
-            : {
-                background: 'transparent',
-                height: '92px',
-                transition: 'all 0.4s ease',
-                borderBottom: '1px solid transparent',
-                paddingTop: '16px',
-                paddingBottom: '16px'
-              }
-        }
+        className={`site-header ${isScrolled ? 'site-header-scrolled' : 'site-header-top'}`}
       >
         {/* Brand Logo & Name */}
         <a 
@@ -270,7 +286,6 @@ function Home() {
         <nav className="hidden lg:flex items-center gap-8 text-[#C9A84C] font-sans text-xs tracking-[0.2em] font-semibold">
           <a href="#services" className="hover:text-white transition-colors uppercase">Our Services</a>
           <a href="#arts-crafts" className="hover:text-white transition-colors uppercase">Arts & Crafts</a>
-          <a href="#pooja-rentals" className="hover:text-white transition-colors uppercase">Pooja Rentals</a>
           <a href="#our-story" className="hover:text-white transition-colors uppercase">Our Story</a>
           <a href="#contact" className="hover:text-white transition-colors uppercase">Contact</a>
         </nav>
@@ -304,16 +319,14 @@ function Home() {
         </div>
       </header>
 
-      {/* Hero Section - The Artisan's 3D Interactive Workshop Tabletop */}
+      {/* Hero Section */}
       <section 
-        className="relative min-h-screen w-full flex flex-col justify-between items-center text-center px-4 overflow-hidden pt-24 md:pt-28 pb-10"
+        className="relative min-h-screen w-full flex flex-col justify-between items-center md:items-start text-center px-4 md:px-16 lg:px-24 overflow-hidden pt-0"
         style={{
           background: 'radial-gradient(ellipse 72% 68% at 50% 52%, #1C6038 0%, #134A2A 28%, #0C3220 55%, #071A10 80%, #040C07 100%)'
         }}
-        onMouseMove={handleMouseMoveDesk}
-        onMouseLeave={handleMouseLeaveDesk}
       >
-        {/* Layered vignette overlay */}
+        {/* Layered vignette overlay (NO warm colors) */}
         <div 
           className="absolute inset-0 pointer-events-none z-[1]" 
           style={{
@@ -321,236 +334,202 @@ function Home() {
           }}
         />
 
-        {/* Embossed gold-brown mandala overlay */}
+        {/* Embossed gold-brown mandala overlay (FULL SIZE, edge-to-edge, responsive) */}
         <div 
-          className="absolute pointer-events-none"
+          className="hero-mandala-overlay"
           style={{
-            backgroundImage: `url('https://res.cloudinary.com/diancfp03/image/upload/v1780162699/home_sa22ka.png')`,
-            width: '110vw',
-            height: '110vh',
-            maxWidth: 'none',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-            zIndex: 0,
-            opacity: 0.35,
-            mixBlendMode: 'multiply',
-            filter: 'sepia(1) hue-rotate(2deg) saturate(1.4) brightness(0.45) contrast(1.15)',
-            WebkitMaskImage: 'radial-gradient(ellipse 90% 85% at 50% 55%, black 30%, black 55%, transparent 80%)',
-            maskImage: 'radial-gradient(ellipse 90% 85% at 50% 55%, black 30%, black 55%, transparent 80%)'
+            backgroundImage: `url('https://res.cloudinary.com/diancfp03/image/upload/v1780162699/home_sa22ka.png')`
           }}
         />
 
-        {/* Brand Header & Title */}
-        <div className="relative z-10 flex flex-col items-center justify-center max-w-4xl px-4 select-none">
-          {/* Logo SVG */}
-          <div className="mb-1.5 flex items-center justify-center">
+        {/* Moving Vintage Film Reels (3 parallel diagonal tracks) */}
+        <div className="hero-film-reels-container select-none">
+          {/* Column 1: Scrolling Up */}
+          <div className="film-strip-column">
+            <div className="film-strip-track-up">
+              {[...reel1Images, ...reel1Images].map((src, i) => (
+                <div key={i} className="vintage-film-frame">
+                  <img src={src} alt="CraftNest Gallery Preview" className="vintage-film-image" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Column 2: Scrolling Up Slow */}
+          <div className="film-strip-column">
+            <div className="film-strip-track-up-slow">
+              {[...reel2Images, ...reel2Images].map((src, i) => (
+                <div key={i} className="vintage-film-frame">
+                  <img src={src} alt="CraftNest Gallery Preview" className="vintage-film-image" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Column 3: Scrolling Up Alt */}
+          <div className="film-strip-column">
+            <div className="film-strip-track-up-alt">
+              {[...reel3Images, ...reel3Images].map((src, i) => (
+                <div key={i} className="vintage-film-frame">
+                  <img src={src} alt="CraftNest Gallery Preview" className="vintage-film-image" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Dummy spacer */}
+        <div className="pt-24" />
+
+        {/* Hero Content Aligned to the Left Half (Centered inside the left half) */}
+        <div 
+          className="relative flex flex-col items-center justify-center w-full md:w-[48%] lg:w-[45%] px-4 py-8 reveal-element revealed md:ml-12 lg:ml-20 text-center"
+          style={{
+            position: 'relative',
+            zIndex: 2
+          }}
+        >
+          {/* Custom Hand-Drawn Paint Palette & Brush SVG Logo (Super Sized in Middle-Top of Left Half) */}
+          <div className="mb-8 flex flex-col items-center justify-center group select-none">
             <svg 
               viewBox="0 0 100 80" 
-              className="w-14 h-12 md:w-16 md:h-14 shiny-logo-hover" 
+              className="w-48 h-40 md:w-80 md:h-64 shiny-logo-hover" 
               fill="none" 
               stroke="currentColor" 
-              strokeWidth="2.0" 
+              strokeWidth="1.8" 
               strokeLinecap="round" 
               strokeLinejoin="round"
             >
-              <path d="M 52 35 C 55 18, 38 12, 24 16 C 10 20, 8 38, 12 50 C 16 62, 30 70, 42 66 C 46 64, 48 58, 45 54 C 42 50, 48 44, 52 35 Z" strokeWidth="2.5" />
-              <circle cx="37" cy="51" r="5.5" strokeWidth="2.0" />
-              <circle cx="23" cy="49" r="3.2" strokeWidth="2.0" />
-              <circle cx="20" cy="40" r="3.2" strokeWidth="2.0" />
-              <circle cx="22" cy="31" r="3.2" strokeWidth="2.0" />
-              <circle cx="28" cy="23" r="3.2" strokeWidth="2.0" />
-              <circle cx="36" cy="23" r="3.2" strokeWidth="2.0" />
-              <circle cx="43" cy="27" r="3.2" strokeWidth="2.0" />
-              <circle cx="46" cy="35" r="3.2" strokeWidth="2.0" />
-              <rect x="57.5" y="32" width="3.0" height="40" rx="1.5" strokeWidth="2.0" />
-              <path d="M 57.5 32 L 56.5 29 L 57.5 24 H 60.5 L 61.5 29 L 60.5 32 Z" strokeWidth="2.0" />
-              <path d="M 57.5 24 C 54.5 19, 54.5 13, 59 7 C 62.5 11, 62.5 19, 60.5 24 Z" strokeWidth="2.0" />
+              {/* Paint Palette Outer Shape */}
+              <path d="M 52 35 C 55 18, 38 12, 24 16 C 10 20, 8 38, 12 50 C 16 62, 30 70, 42 66 C 46 64, 48 58, 45 54 C 42 50, 48 44, 52 35 Z" strokeWidth="2.2" />
+              
+              {/* Large Thumb Hole */}
+              <circle cx="37" cy="51" r="5.5" strokeWidth="1.8" fill="none" />
+              
+              {/* 7 Uniform Paint Wells */}
+              <circle cx="23" cy="49" r="3.2" strokeWidth="1.8" fill="none" />
+              <circle cx="20" cy="40" r="3.2" strokeWidth="1.8" fill="none" />
+              <circle cx="22" cy="31" r="3.2" strokeWidth="1.8" fill="none" />
+              <circle cx="28" cy="23" r="3.2" strokeWidth="1.8" fill="none" />
+              <circle cx="36" cy="23" r="3.2" strokeWidth="1.8" fill="none" />
+              <circle cx="43" cy="27" r="3.2" strokeWidth="1.8" fill="none" />
+              <circle cx="46" cy="35" r="3.2" strokeWidth="1.8" fill="none" />
+              
+              {/* Paintbrush */}
+              <rect x="57.5" y="32" width="3.0" height="40" rx="1.5" strokeWidth="1.8" fill="none" />
+              <path d="M 57.5 32 L 56.5 29 L 57.5 24 H 60.5 L 61.5 29 L 60.5 32 Z" strokeWidth="1.8" fill="none" />
+              <path d="M 57.5 24 C 54.5 19, 54.5 13, 59 7 C 62.5 11, 62.5 19, 60.5 24 Z" strokeWidth="1.8" fill="none" />
             </svg>
           </div>
 
+          {/* Heading with text-shadow glow (Uniform professional serif font matching the logo) */}
           <h1 
-            className="font-serif text-[clamp(1.5rem,4.5vw,2.8rem)] leading-none text-[#D4A843] uppercase select-none font-bold tracking-[0.25em] md:tracking-[0.35em] pl-[0.25em] md:pl-[0.35em] mb-1"
+            className="leading-[1.15] text-[#D4A843] uppercase select-none font-serif font-bold tracking-[0.2em] flex flex-wrap items-center justify-center text-[clamp(2rem,6.5vw,5rem)] mb-4 w-full pl-[0.2em]"
             style={{
-              textShadow: '0 0 30px rgba(190, 145, 50, 0.2), 0 2px 6px rgba(0, 0, 0, 0.5)'
+              textShadow: '0 0 60px rgba(190, 145, 50, 0.3), 0 0 20px rgba(190, 145, 50, 0.15), 0 3px 12px rgba(0, 0, 0, 0.6)'
             }}
           >
             {"CRAFT NEST".split("").map((letter, index) => (
               letter === " " ? (
-                <span key={index} className="inline-block w-[0.4em]" />
+                <span key={index} className="inline-block w-[0.35em]" />
               ) : (
-                <span key={index} className="shiny-letter">
+                <span 
+                  key={index} 
+                  className="shiny-letter text-[#FFF0B5]" 
+                  style={{ transitionDelay: `${index * 40}ms` }}
+                >
                   {letter}
                 </span>
               )
             ))}
           </h1>
-          
-          <div className="w-[150px] h-[1px] bg-gradient-to-r from-transparent via-[#EDD06A] to-transparent mb-1" />
-          
-          <p className="font-sans text-[8px] md:text-[10px] text-[#C4A050] uppercase tracking-[0.3em] font-semibold pl-[0.3em]">
-            Interactive Artisan Workspace
-          </p>
-        </div>
 
-        {/* 3D Tabletop Stage */}
-        <div className="relative w-full max-w-4xl flex justify-center items-center z-10 py-6 workshop-scene">
+          {/* Decorative Horizontal Divider (Centered inside left column) */}
           <div 
-            className="workshop-desk w-full max-w-[340px] md:max-w-[760px] h-[360px] md:h-[380px] relative rounded-[28px] border-4 border-[#3e2b1e] bg-gradient-to-br from-[#2a1c12] via-[#1c120b] to-[#0f0a06] overflow-hidden p-6"
+            className="mx-auto block"
             style={{
-              transform: `rotateX(${tilt.x}deg) rotateZ(${tilt.y}deg) scale(0.95)`,
-              boxShadow: '0 40px 100px rgba(0, 0, 0, 0.75), inset 0 0 50px rgba(0, 0, 0, 0.9)'
+              width: '280px',
+              height: '1px',
+              background: 'linear-gradient(90deg, transparent 0%, rgba(237, 208, 106, 0.2) 15%, #EDD06A 50%, rgba(237, 208, 106, 0.2) 85%, transparent 100%)',
+              marginTop: '16px',
+              marginBottom: '24px'
             }}
-          >
-            {/* Wooden Grain Overlay lines */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none bg-[repeating-linear-gradient(0deg,transparent,transparent_4px,rgba(0,0,0,0.4)_4px,rgba(0,0,0,0.4)_8px)]" />
+          />
 
-            {/* Interactive Items inside the desk */}
-            
-            {/* 1. Handmade Jewellery Area (Top Left) */}
-            <div 
-              onClick={() => setActiveWorkshopIndex(0)}
-              className={`absolute top-[8%] left-[6%] md:top-[12%] md:left-[10%] w-[120px] md:w-[150px] text-center cursor-pointer group desk-item-container ${
-                activeWorkshopIndex === 0 ? 'scale-105 filter-none' : 'opacity-70 filter grayscale-[30%] hover:opacity-100 hover:grayscale-0'
-              }`}
-              style={{ transform: 'translateZ(20px)' }}
-            >
-              <span className="text-[7px] md:text-[9px] font-sans font-bold text-[#E8C96B] tracking-widest block uppercase mb-2">Jewellery Box</span>
-              <div className="jewellery-box-3d relative w-20 h-16 md:w-28 md:h-20 mx-auto bg-[#521313] border-2 border-[#C9A84C]/50 rounded-[12px] shadow-lg flex items-center justify-center">
-                {/* Rotating Lid */}
-                <div className="jewellery-lid-3d absolute inset-x-0 -top-1 h-3 bg-[#6e1e1e] border-b border-[#C9A84C]/60 rounded-t-[12px] z-10 flex items-center justify-center shadow-inner">
-                  <div className="w-4 h-1 bg-[#E8C96B] rounded-full" />
-                </div>
-                {/* Inside base */}
-                <div className="absolute inset-2 bg-[#2d0505] rounded-[8px] flex items-center justify-center">
-                  <span className="text-[18px] md:text-[24px] filter drop-shadow-[0_0_8px_#E8C96B] animate-pulse">💎</span>
-                </div>
-              </div>
-            </div>
-
-            {/* 2. Pooja & Event Rentals Area (Top Right) */}
-            <div 
-              onClick={() => setActiveWorkshopIndex(1)}
-              className={`absolute top-[8%] right-[6%] md:top-[10%] md:right-[10%] w-[120px] md:w-[160px] text-center cursor-pointer group desk-item-container ${
-                activeWorkshopIndex === 1 ? 'scale-105 filter-none' : 'opacity-70 filter grayscale-[30%] hover:opacity-100 hover:grayscale-0'
-              }`}
-              style={{ transform: 'translateZ(18px)' }}
-            >
-              <span className="text-[7px] md:text-[9px] font-sans font-bold text-[#E8C96B] tracking-widest block uppercase mb-2">Pooja Urli Bowl</span>
-              <div className="relative w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full bg-gradient-to-br from-[#d4af37] via-[#aa820a] to-[#735503] p-1.5 border border-[#E8C96B]/50 shadow-lg flex items-center justify-center overflow-hidden">
-                {/* Water surface */}
-                <div className="absolute inset-1 rounded-full bg-[#1b4353]/80 backdrop-blur-xs flex items-center justify-center overflow-hidden">
-                  {/* Floating marigolds */}
-                  <div className="absolute top-[20%] left-[25%] text-[10px] md:text-[14px] flower-floating">🌸</div>
-                  <div className="absolute bottom-[22%] right-[20%] text-[10px] md:text-[14px] flower-floating" style={{ animationDelay: '2s' }}>🌺</div>
-                  <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 text-[12px] md:text-[16px] flower-floating" style={{ animationDelay: '1s' }}>🌼</div>
-
-                  {/* Water Ripples */}
-                  <div className="absolute inset-0 rounded-full border border-white/20 pointer-events-none ripple-ring" />
-                  <div className="absolute inset-0 rounded-full border border-white/20 pointer-events-none ripple-ring-delayed" />
-                </div>
-              </div>
-            </div>
-
-            {/* 3. Arts & Crafts Area (Bottom Left) */}
-            <div 
-              onClick={() => setActiveWorkshopIndex(2)}
-              className={`absolute bottom-[8%] left-[6%] md:bottom-[10%] md:left-[12%] w-[120px] md:w-[160px] text-center cursor-pointer group desk-item-container ${
-                activeWorkshopIndex === 2 ? 'scale-105 filter-none' : 'opacity-70 filter grayscale-[30%] hover:opacity-100 hover:grayscale-0'
-              }`}
-              style={{ transform: 'translateZ(25px)' }}
-            >
-              <span className="text-[7px] md:text-[9px] font-sans font-bold text-[#E8C96B] tracking-widest block uppercase mb-2">Mandala Clay Plate</span>
-              <div className="relative w-20 h-20 md:w-24 md:h-24 mx-auto">
-                {/* Mandala Lippan Plate */}
-                <div 
-                  className="w-full h-full rounded-full bg-cover shadow-lg border border-[#C9A84C]/40 relative flex items-center justify-center"
-                  style={{ backgroundImage: `url('https://res.cloudinary.com/diancfp03/image/upload/v1780162699/home_sa22ka.png')` }}
-                >
-                  <div className="absolute inset-0 bg-[#0B3D2E]/20 rounded-full mix-blend-overlay" />
-                  {/* Mirrors */}
-                  <div className="absolute w-2 h-2 bg-white/70 border border-black/10 rotate-45 top-[15%] left-[45%]" />
-                  <div className="absolute w-2 h-2 bg-white/70 border border-black/10 rotate-45 bottom-[15%] left-[45%]" />
-                  <div className="absolute w-2 h-2 bg-white/70 border border-black/10 rotate-45 top-[45%] left-[15%]" />
-                  <div className="absolute w-2 h-2 bg-white/70 border border-black/10 rotate-45 top-[45%] right-[15%]" />
-                </div>
-                {/* Floating paint brush */}
-                <div className="absolute -right-3 -top-2 w-14 h-14 md:w-16 md:h-16 pointer-events-none brush-anim-hover">
-                  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-md text-[#E8C96B]" fill="currentColor">
-                    <rect x="42" y="30" width="8" height="60" rx="3" transform="rotate(35 46 60)" />
-                    <path d="M 68 18 L 74 24 L 78 30 L 68 34 Z" fill="#fff" />
-                    <path d="M 78 30 L 85 24 L 88 15 L 75 18 Z" fill="#0B3D2E" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            {/* 4. Face Painting & Body Art Area (Bottom Right) */}
-            <div 
-              onClick={() => setActiveWorkshopIndex(3)}
-              className={`absolute bottom-[8%] right-[6%] md:bottom-[8%] md:right-[12%] w-[120px] md:w-[160px] text-center cursor-pointer group desk-item-container ${
-                activeWorkshopIndex === 3 ? 'scale-105 filter-none' : 'opacity-70 filter grayscale-[30%] hover:opacity-100 hover:grayscale-0'
-              }`}
-              style={{ transform: 'translateZ(22px)' }}
-            >
-              <span className="text-[7px] md:text-[9px] font-sans font-bold text-[#E8C96B] tracking-widest block uppercase mb-2">Artist Palette</span>
-              <div className="relative w-20 h-16 md:w-26 md:h-20 mx-auto bg-amber-100/90 border border-[#C9A84C]/50 rounded-[16px] shadow-lg flex items-center justify-around p-2">
-                {/* Color spots */}
-                <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-[#c92a2a] shadow-inner" />
-                <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-[#2b8a3e] shadow-inner" />
-                <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-[#1864ab] shadow-inner" />
-                <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-[#e67e22] shadow-inner" />
-                {/* Henna Cone outline overlay */}
-                <div className="absolute -bottom-2 -left-2 w-8 h-12 md:w-10 md:h-14 rotate-[65deg]">
-                  <div className="w-full h-full bg-gradient-to-t from-[#2a3c24] to-[#405c38] rounded-t-[5px] rounded-b-[40px] shadow-md border border-[#E8C96B]/30 flex items-center justify-center">
-                    <span className="text-[6px] md:text-[8px] text-[#E8C96B] font-mono select-none">HENNA</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Detailed Description Panel of the Selected Craft Item */}
-        <div className="relative z-10 w-full max-w-xl px-4 select-none">
-          <div className="bg-[#051A10]/85 border border-[#C9A84C]/35 rounded-[20px] p-5 md:p-6 backdrop-blur-md shadow-2xl relative gold-glow">
-            <div className="flex items-center justify-center gap-2 mb-2 text-[#C9A84C]">
-              <Compass className="w-3.5 h-3.5 stroke-[1.8] animate-spin-slow" />
-              <span className="text-[8px] md:text-[9px] font-sans font-bold tracking-[0.3em] uppercase">
-                {workshopItems[activeWorkshopIndex].category}
+          {/* Tagline */}
+          <p className="font-serif italic text-xl md:text-3xl text-[#C4A050] tracking-wide mb-10 flex flex-wrap items-center justify-center gap-x-3">
+            {"Handmade with Love".split(" ").map((word, index) => (
+              <span key={index} className="shiny-word">
+                {word}
               </span>
-            </div>
+            ))}
+          </p>
 
-            <h3 className="font-serif text-lg md:text-2xl text-white font-medium mb-2 leading-tight">
-              {workshopItems[activeWorkshopIndex].title}
-            </h3>
-
-            <p className="font-sans text-[11px] md:text-xs text-[rgba(250,246,235,0.75)] leading-relaxed mb-4 max-w-md mx-auto">
-              {workshopItems[activeWorkshopIndex].desc}
-            </p>
-
-            <a
-              href={`#${workshopItems[activeWorkshopIndex].anchor}`}
-              className="inline-flex items-center gap-1.5 font-sans font-bold text-[9px] md:text-[10px] tracking-[0.2em] border border-[#C9A84C] text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0B3D2E] rounded-full px-5 py-2.5 transition-all duration-300 uppercase cursor-pointer"
+          {/* Two Side-by-Side CTA Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-4 mt-2">
+            <a 
+              href="#services"
+              className="font-sans font-semibold transition-all duration-300 uppercase cursor-pointer"
+              style={{
+                border: '1.5px solid rgba(201, 168, 76, 0.75)',
+                color: '#D4AA56',
+                background: 'transparent',
+                letterSpacing: '0.2em',
+                padding: '14px 32px',
+                fontSize: '12px',
+                minWidth: '160px',
+                textAlign: 'center'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(201, 168, 76, 0.12)';
+                e.currentTarget.style.borderColor = '#E8C96B';
+                e.currentTarget.style.color = '#F0D070';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.borderColor = 'rgba(201, 168, 76, 0.75)';
+                e.currentTarget.style.color = '#D4AA56';
+              }}
             >
-              <span>EXPLORE THIS ART</span>
-              <span>→</span>
+              TO BUY
+            </a>
+            <a 
+              href="#contact"
+              className="font-sans font-semibold transition-all duration-300 uppercase cursor-pointer"
+              style={{
+                border: '1.5px solid #C9A84C',
+                color: '#04140E',
+                background: '#C9A84C',
+                letterSpacing: '0.2em',
+                padding: '14px 32px',
+                fontSize: '12px',
+                minWidth: '160px',
+                textAlign: 'center'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#E8C96B';
+                e.currentTarget.style.borderColor = '#E8C96B';
+                e.currentTarget.style.color = '#04140E';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#C9A84C';
+                e.currentTarget.style.borderColor = '#C9A84C';
+                e.currentTarget.style.color = '#04140E';
+              }}
+            >
+              BOOK AN EVENT
             </a>
           </div>
         </div>
 
         {/* Bouncing Chevron down scroll indicator */}
-        <div className="relative z-10 pt-4 pb-2">
+        <div className="relative z-10 pb-10">
           <a 
             href="#services" 
             aria-label="Scroll Down"
             className="text-[#C9A84C] hover:text-[#E8C96B] animate-bounce transition-colors inline-block"
           >
-            <ChevronDown className="w-6 h-6 stroke-[1.5]" />
+            <ChevronDown className="w-7 h-7 stroke-[1.5]" />
           </a>
         </div>
       </section>
@@ -682,9 +661,9 @@ function Home() {
 
           {/* Collage Item 3: Crafts & Arts */}
           <div className="relative h-full w-full overflow-hidden group select-none">
-            <img 
-              src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&q=80&w=600" 
-              alt="Sacred Mandala & Lippan Art" 
+            <img
+              src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&q=80&w=600"
+              alt="Sacred Mandala & Lippan Art"
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-500" />
@@ -696,9 +675,9 @@ function Home() {
 
           {/* Collage Item 4: Pooja & Event Rentals */}
           <div className="relative h-full w-full overflow-hidden group select-none">
-            <img 
-              src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=600" 
-              alt="Bespoke Festive Props" 
+            <img
+              src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=600"
+              alt="Bespoke Festive Props"
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-500" />
@@ -728,12 +707,10 @@ function Home() {
       </section>
 
       {/* Our Services & Featured Collections Section */}
-      <section 
-        id="services" 
-        className="relative py-24 px-6 md:px-16 border-b border-[#C9A84C]/25"
-        style={{
-          background: 'linear-gradient(rgba(244, 249, 246, 0.85), rgba(228, 242, 234, 0.88)), url(https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&q=80&w=1200) center/cover no-repeat'
-        }}
+      <section
+        id="services"
+        className="relative py-24 px-6 md:px-16 border-b border-[#C9A84C]/25 services-border-frame"
+        style={{ background: 'radial-gradient(ellipse 100% 120% at 50% 0%, #0F3D28 0%, #071510 55%, #040D08 100%)' }}
       >
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
@@ -741,562 +718,376 @@ function Home() {
             <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.25em] text-[#C9A84C] uppercase mb-3 block">
               FEATURED COLLECTIONS
             </span>
-            <h2 className="font-serif text-3xl md:text-[46px] text-[#0B3D2E] font-medium tracking-wide">
+            <h2 className="font-serif text-3xl md:text-[46px] text-[#E8C96B] font-medium tracking-wide">
               Our Services
             </h2>
-            <div className="w-24 h-[1px] bg-[#C9A84C]/35 mx-auto mt-5" />
+            <div className="w-24 h-[1px] bg-[#C9A84C]/35 mx-auto mt-5 mb-5" />
+            <p className="font-sans text-xs md:text-sm text-white/50 max-w-xl mx-auto leading-relaxed tracking-wide">
+              Bespoke handcrafted experiences tailored for your most memorable celebrations
+            </p>
           </div>
 
-          {/* Slideshow Card Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                id: 'jewellery',
-                name: 'Handmade Jewellery',
-                desc: 'Elegant, masterfully crafted organic and stone accessories designed to turn heads.',
-                images: [
-                  'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=600',
-                  'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=600',
-                  'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=600',
-                ]
-              },
-              {
-                id: 'gifts',
-                name: 'Return Gifts',
-                desc: 'Curated, handcrafted keepsakes that turn celebrations into lifetime memories.',
-                images: [
-                  'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=600',
-                  'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=600',
-                  'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&q=80&w=600',
-                ]
-              },
-              {
-                id: 'painting',
-                name: 'Face Painting',
-                desc: 'Whimsical, safe, and event-ready designs for every age and festive occasion.',
-                images: [
-                  'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=600',
-                  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600',
-                  'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=600',
-                ]
-              }
-            ].map((card, cardIdx) => (
-              <Link 
-                key={card.id}
-                to="/collection/$id"
-                params={{ id: card.id }}
-                onMouseMove={handleMouseMove3D}
-                onMouseLeave={handleMouseLeave3D}
-                className="reveal-element overflow-hidden bg-white/70 backdrop-blur-sm border border-[#C9A84C]/25 rounded-[16px] hover:border-[#E8C96B]/50 hover:bg-white/95 transition-all duration-300 shadow-[0_4px_30px_rgba(4,20,10,0.05)] hover:shadow-[0_10px_30px_rgba(201,168,76,0.1)] cursor-pointer group block"
+          {/* Tab Strip */}
+          <div className="overflow-x-auto scrollbar-none">
+            <div className="flex min-w-max md:min-w-0 border-b border-[#C9A84C]/15">
+              {servicesPanels.map((tab, tabIdx) => {
+                const isActive = activeServiceTab === tabIdx;
+                return (
+                  <button
+                    key={tabIdx}
+                    onClick={() => setActiveServiceTab(tabIdx)}
+                    className="relative flex-1 px-5 md:px-10 lg:px-16 py-4 md:py-5 flex flex-col items-center gap-1 transition-all duration-300 cursor-pointer group"
+                  >
+                    <span
+                      className="text-[9px] font-sans font-bold tracking-[0.2em] transition-all duration-300"
+                      style={{
+                        color: isActive ? '#E8C96B' : 'rgba(255,255,255,0.2)',
+                        textShadow: isActive ? '0 0 12px rgba(232,201,107,0.5)' : 'none',
+                      }}
+                    >
+                      {tab.num}
+                    </span>
+                    <span
+                      className="font-sans text-[10px] md:text-xs tracking-[0.18em] font-bold uppercase transition-all duration-300 whitespace-nowrap"
+                      style={{
+                        color: isActive ? '#FFF0B5' : 'rgba(255,255,255,0.28)',
+                        textShadow: isActive
+                          ? '0 0 22px rgba(255,231,154,0.85), 0 0 8px rgba(232,201,107,0.5)'
+                          : 'none',
+                      }}
+                    >
+                      {tab.name}
+                    </span>
+                    {/* Active underline — glowing gold */}
+                    <div
+                      className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full transition-all duration-400"
+                      style={{
+                        background: isActive ? '#E8C96B' : 'transparent',
+                        boxShadow: isActive ? '0 0 10px rgba(232,201,107,0.7)' : 'none',
+                      }}
+                    />
+                    {/* Hover underline for inactive tabs */}
+                    {!isActive && (
+                      <div className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full bg-[#C9A84C]/0 group-hover:bg-[#C9A84C]/25 transition-all duration-300" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Active Panel — key forces remount so animate-panel-enter plays on tab switch */}
+          {servicesPanels.map((panel, panelIdx) =>
+            activeServiceTab !== panelIdx ? null : (
+              <div
+                key={panelIdx}
+                className="animate-panel-enter flex flex-col lg:flex-row bg-[#071510] border border-[#C9A84C]/15 border-t-0 rounded-b-[24px] overflow-hidden"
+                style={{ minHeight: '520px' }}
               >
-                {/* Slideshow Top Area */}
-                <div className="relative h-64 overflow-hidden w-full rounded-t-[16px] bg-[#04140E]">
-                  {card.images.map((imgUrl, imgIdx) => (
-                    <img 
+                {/* Left: Image Slideshow */}
+                <div className="relative w-full lg:w-[55%] h-64 sm:h-72 lg:h-auto overflow-hidden bg-[#04140E] flex-shrink-0 lg:min-h-[520px]">
+                  {panel.images.map((imgUrl, imgIdx) => (
+                    <img
                       key={imgIdx}
                       src={imgUrl}
-                      alt={`${card.name} slide ${imgIdx + 1}`}
-                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${imgIdx === slideIndices[cardIdx] ? 'opacity-100' : 'opacity-0'}`}
+                      alt={`${panel.name} ${imgIdx + 1}`}
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${imgIdx === slideIndices[panelIdx] ? 'opacity-100' : 'opacity-0'}`}
                     />
                   ))}
-                  
-                  {/* Miniature Indicator Dots */}
-                  <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center gap-1.5 z-10 select-none pointer-events-none">
-                    {card.images.map((_, dotIdx) => (
-                      <div 
-                        key={dotIdx} 
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${dotIdx === slideIndices[cardIdx] ? 'bg-[#E8C96B] scale-125' : 'bg-white/40'}`} 
-                      />
-                    ))}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/40 pointer-events-none hidden lg:block" />
+                  <div className="absolute bottom-5 left-5 z-10 select-none pointer-events-none">
+                    <span className="text-[10px] font-sans font-semibold text-white/40 tracking-[0.15em]">
+                      {String(slideIndices[panelIdx] + 1).padStart(2, '0')} / 03
+                    </span>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/10 z-10">
+                    <div
+                      className="h-full bg-[#E8C96B]/60 transition-all duration-700"
+                      style={{ width: `${((slideIndices[panelIdx] + 1) / 3) * 100}%` }}
+                    />
                   </div>
                 </div>
 
-                {/* Card Bottom Area */}
-                <div className="p-6 text-left">
-                  <h3 className="font-serif text-2xl text-[#0B3D2E] font-medium mb-3 group-hover:text-[#C9A84C] transition-colors">{card.name}</h3>
-                  <p className="text-sm font-sans text-gray-700 leading-relaxed mb-6">{card.desc}</p>
-                  <div className="pt-2">
-                    <span 
-                      className="inline-flex items-center text-[10px] tracking-[0.2em] font-semibold border border-[#C9A84C] text-[#C9A84C] rounded-full px-5 py-2.5 hover:bg-[#C9A84C] hover:text-white transition-all duration-300 uppercase cursor-pointer"
-                    >
-                      <span>SEE MORE</span>
-                      <span className="ml-1.5 font-sans">→</span>
+                {/* Right: Details */}
+                <div className="w-full lg:w-[45%] p-8 md:p-10 lg:p-14 flex flex-col justify-center">
+                  <span className="text-[#C9A84C]/18 font-serif text-6xl md:text-7xl font-bold leading-none select-none mb-2 block">
+                    {panel.num}
+                  </span>
+                  <h3 className="font-serif text-3xl md:text-4xl text-white font-medium leading-tight mb-2">
+                    {panel.name}
+                  </h3>
+                  <p className="font-serif italic text-sm md:text-base text-[#C9A84C]/60 mb-5">
+                    {panel.tagline}
+                  </p>
+                  <div className="w-12 h-[1px] bg-[#C9A84C]/30 mb-6" />
+                  <p className="font-sans text-sm text-white/55 leading-relaxed mb-8">
+                    {panel.desc}
+                  </p>
+                  <div className="space-y-3 mb-10">
+                    {panel.features.map((feature, fIdx) => (
+                      <div key={fIdx} className="flex items-start gap-3">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#E8C96B] mt-[7px] flex-shrink-0" />
+                        <span className="font-sans text-xs md:text-sm text-white/65 leading-relaxed">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <Link
+                    to="/collection/$id"
+                    params={{ id: panel.id }}
+                    className="inline-flex items-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] text-[10px] tracking-[0.2em] font-sans font-bold px-7 py-3.5 rounded-full uppercase transition-all duration-300 shadow-[0_2px_16px_rgba(201,168,76,0.25)] hover:shadow-[0_6px_28px_rgba(201,168,76,0.45)] w-fit"
+                  >
+                    <span>EXPLORE COLLECTION</span>
+                    <span>→</span>
+                  </Link>
+                </div>
+              </div>
+            )
+          )}
+        </div>
+      </section>
+
+      {/* Our Arts & Crafts Section — Bento Masonry Gallery */}
+      <section
+        id="arts-crafts"
+        className="relative py-24 px-6 md:px-16 border-b border-[#C9A84C]/25"
+        style={{ background: 'radial-gradient(ellipse 100% 120% at 50% 0%, #0F3D28 0%, #071510 55%, #040D08 100%)' }}
+      >
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header */}
+          <div className="text-center mb-14 reveal-element">
+            <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.25em] text-[#C9A84C] uppercase mb-3 block">
+              EXPLORE HERITAGE SKILLS
+            </span>
+            <h2 className="font-serif text-3xl md:text-[46px] text-white font-medium tracking-wide">
+              Our Arts & Crafts
+            </h2>
+            <div className="w-24 h-[1px] bg-[#C9A84C]/35 mx-auto mt-5 mb-5" />
+            <p className="font-sans text-xs md:text-sm text-[#E8C96B]/45 max-w-xl mx-auto leading-relaxed">
+              Six traditional art forms — each telling a story of heritage and handcraft mastery. Tap any to explore.
+            </p>
+          </div>
+
+          {/* Bento Masonry Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+            {craftItems.map((craft, idx) => (
+              <div
+                key={idx}
+                onClick={() => setActiveCraftModal(idx)}
+                className={`group relative overflow-hidden rounded-[18px] cursor-pointer select-none ${craft.heightClass} ${craft.spanClass}`}
+              >
+                {/* Image */}
+                <img
+                  src={craft.img}
+                  alt={craft.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                />
+
+                {/* Gradient overlay — lightens on hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent transition-all duration-500 group-hover:from-black/50 group-hover:via-black/5" />
+
+                {/* Gold border ring on hover */}
+                <div className="absolute inset-[1px] rounded-[17px] opacity-0 group-hover:opacity-100 outline outline-[2px] outline-[#E8C96B]/55 transition-all duration-500" />
+
+                {/* Content overlay */}
+                <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-6">
+                  <span className="text-[8px] md:text-[9px] tracking-[0.3em] text-[#E8C96B] font-bold uppercase mb-1.5 block transition-transform duration-500 group-hover:-translate-y-1">
+                    {craft.tag}
+                  </span>
+                  <h3 className="font-serif text-xl md:text-2xl text-white font-medium leading-tight transition-transform duration-500 group-hover:-translate-y-1">
+                    {craft.title}
+                  </h3>
+
+                  {/* Description + explore hint — slides up on hover */}
+                  <div className="overflow-hidden max-h-0 group-hover:max-h-28 transition-all duration-500 ease-in-out">
+                    <p className="font-sans text-[11px] md:text-xs text-white/70 leading-relaxed mt-2 mb-3">
+                      {craft.desc}
+                    </p>
+                    <span className="inline-flex items-center gap-1.5 text-[9px] text-[#E8C96B] font-bold tracking-[0.22em] uppercase">
+                      Tap to explore →
                     </span>
                   </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Our Arts & Crafts Section */}
-      {(() => {
-        const craftSlides = [
-          {
-            title: 'Lippan Art',
-            img: 'https://images.unsplash.com/photo-1561715276-a2d087060f1d?auto=format&fit=crop&q=80&w=800',
-            desc: 'Traditional clay and mirror work showcasing intricate patterns and standard radial geometry that reflects light beautifully.',
-            tag: 'LIPPAN ART'
-          },
-          {
-            title: 'Custom Name Plates',
-            img: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800',
-            desc: 'Bespoke hand-carved name plaques designed to represent family identity through stunning, hand-painted wooden contours.',
-            tag: 'CUSTOM NAME PLATES'
-          },
-          {
-            title: 'Mandala Art',
-            img: 'https://res.cloudinary.com/diancfp03/image/upload/v1780162699/home_sa22ka.png',
-            desc: 'Sacred concentric circular designs that capture cosmic symmetry, masterfully drafted using authentic artisan colors.',
-            tag: 'MANDALA ART'
-          },
-          {
-            title: 'Mehandi',
-            img: 'https://images.unsplash.com/photo-1590075865003-e48277faa558?auto=format&fit=crop&q=80&w=800',
-            desc: 'Intricate and traditional bridal-grade henna patterns hand-drawn with organic plant-based pastes.',
-            tag: 'MEHANDI'
-          },
-          {
-            title: 'Wood & Pot Painting',
-            img: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800',
-            desc: 'Vibrant acrylic detailing applied on natural clay vessels and high-quality seasoned wood objects.',
-            tag: 'WOOD AND POT PAINTING'
-          },
-          {
-            title: 'Canvas Painting',
-            img: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&q=80&w=800',
-            desc: 'Premium traditional paintings on high-quality stretched canvas, capturing cultural scenes and geometric alignments.',
-            tag: 'CANVAS PAINTING'
-          }
-        ];
-
-        const activeSlide = craftSlides[currentCraftIndex];
-
-        return (
-          <section 
-            id="arts-crafts" 
-            className="relative py-20 px-6 md:px-16 border-b border-[#C9A84C]/25"
-            style={{
-              background: 'linear-gradient(rgba(235, 225, 218, 0.88), rgba(248, 222, 203, 0.90)), url(https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=1200) center/cover no-repeat'
-            }}
-          >
-            <div className="max-w-7xl mx-auto">
-              {/* Section Header */}
-              <div className="text-center mb-16 reveal-element">
-                <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.25em] text-[#C9A84C] uppercase mb-3 block">
-                  EXPLORE HERITAGE SKILLS
-                </span>
-                <h2 className="font-serif text-3xl md:text-[46px] text-[#0B3D2E] font-medium tracking-wide">
-                  Our Arts & Crafts
-                </h2>
-                <div className="w-24 h-[1px] bg-[#C9A84C]/35 mx-auto mt-5" />
-              </div>
-
-              {/* Premium 50/50 Card Split - Grand Height Layout */}
-              <div className="relative rounded-[24px] overflow-hidden flex flex-col lg:flex-row border border-[#C9A84C]/30 shadow-2xl min-h-[500px] md:h-[550px]">
-                
-                {/* Left Side Content panel (Sage/Forest Green) */}
-                <div className="w-full lg:w-[45%] bg-white/90 backdrop-blur-sm p-8 md:p-14 flex flex-col justify-between items-start text-left select-none relative z-10 border-r border-[#C9A84C]/20">
-                  <div>
-                    <span className="text-[10px] md:text-xs tracking-[0.3em] font-sans font-bold text-[#C9A84C] hover:text-[#E8C96B] transition-colors cursor-pointer uppercase mb-4 block inline-block">
-                      ALSO FEATURING
-                    </span>
-                    <h3 className="font-serif text-3xl md:text-[42px] font-bold text-[#0B3D2E] tracking-wide leading-tight mb-6">
-                      {activeSlide.title}
-                    </h3>
-                    <p className="font-sans text-xs md:text-sm leading-relaxed text-gray-700 mb-8 max-w-md">
-                      {activeSlide.desc}
-                    </p>
-                    
-                    {/* Dynamic tag buttons / capsules */}
-                    <div className="flex flex-wrap gap-2.5 mb-8">
-                      {craftSlides.map((slide, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setCurrentCraftIndex(idx)}
-                          className={`text-[9px] md:text-[10px] tracking-[0.15em] font-bold px-4 py-2 rounded-full border transition-all duration-300 uppercase cursor-pointer ${
-                            idx === currentCraftIndex
-                              ? 'bg-[#0B3D2E] border-[#0B3D2E] text-white scale-105 shadow-md'
-                              : 'border-[#C9A84C]/40 text-[#C9A84C]/80 hover:border-[#0B3D2E] hover:text-[#0B3D2E]'
-                          }`}
-                        >
-                          {slide.title}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* "SEE MORE" Button placed on the left side */}
-                  <Link 
-                    to="/collection/$id" 
-                    params={{ id: 'painting' }}
-                    className="inline-flex items-center text-[10px] md:text-xs tracking-[0.2em] font-bold border border-[#0B3D2E] text-[#0B3D2E] rounded-full px-7 py-3 hover:bg-[#0B3D2E] hover:text-white hover:border-[#0B3D2E] transition-all duration-300 uppercase cursor-pointer"
-                  >
-                    <span>SEE MORE</span>
-                    <span className="ml-2 font-sans">→</span>
-                  </Link>
-                </div>
-
-                {/* Right Side Slideshow Showcase */}
-                <div 
-                  onTouchStart={handleTouchStart}
-                  onTouchMove={handleTouchMove}
-                  onTouchEnd={() => handleTouchEnd(
-                    () => setCurrentCraftIndex(prev => (prev + 1) % craftSlides.length),
-                    () => setCurrentCraftIndex(prev => (prev - 1 + craftSlides.length) % craftSlides.length)
-                  )}
-                  className="w-full lg:w-[55%] h-[350px] lg:h-full relative overflow-hidden bg-[#04140E]"
-                >
-                  {/* Photo transition layer */}
-                  {craftSlides.map((slide, idx) => (
-                    <img 
-                      key={idx}
-                      src={slide.img} 
-                      alt={slide.title}
-                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
-                        idx === currentCraftIndex ? 'opacity-100' : 'opacity-0'
-                      }`} 
-                    />
-                  ))}
-                  
-                  {/* Glassmorphic overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
-
-                  {/* Manual Arrow Controls Overlay */}
-                  <button 
-                    onClick={() => setCurrentCraftIndex(prev => (prev - 1 + craftSlides.length) % craftSlides.length)}
-                    className="absolute left-6 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 rounded-full border border-white/50 text-white hover:bg-white hover:text-[#0B3D2E] hover:scale-105 transition-all duration-300 flex items-center justify-center cursor-pointer shadow-lg z-20"
-                    aria-label="Previous Slide"
-                  >
-                    <span className="text-xl font-bold">←</span>
-                  </button>
-
-                  <button 
-                    onClick={() => setCurrentCraftIndex(prev => (prev + 1) % craftSlides.length)}
-                    className="absolute right-6 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 rounded-full border border-white/50 text-white hover:bg-white hover:text-[#0B3D2E] hover:scale-105 transition-all duration-300 flex items-center justify-center cursor-pointer shadow-lg z-20"
-                    aria-label="Next Slide"
-                  >
-                    <span className="text-xl font-bold">→</span>
-                  </button>
-
-                  {/* Dynamic Slide Title Overlay at the Bottom */}
-                  <div className="absolute bottom-8 left-8 right-8 z-10 flex justify-between items-end select-none pointer-events-none">
-                    <div>
-                      <span className="text-[9px] uppercase tracking-widest text-[#E8C96B] font-bold mb-1.5 block">
-                        {activeSlide.tag}
-                      </span>
-                      <h4 className="font-serif text-xl sm:text-2xl text-white font-medium">
-                        {activeSlide.title}
-                      </h4>
-                    </div>
-                    {/* Progress indicator */}
-                    <div className="text-white/60 font-sans text-xs tracking-widest font-semibold">
-                      {currentCraftIndex + 1} / {craftSlides.length}
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </section>
-        );
-      })()}
-
-      {/* Pooja & Event Rentals Section - Reversed Split Layout */}
-      {(() => {
-        const poojaSlides = [
-          {
-            title: 'Brass Samai Lamps',
-            img: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=800',
-            desc: 'Stunning polished brass lamps (Kuthu Vilakku) designed to bring divine and traditional light to any home celebration.',
-            tag: 'DIVINE LIGHTS'
-          },
-          {
-            title: 'Traditional Backdrops',
-            img: 'https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&q=80&w=800',
-            desc: 'Elegant event backdrop walls decorated with marigolds, green leaves, and sacred lotus medallion borders.',
-            tag: 'STAGE BACKDROPS'
-          },
-          {
-            title: 'Artisan Urli Bowls',
-            img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=800',
-            desc: 'Hammered brass bowls ideal for floating flowers, candles, and welcoming guests with classical Indian charm.',
-            tag: 'DECORATIVE URLIS'
-          },
-          {
-            title: 'Pooja Mandir & Chowkis',
-            img: 'https://images.unsplash.com/photo-1589156280159-27698a70f29e?auto=format&fit=crop&q=80&w=800',
-            desc: 'Hand-carved premium wooden temples and low-height decorated stools (chowkis) finished with gold leafing.',
-            tag: 'SACRED CHOWKIS'
-          },
-          {
-            title: 'Traditional Umbrellas & Props',
-            img: 'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&q=80&w=800',
-            desc: 'Stunning parasols, hanging brass bells, and decorative elements to elevate the festive ambiance.',
-            tag: 'FESTIVE PROPS'
-          }
-        ];
-
-        const activeSlide = poojaSlides[currentPoojaIndex];
-
-        return (
-          <section 
-            id="pooja-rentals" 
-            className="relative py-20 px-6 md:px-16 border-b border-[#C9A84C]/25"
-            style={{
-              background: 'linear-gradient(rgba(235, 225, 218, 0.88), rgba(248, 222, 203, 0.90)), url(https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200) center/cover no-repeat'
-            }}
-          >
-            <div className="max-w-7xl mx-auto">
-              {/* Section Header */}
-              <div className="text-center mb-16 reveal-element">
-                <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.25em] text-[#C9A84C] uppercase mb-3 block">
-                  CELEBRATIONS MADE DIVINE
-                </span>
-                <h2 className="font-serif text-3xl md:text-[46px] text-[#0B3D2E] font-medium tracking-wide">
-                  Pooja & Event Rentals
-                </h2>
-                <div className="w-24 h-[1px] bg-[#C9A84C]/35 mx-auto mt-5" />
-              </div>
-
-              {/* Premium 50/50 Card Split - Reversed Layout (Slideshow Left, Details Right) */}
-              <div className="relative rounded-[24px] overflow-hidden flex flex-col lg:flex-row border border-[#C9A84C]/30 shadow-2xl min-h-[500px] md:h-[550px]">
-                
-                {/* LEFT Side Slideshow Showcase */}
-                <div 
-                  onTouchStart={handleTouchStart}
-                  onTouchMove={handleTouchMove}
-                  onTouchEnd={() => handleTouchEnd(
-                    () => setCurrentPoojaIndex(prev => (prev + 1) % poojaSlides.length),
-                    () => setCurrentPoojaIndex(prev => (prev - 1 + poojaSlides.length) % poojaSlides.length)
-                  )}
-                  className="w-full lg:w-[55%] h-[350px] lg:h-full relative overflow-hidden bg-[#04140E] order-2 lg:order-1"
-                >
-                  {/* Photo transition layer */}
-                  {poojaSlides.map((slide, idx) => (
-                    <img 
-                      key={idx}
-                      src={slide.img} 
-                      alt={slide.title}
-                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
-                        idx === currentPoojaIndex ? 'opacity-100' : 'opacity-0'
-                      }`} 
-                    />
-                  ))}
-                  
-                  {/* Glassmorphic overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
-
-                  {/* Manual Arrow Controls Overlay */}
-                  <button 
-                    onClick={() => setCurrentPoojaIndex(prev => (prev - 1 + poojaSlides.length) % poojaSlides.length)}
-                    className="absolute left-6 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 rounded-full border border-white/50 text-white hover:bg-white hover:text-[#0B3D2E] hover:scale-105 transition-all duration-300 flex items-center justify-center cursor-pointer shadow-lg z-20"
-                    aria-label="Previous Slide"
-                  >
-                    <span className="text-xl font-bold">←</span>
-                  </button>
-
-                  <button 
-                    onClick={() => setCurrentPoojaIndex(prev => (prev + 1) % poojaSlides.length)}
-                    className="absolute right-6 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 rounded-full border border-white/50 text-white hover:bg-white hover:text-[#0B3D2E] hover:scale-105 transition-all duration-300 flex items-center justify-center cursor-pointer shadow-lg z-20"
-                    aria-label="Next Slide"
-                  >
-                    <span className="text-xl font-bold">→</span>
-                  </button>
-
-                  {/* Dynamic Slide Title Overlay */}
-                  <div className="absolute bottom-8 left-8 right-8 z-10 flex justify-between items-end select-none pointer-events-none">
-                    <div>
-                      <span className="text-[9px] uppercase tracking-widest text-[#E8C96B] font-bold mb-1.5 block">
-                        {activeSlide.tag}
-                      </span>
-                      <h4 className="font-serif text-xl sm:text-2xl text-white font-medium">
-                        {activeSlide.title}
-                      </h4>
-                    </div>
-                    {/* Progress indicator */}
-                    <div className="text-white/60 font-sans text-xs tracking-widest font-semibold">
-                      {currentPoojaIndex + 1} / {poojaSlides.length}
-                    </div>
-                  </div>
-                </div>
-
-                {/* RIGHT Side Content panel (Sage/Forest Green) */}
-                <div className="w-full lg:w-[45%] bg-white/90 backdrop-blur-sm p-8 md:p-14 flex flex-col justify-between items-start text-left select-none relative z-10 border-l border-[#C9A84C]/20 order-1 lg:order-2">
-                  <div>
-                    <span className="text-[10px] md:text-xs tracking-[0.3em] font-sans font-bold text-[#C9A84C] hover:text-[#E8C96B] transition-colors cursor-pointer uppercase mb-4 block inline-block">
-                      ALSO FEATURING
-                    </span>
-                    <h3 className="font-serif text-3xl md:text-[42px] font-bold text-[#0B3D2E] tracking-wide leading-tight mb-6">
-                      {activeSlide.title}
-                    </h3>
-                    <p className="font-sans text-xs md:text-sm leading-relaxed text-gray-700 mb-8 max-w-md">
-                      {activeSlide.desc}
-                    </p>
-                    
-                    {/* Dynamic tag buttons / capsules */}
-                    <div className="flex flex-wrap gap-2.5 mb-8">
-                      {poojaSlides.map((slide, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setCurrentPoojaIndex(idx)}
-                          className={`text-[9px] md:text-[10px] tracking-[0.15em] font-bold px-4 py-2 rounded-full border transition-all duration-300 uppercase cursor-pointer ${
-                            idx === currentPoojaIndex
-                              ? 'bg-[#0B3D2E] border-[#0B3D2E] text-white scale-105 shadow-md'
-                              : 'border-[#C9A84C]/40 text-[#C9A84C]/80 hover:border-[#0B3D2E] hover:text-[#0B3D2E]'
-                          }`}
-                        >
-                          {slide.title}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* "SEE MORE" Button placed on the right side details block */}
-                  <Link 
-                    to="/collection/$id" 
-                    params={{ id: 'gifts' }}
-                    className="inline-flex items-center text-[10px] md:text-xs tracking-[0.2em] font-bold border border-[#0B3D2E] text-[#0B3D2E] rounded-full px-7 py-3 hover:bg-[#0B3D2E] hover:text-white hover:border-[#0B3D2E] transition-all duration-300 uppercase cursor-pointer"
-                  >
-                    <span>SEE MORE</span>
-                    <span className="ml-2 font-sans">→</span>
-                  </Link>
-                </div>
-
-              </div>
-            </div>
-          </section>
-        );
-      })()}
-
-      {/* Our Story Section */}
-      <section 
-        id="our-story"
+      {/* Pooja & Event Rentals — Editorial Mosaic Grid */}
+      <section
+        id="pooja-rentals"
         className="relative py-24 px-6 md:px-16 border-b border-[#C9A84C]/25"
-        style={{
-          background: 'linear-gradient(rgba(244, 249, 246, 0.85), rgba(228, 242, 234, 0.88)), url(https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&q=80&w=1200) center/cover no-repeat'
-        }}
+        style={{ background: 'radial-gradient(ellipse 110% 130% at 50% 100%, #0F3D28 0%, #071510 50%, #040D08 100%)' }}
       >
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-16 items-start justify-between">
-          
-          {/* LEFT SIDE - Narrative Prose */}
-          <div className="w-full lg:w-[48%] text-left">
-            <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.3em] text-[#C9A84C] uppercase mb-4 block">
-              OUR STORY
+        {/* Subtle scattered dot texture overlay */}
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #E8C96B 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Section Header */}
+          <div className="text-center mb-14 reveal-element">
+            <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.3em] text-[#C9A84C] uppercase mb-3 block">
+              CELEBRATIONS MADE DIVINE
             </span>
-            <h2 className="font-serif text-3xl md:text-[46px] text-[#0B3D2E] font-medium leading-tight mb-8">
-              Where Creativity<br />Meets Celebration
+            <h2 className="font-serif text-3xl md:text-[46px] text-white font-medium tracking-wide">
+              Pooja & Event Rentals
             </h2>
-            <div className="w-20 h-[1.5px] bg-[#C9A84C]/45 mb-8" />
-            
-            <div className="space-y-6 font-sans text-xs md:text-sm leading-relaxed text-gray-700">
-              <p className="font-medium text-[#0B3D2E] text-sm md:text-base leading-relaxed">
-                Welcome to CraftNest, where creativity meets celebration!
-              </p>
-              <p>
-                CraftNest was born from a passion for handmade art, personalized gifts, and creating memorable experiences for families and children. What started as a hobby of crafting unique handmade creations gradually grew into a business dedicated to bringing joy through art and creativity.
-              </p>
-              <p>
-                At CraftNest, we believe handmade creations tell a story. Every item we create is crafted with love and designed to make your celebrations more meaningful and memorable.
-              </p>
-            </div>
+            <div className="w-24 h-[1px] bg-[#C9A84C]/35 mx-auto mt-5 mb-5" />
+            <p className="font-sans text-xs md:text-sm text-[#E8C96B]/40 max-w-lg mx-auto leading-relaxed">
+              Sacred props and festive décor handpicked to elevate every ceremony and celebration.
+            </p>
+          </div>
 
-            {/* Elegant Inline Project Showcase Pic */}
-            <div className="mt-8 rounded-[16px] overflow-hidden border border-[#C9A84C]/25 shadow-md h-[180px] select-none">
-              <img 
-                src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800" 
-                alt="CraftNest Handcrafted Art Project" 
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+          {/* Row 1: Featured (col-span-2) + Side Card */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 mb-4 md:mb-5">
+
+            {/* Featured Card — 2/3 width, taller */}
+            <div className="group relative overflow-hidden rounded-[20px] cursor-pointer md:col-span-2 h-[380px] md:h-[440px]">
+              <img
+                src="https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=1000"
+                alt="Brass Samai Lamps"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#040D08]/90 via-[#040D08]/30 to-transparent" />
+              <div className="absolute inset-[1px] rounded-[19px] opacity-0 group-hover:opacity-100 outline outline-[2px] outline-[#E8C96B]/40 transition-all duration-500" />
+
+              <div className="absolute bottom-0 left-0 right-0 p-7 md:p-9">
+                <span className="text-[8px] tracking-[0.32em] text-[#E8C96B] font-bold uppercase block mb-2">DIVINE LIGHTS</span>
+                <h3 className="font-serif text-2xl md:text-3xl text-white font-medium mb-3 leading-tight">Brass Samai Lamps</h3>
+                <p className="font-sans text-xs text-white/55 leading-relaxed mb-5 max-w-md hidden sm:block">
+                  Stunning polished Kuthu Vilakku lamps crafted to bring divine and traditional warmth to any home celebration or ceremony.
+                </p>
+                <a
+                  href={`https://wa.me/14704527988?text=${encodeURIComponent('Hi CraftNest! I\'d like to enquire about Brass Samai Lamps rental for my event.')}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-[#E8C96B] hover:bg-[#FFF0B5] text-[#0B3D2E] text-[9px] font-bold tracking-[0.2em] uppercase px-6 py-2.5 rounded-full transition-all hover:scale-105 cursor-pointer"
+                >
+                  BOOK FOR YOUR EVENT →
+                </a>
+              </div>
             </div>
 
-            {/* Support Message Box */}
-            <div className="mt-8 p-6 rounded-[16px] bg-[#0B3D2E]/5 border border-[#C9A84C]/25 text-left relative overflow-hidden">
-              <div className="absolute right-4 bottom-2 opacity-5 select-none font-serif text-8xl text-[#0B3D2E]">
-                ”
-              </div>
-              <p className="font-serif italic text-xs md:text-sm text-gray-800 leading-relaxed relative z-10">
-                "Thank you for supporting our small business and allowing us to be a part of your special moments."
-              </p>
-            </div>
-          </div>
+            {/* Side Card 1 */}
+            <div className="group relative overflow-hidden rounded-[20px] cursor-pointer h-[380px] md:h-[440px]">
+              <img
+                src="https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&q=80&w=700"
+                alt="Traditional Backdrops"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#040D08]/85 via-[#040D08]/20 to-transparent" />
+              <div className="absolute inset-[1px] rounded-[19px] opacity-0 group-hover:opacity-100 outline outline-[2px] outline-[#E8C96B]/40 transition-all duration-500" />
 
-          {/* RIGHT SIDE - Specialties Cards Grid */}
-          <div className="w-full lg:w-[48%] text-left">
-            <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.3em] text-[#C9A84C] uppercase mb-6 block">
-              WHAT WE SPECIALIZE IN
-            </span>
-
-            <div className="flex flex-col gap-6">
-              {/* Specialty Item 1 */}
-              <div 
-                onMouseMove={handleMouseMove3D}
-                onMouseLeave={handleMouseLeave3D}
-                className="bg-white/70 backdrop-blur-sm border border-[#C9A84C]/25 rounded-[20px] p-6 md:p-8 shadow-sm hover:shadow-md hover:border-[#E8C96B]/50 hover:bg-white/95 transition-all duration-300 group"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#0B3D2E] border border-[#C9A84C]/20 flex items-center justify-center text-xl shrink-0 group-hover:bg-[#C9A84C] group-hover:text-[#0B3D2E] transition-colors duration-300">
-                    🎨
-                  </div>
-                  <div>
-                    <h4 className="font-serif text-lg md:text-xl font-bold text-[#0B3D2E] mb-2 group-hover:text-[#C9A84C] transition-colors">
-                      Face Painting
-                    </h4>
-                    <p className="font-sans text-xs md:text-sm text-gray-700 leading-relaxed">
-                      Transforming birthdays, festivals, school events, and parties into colorful and unforgettable experiences with fun and creative face painting designs.
-                    </p>
-                  </div>
+              <div className="absolute inset-0 flex flex-col justify-end p-6">
+                <span className="text-[8px] tracking-[0.3em] text-[#E8C96B] font-bold uppercase block mb-1.5 transition-transform duration-500 group-hover:-translate-y-1">STAGE BACKDROPS</span>
+                <h3 className="font-serif text-xl text-white font-medium leading-tight transition-transform duration-500 group-hover:-translate-y-1">Traditional Backdrops</h3>
+                <div className="overflow-hidden max-h-0 group-hover:max-h-24 transition-all duration-500 ease-in-out">
+                  <p className="font-sans text-[11px] text-white/60 leading-relaxed mt-2 mb-3">Marigold and lotus-draped event backdrops for weddings and poojas.</p>
+                  <span className="text-[9px] text-[#E8C96B] font-bold tracking-[0.2em] uppercase">Enquire →</span>
                 </div>
               </div>
-
-              {/* Specialty Item 2 */}
-              <div 
-                onMouseMove={handleMouseMove3D}
-                onMouseLeave={handleMouseLeave3D}
-                className="bg-white/70 backdrop-blur-sm border border-[#C9A84C]/25 rounded-[20px] p-6 md:p-8 shadow-sm hover:shadow-md hover:border-[#E8C96B]/50 hover:bg-white/95 transition-all duration-300 group"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#0B3D2E] border border-[#C9A84C]/20 flex items-center justify-center text-xl shrink-0 group-hover:bg-[#C9A84C] group-hover:text-[#0B3D2E] transition-colors duration-300">
-                    🎁
-                  </div>
-                  <div>
-                    <h4 className="font-serif text-lg md:text-xl font-bold text-[#0B3D2E] mb-2 group-hover:text-[#C9A84C] transition-colors">
-                      Return Gifts
-                    </h4>
-                    <p className="font-sans text-xs md:text-sm text-gray-700 leading-relaxed">
-                      Thoughtfully handcrafted return gifts that add a personal touch to every occasion. From custom hair accessories and bangles to unique keepsakes, we create gifts your guests will love and remember.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Specialty Item 3 */}
-              <div 
-                onMouseMove={handleMouseMove3D}
-                onMouseLeave={handleMouseLeave3D}
-                className="bg-white/70 backdrop-blur-sm border border-[#C9A84C]/25 rounded-[20px] p-6 md:p-8 shadow-sm hover:shadow-md hover:border-[#E8C96B]/50 hover:bg-white/95 transition-all duration-300 group"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#0B3D2E] border border-[#C9A84C]/20 flex items-center justify-center text-xl shrink-0 group-hover:bg-[#C9A84C] group-hover:text-[#0B3D2E] transition-colors duration-300">
-                    🖌️
-                  </div>
-                  <div>
-                    <h4 className="font-serif text-lg md:text-xl font-bold text-[#0B3D2E] mb-2 group-hover:text-[#C9A84C] transition-colors">
-                      Crafts & Arts
-                    </h4>
-                    <p className="font-sans text-xs md:text-sm text-gray-700 leading-relaxed">
-                      From traditional Lippan Art and personalized nameplates to mandala art, canvas painting, wood painting, and custom handmade décor, every piece is designed with care, creativity, and attention to detail.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
 
+          {/* Row 2: Three compact cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
+            {[
+              { title: 'Artisan Urli Bowls', tag: 'DECORATIVE URLIS', img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=700', desc: 'Hammered brass bowls for floating flowers and candles.' },
+              { title: 'Pooja Mandir & Chowkis', tag: 'SACRED CHOWKIS', img: 'https://images.unsplash.com/photo-1589156280159-27698a70f29e?auto=format&fit=crop&q=80&w=700', desc: 'Hand-carved wooden mandirs with gold-leaf finish.' },
+              { title: 'Umbrellas & Festive Props', tag: 'FESTIVE PROPS', img: 'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&q=80&w=700', desc: 'Parasols, brass bells, and décor to elevate your event.' },
+            ].map((item) => (
+              <div key={item.title} className="group relative overflow-hidden rounded-[20px] cursor-pointer h-60 md:h-72">
+                <img
+                  src={item.img}
+                  alt={item.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#040D08]/85 via-[#040D08]/20 to-transparent" />
+                <div className="absolute inset-[1px] rounded-[19px] opacity-0 group-hover:opacity-100 outline outline-[2px] outline-[#E8C96B]/40 transition-all duration-500" />
+                <div className="absolute inset-0 flex flex-col justify-end p-5">
+                  <span className="text-[7px] tracking-[0.3em] text-[#E8C96B] font-bold uppercase block mb-1 transition-transform duration-500 group-hover:-translate-y-0.5">{item.tag}</span>
+                  <h3 className="font-serif text-base text-white font-medium leading-tight transition-transform duration-500 group-hover:-translate-y-0.5">{item.title}</h3>
+                  <div className="overflow-hidden max-h-0 group-hover:max-h-20 transition-all duration-500 ease-in-out">
+                    <p className="font-sans text-[10px] text-white/55 leading-relaxed mt-2">{item.desc}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom CTA Strip */}
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 border border-[#C9A84C]/15 rounded-[16px] px-7 py-5" style={{ background: 'rgba(15,61,40,0.35)' }}>
+            <div>
+              <p className="font-serif text-lg text-white font-medium">Planning a celebration?</p>
+              <p className="font-sans text-xs text-[#E8C96B]/50 mt-0.5">Get a quote tailored to your event — poojas, weddings, birthdays & more.</p>
+            </div>
+            <a
+              href={`https://wa.me/14704527988?text=${encodeURIComponent('Hi CraftNest! I\'d like to book Pooja & Event Rentals for my upcoming celebration.')}`}
+              target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white text-[10px] font-bold tracking-[0.2em] uppercase px-7 py-3 rounded-full transition-all hover:scale-105 cursor-pointer shrink-0"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              BOOK ON WHATSAPP
+            </a>
+          </div>
         </div>
       </section>
+
+      {/* Craft Detail Modal */}
+      {activeCraftModal !== null && craftItems[activeCraftModal] && (() => {
+        const craft = craftItems[activeCraftModal];
+        return (
+          <div
+            className="fixed inset-0 z-[9998] bg-black/70 backdrop-blur-lg flex items-center justify-center p-4 md:p-8 animate-fade-in"
+            onClick={() => setActiveCraftModal(null)}
+          >
+            <div
+              className="relative bg-[#0F1A12] rounded-[22px] overflow-hidden flex flex-col md:flex-row max-w-4xl w-full max-h-[92vh] shadow-2xl border border-[#C9A84C]/20 animate-scale-in"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setActiveCraftModal(null)}
+                className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/50 border border-white/20 text-white/70 hover:text-white hover:border-white/50 flex items-center justify-center transition-all cursor-pointer"
+              >
+                ✕
+              </button>
+
+              {/* Left — image */}
+              <div className="relative w-full md:w-[58%] h-64 md:h-auto flex-shrink-0">
+                <img
+                  src={craft.img}
+                  alt={craft.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <span className="absolute bottom-5 left-5 text-[9px] tracking-[0.3em] text-[#E8C96B] font-bold uppercase">
+                  {craft.tag}
+                </span>
+              </div>
+
+              {/* Right — content */}
+              <div className="flex flex-col justify-center p-8 md:p-10 w-full">
+                <h3 className="font-serif text-2xl md:text-3xl text-white font-medium mb-4 leading-tight">
+                  {craft.title}
+                </h3>
+                <div className="w-14 h-[1px] bg-[#C9A84C]/50 mb-5" />
+                <p className="font-sans text-sm text-white/65 leading-relaxed mb-8">
+                  {craft.desc}
+                </p>
+                <a
+                  href={`https://wa.me/14704527988?text=${encodeURIComponent(`Hi CraftNest! I'd like to enquire about your ${craft.title} service.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#1ebe5d] text-white text-[11px] tracking-[0.2em] font-bold uppercase px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 cursor-pointer"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  ENQUIRE ON WHATSAPP
+                </a>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Fullscreen Blurred Interactive Modal */}
       {activeModal && (
@@ -1424,147 +1215,174 @@ function Home() {
       )}
 
 
-      {/* Premium Sliding Cart Drawer */}
-      <div 
-        className={`fixed inset-0 z-[99999] transition-all duration-500 ease-in-out ${isCartOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
-      >
-        {/* Backdrop overlay */}
-        <div 
-          onClick={() => setIsCartOpen(false)}
-          className={`absolute inset-0 bg-[#04140E]/80 backdrop-blur-sm transition-opacity duration-500 ${isCartOpen ? 'opacity-100' : 'opacity-0'}`}
-        />
-        
-        {/* Drawer container panel */}
-        <div 
-          className={`absolute top-0 right-0 h-full w-full sm:w-[450px] bg-[#071A10] border-l border-[#C9A84C]/35 shadow-[0_0_50px_rgba(4,20,10,0.8)] flex flex-col justify-between transition-transform duration-500 ease-in-out transform ${
-            isCartOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
-        >
-          {/* Header */}
-          <div className="p-6 border-b border-[#C9A84C]/25 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-[#E8C96B]" />
-              <h3 className="font-serif text-xl font-bold text-white tracking-wide uppercase">Your Selection</h3>
-              <span className="bg-[#E8C96B] text-[#0B3D2E] text-[10px] font-sans font-bold px-2 py-0.5 rounded-full">
-                {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
-              </span>
-            </div>
-            
-            <button 
-              onClick={() => setIsCartOpen(false)}
-              className="w-8 h-8 rounded-full border border-[#C9A84C]/30 hover:border-[#E8C96B] flex items-center justify-center text-[#C9A84C] hover:text-[#E8C96B] transition-all cursor-pointer"
-              aria-label="Close Cart"
-            >
-              <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
 
-          {/* Cart Item List (Scrollable) */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-4">
-            {cartItems.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center text-center space-y-4 select-none">
-                <span className="text-4xl">🎁</span>
-                <p className="font-serif text-base text-[#E8C96B]">Your cart is empty</p>
-                <p className="font-sans text-xs text-white/50 max-w-[240px]">Explore our featured collections and select custom keepsakes to begin.</p>
-                <button 
-                  onClick={() => {
-                    setIsCartOpen(false);
-                    const servicesSection = document.getElementById('services');
-                    if (servicesSection) {
-                      servicesSection.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                  className="font-sans text-[10px] tracking-[0.2em] font-semibold border border-[#C9A84C] text-[#C9A84C] rounded-full px-5 py-2.5 hover:bg-[#C9A84C] hover:text-[#0B3D2E] transition-all duration-300 uppercase cursor-pointer"
-                >
-                  Browse Art
-                </button>
+
+
+
+      {/* Interactive Selection Catalog — Premium Redesign */}
+      {(() => {
+        const catalog = [
+          {
+            category: 'Arts & Paintings', icon: '🖼️', color: 'from-[#0F2E1A] to-[#061008]',
+            items: [
+              { name: 'Lippan Art', icon: '🌸' },
+              { name: 'Mandala Art', icon: '🔮' },
+              { name: 'Custom Name Plates', icon: '🏷️' },
+              { name: 'Wood Painting', icon: '🌿' },
+              { name: 'Pot Painting', icon: '🏺' },
+              { name: 'Canvas Painting', icon: '🖌️' },
+            ]
+          },
+          {
+            category: 'Event Services', icon: '🎭', color: 'from-[#1A1208] to-[#0A0805]',
+            items: [
+              { name: 'Face Painting', icon: '🎨' },
+              { name: 'Mehandi / Henna Art', icon: '🌺' },
+            ]
+          },
+          {
+            category: 'Gifts & Accessories', icon: '🎁', color: 'from-[#0A1A14] to-[#050E09]',
+            items: [
+              { name: 'Handmade Jewellery', icon: '💎' },
+              { name: 'Return Gifts & Keepsakes', icon: '🎀' },
+              { name: 'German Silver Items', icon: '🥈' },
+            ]
+          },
+        ];
+        return (
+          <section
+            id="interactive-catalog"
+            className="relative py-24 px-4 md:px-12 border-t border-[#C9A84C]/20"
+            style={{ background: 'radial-gradient(ellipse 120% 80% at 50% 0%, #071510 0%, #040D08 55%, #010806 100%)' }}
+          >
+            <div className="max-w-6xl mx-auto">
+
+              {/* Header */}
+              <div className="text-center mb-16">
+                <span className="text-[9px] md:text-[10px] tracking-[0.38em] text-[#C9A84C] font-bold uppercase block mb-4">CUSTOM ESTIMATE & BOOKING</span>
+                <h2 className="font-serif text-3xl md:text-5xl text-[#E8C96B] font-medium tracking-wide mb-5">
+                  Build Your Event Package
+                </h2>
+                <div className="w-20 h-[1px] mx-auto mb-5" style={{ background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)' }} />
+                <p className="font-sans text-xs md:text-sm text-white/45 max-w-xl mx-auto leading-relaxed">
+                  Tap the services you need — we'll send a personalised quote straight to your WhatsApp.
+                </p>
               </div>
-            ) : (
-              cartItems.map((item, idx) => (
-                <div 
-                  key={idx} 
-                  className="p-4 bg-[#0B3D2E]/60 border border-[#C9A84C]/20 rounded-[16px] flex items-center justify-between gap-4 animate-scale-in text-left"
+
+              {/* Category sections */}
+              <div className="space-y-10">
+                {catalog.map((cat) => {
+                  const catSelected = cat.items.filter(i => selectedItems.includes(i.name)).length;
+                  return (
+                    <div key={cat.category}>
+                      {/* Category header */}
+                      <div className="flex items-center gap-3 mb-5 pb-4 border-b border-[#C9A84C]/10">
+                        <div className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0" style={{ background: 'rgba(232,201,107,0.08)', border: '1px solid rgba(232,201,107,0.15)' }}>
+                          {cat.icon}
+                        </div>
+                        <h3 className="font-serif text-lg md:text-xl text-white font-medium">{cat.category}</h3>
+                        {catSelected > 0 && (
+                          <span className="ml-2 text-[8px] font-bold tracking-[0.15em] uppercase bg-[#E8C96B] text-[#0B3D2E] rounded-full px-2.5 py-0.5">
+                            {catSelected} selected
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Service tiles */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                        {cat.items.map((service) => {
+                          const active = selectedItems.includes(service.name);
+                          return (
+                            <button
+                              key={service.name}
+                              onClick={() => toggleItemSelection(service.name)}
+                              className="relative flex flex-col items-center gap-2.5 px-3 py-4 rounded-[16px] text-center cursor-pointer select-none transition-all duration-250 group"
+                              style={{
+                                background: active
+                                  ? 'linear-gradient(135deg, rgba(232,201,107,0.14) 0%, rgba(201,168,76,0.06) 100%)'
+                                  : 'rgba(15,29,22,0.7)',
+                                border: active
+                                  ? '1px solid rgba(232,201,107,0.5)'
+                                  : '1px solid rgba(201,168,76,0.12)',
+                                boxShadow: active
+                                  ? '0 0 20px rgba(232,201,107,0.12), inset 0 1px 0 rgba(232,201,107,0.1)'
+                                  : '0 2px 12px rgba(0,0,0,0.3)',
+                              }}
+                            >
+                              {/* Gold glow ring on hover (inactive only) */}
+                              {!active && (
+                                <div className="absolute inset-0 rounded-[16px] opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ border: '1px solid rgba(201,168,76,0.3)' }} />
+                              )}
+
+                              {/* Checkmark badge */}
+                              {active && (
+                                <div className="absolute top-2 right-2 w-4.5 h-4.5 rounded-full flex items-center justify-center" style={{ background: '#E8C96B' }}>
+                                  <svg className="w-2.5 h-2.5 fill-none stroke-[#0B3D2E]" strokeWidth="3" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                  </svg>
+                                </div>
+                              )}
+
+                              <span className="text-2xl leading-none">{service.icon}</span>
+                              <span
+                                className="font-sans text-[10px] md:text-xs font-semibold leading-snug transition-colors duration-200"
+                                style={{ color: active ? '#E8C96B' : 'rgba(255,255,255,0.65)' }}
+                              >
+                                {service.name}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Inline summary + CTA (shows when items selected) */}
+              {selectedItems.length > 0 && (
+                <div
+                  className="mt-12 rounded-[20px] px-7 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 animate-fade-in"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(15,61,40,0.55) 0%, rgba(4,14,9,0.8) 100%)',
+                    border: '1px solid rgba(232,201,107,0.25)',
+                  }}
                 >
                   <div className="flex-1">
-                    <h4 className="font-serif text-sm font-semibold text-white leading-tight mb-1">{item.title}</h4>
-                    <p className="font-sans text-xs text-[#E8C96B] font-bold">₹{item.price.toLocaleString('en-IN')}</p>
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="w-7 h-7 rounded-full bg-[#E8C96B] text-[#0B3D2E] text-xs font-bold flex items-center justify-center shrink-0">{selectedItems.length}</span>
+                      <span className="font-sans text-xs font-bold tracking-[0.2em] uppercase text-[#E8C96B]">Your Selection</span>
+                    </div>
+                    <p className="font-sans text-[11px] text-white/45 leading-relaxed">
+                      {selectedItems.join(' · ')}
+                    </p>
                   </div>
-                  
-                  {/* Quantity controls */}
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => updateQuantity(item.title, -1)}
-                      className="w-6 h-6 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0B3D2E] flex items-center justify-center text-xs transition-all cursor-pointer font-bold"
+                  <div className="flex items-center gap-3 shrink-0">
+                    <button
+                      onClick={clearSelection}
+                      className="font-sans text-[10px] font-bold uppercase tracking-wider text-white/40 hover:text-white/70 transition-colors cursor-pointer px-3 py-2"
                     >
-                      -
+                      Clear
                     </button>
-                    <span className="font-sans text-xs font-bold text-white w-4 text-center">{item.quantity}</span>
-                    <button 
-                      onClick={() => updateQuantity(item.title, 1)}
-                      className="w-6 h-6 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0B3D2E] flex items-center justify-center text-xs transition-all cursor-pointer font-bold"
+                    <button
+                      onClick={() => {
+                        const selections = selectedItems.map(i => `• ${i}`).join('\n');
+                        const msg = `Hello CraftNest! I'd like to enquire about the following services:\n\n${selections}\n\nPlease share pricing and availability. Thank you!`;
+                        window.open(`https://wa.me/14704527988?text=${encodeURIComponent(msg)}`, '_blank');
+                      }}
+                      className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-sans text-[10px] font-bold tracking-[0.18em] uppercase px-6 py-3 rounded-full transition-all hover:scale-105 cursor-pointer shadow-lg"
                     >
-                      +
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                      ENQUIRE ON WHATSAPP
                     </button>
                   </div>
-
-                  {/* Remove button */}
-                  <button 
-                    onClick={() => removeFromCart(item.title)}
-                    className="text-white/40 hover:text-red-400 transition-colors p-1 cursor-pointer"
-                    aria-label="Remove Item"
-                  >
-                    <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
                 </div>
-              ))
-            )}
-          </div>
+              )}
 
-          {/* Footer details with total & Checkout Enquire button */}
-          {cartItems.length > 0 && (
-            <div className="p-6 border-t border-[#C9A84C]/25 bg-[#04140E] space-y-4">
-              <div className="flex items-center justify-between font-serif text-white">
-                <span className="text-sm font-medium tracking-wide">SUBTOTAL</span>
-                <span className="text-lg font-bold text-[#E8C96B]">
-                  ₹{cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0).toLocaleString('en-IN')}
-                </span>
-              </div>
-              
-              <button 
-                onClick={() => {
-                  const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-                  const itemsList = cartItems.map(item => `• *${item.title}* (Qty: ${item.quantity}) - ₹${(item.price * item.quantity).toLocaleString('en-IN')}`).join('\n');
-                  
-                  const messageString = `Hello CraftNest! I would like to enquire about the following handcrafted items in my cart:\n\n${itemsList}\n\n*Total Estimated Order:* ₹${subtotal.toLocaleString('en-IN')}\n\nPlease let me know how we can proceed. Thank you!`;
-                  
-                  const encodedMessage = encodeURIComponent(messageString);
-                  const whatsappRedirectUrl = `https://wa.me/14704527988?text=${encodedMessage}`;
-                  window.open(whatsappRedirectUrl, '_blank');
-                }}
-                className="w-full bg-[#E8C96B] hover:bg-[#EDD06A] text-[#0B3D2E] py-4 rounded-[12px] text-xs tracking-[0.25em] font-sans font-bold uppercase transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:scale-[1.01]"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.504-5.727-1.465L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.859-4.407 9.862-9.83.001-2.628-1.02-5.1-2.871-6.953C16.596 1.968 14.12 .946 11.5 .944 6.066.944 1.65 5.356 1.647 10.782c-.001 1.732.463 3.42 1.343 4.927l-.988 3.6 3.69-.966z" />
-                </svg>
-                <span>Enquire Cart via WhatsApp</span>
-              </button>
-
-              <button 
-                onClick={() => setCartItems([])}
-                className="w-full text-center text-[10px] tracking-widest text-[#C9A84C]/60 hover:text-white uppercase transition-colors py-1 cursor-pointer font-bold"
-              >
-                Clear Cart
-              </button>
             </div>
-          )}
-        </div>
-      </div>
-
-
+          </section>
+        );
+      })()}
 
       {/* Contact Section - "Let's Create Together" */}
       <section 
@@ -1741,7 +1559,6 @@ function Home() {
                       <option value="" disabled className="bg-[#0B3D2E] text-white">Select...</option>
                       <option value="Handmade Jewellery" className="bg-[#0B3D2E] text-white">Handmade Jewellery</option>
                       <option value="Arts & Crafts" className="bg-[#0B3D2E] text-white">Arts & Crafts</option>
-                      <option value="Pooja & Event Rentals" className="bg-[#0B3D2E] text-white">Pooja & Event Rentals</option>
                       <option value="Custom Return Gifts" className="bg-[#0B3D2E] text-white">Custom Return Gifts & Keepsakes</option>
                       <option value="Other" className="bg-[#0B3D2E] text-white">Other Bespoke Requests</option>
                     </select>
@@ -1790,84 +1607,241 @@ function Home() {
         </div>
       </section>
 
-      {/* About Us / Proprietor Section */}
-      <section 
-        id="about-proprietor" 
-        className="relative py-24 px-6 md:px-16 border-t border-[#C9A84C]/25"
-        style={{
-          background: 'linear-gradient(rgba(244, 249, 246, 0.94), rgba(228, 242, 234, 0.96)), url(https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=1200) center/cover no-repeat'
+      {/* Our Story & Heritage — Combined 3D Cinematic Ending */}
+      <section
+        id="our-story"
+        className="relative overflow-hidden py-28 md:py-36 px-6 md:px-16 border-t border-[#C9A84C]/10"
+        style={{ background: 'radial-gradient(ellipse 130% 90% at 50% 110%, #0F3D28 0%, #071510 48%, #010806 100%)' }}
+        onMouseMove={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect()
+          setStoryMouse({
+            x: (e.clientX - rect.left - rect.width / 2) / rect.width,
+            y: (e.clientY - rect.top - rect.height / 2) / rect.height,
+          })
         }}
+        onMouseLeave={() => setStoryMouse({ x: 0, y: 0 })}
       >
-        <div className="max-w-4xl mx-auto text-center flex flex-col items-center justify-center">
-          
-          {/* Top Description & Contact Details Summary */}
-          <div className="mb-12 reveal-element">
-            <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.3em] text-[#C9A84C] hover:text-[#E8C96B] transition-colors cursor-pointer uppercase mb-4 block inline-block">
-              OUR HERITAGE
+        {/* ── Parallax layer 1: slow rotating mandala backdrop ── */}
+        <div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
+          style={{
+            transform: `translate(${storyMouse.x * 22}px, ${storyMouse.y * 22}px)`,
+            transition: 'transform 1s ease-out',
+          }}
+        >
+          <div
+            className="rotating-mandala-bg opacity-[0.045]"
+            style={{
+              width: '130vw', height: '130vw', maxWidth: '1100px', maxHeight: '1100px',
+              backgroundImage: 'url(https://res.cloudinary.com/diancfp03/image/upload/v1780162699/home_sa22ka.png)',
+              backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center',
+            }}
+          />
+        </div>
+
+        {/* ── Parallax layer 2: floating gold orbs (medium speed) ── */}
+        <div
+          className="absolute inset-0 pointer-events-none select-none"
+          style={{ transform: `translate(${storyMouse.x * 45}px, ${storyMouse.y * 45}px)`, transition: 'transform 0.45s ease-out' }}
+        >
+          <div className="absolute top-[18%] left-[8%]  w-1.5 h-1.5 rounded-full bg-[#E8C96B]/20" />
+          <div className="absolute top-[32%] right-[12%] w-2   h-2   rounded-full bg-[#E8C96B]/12" />
+          <div className="absolute top-[60%] left-[15%] w-1   h-1   rounded-full bg-[#C9A84C]/25" />
+          <div className="absolute top-[75%] right-[20%] w-2.5 h-2.5 rounded-full bg-[#E8C96B]/10" />
+          <div className="absolute top-[48%] left-[5%]  w-1   h-1   rounded-full bg-[#E8C96B]/18" />
+          <div className="absolute top-[22%] right-[6%]  w-1.5 h-1.5 rounded-full bg-[#C9A84C]/15" />
+        </div>
+
+        {/* ── Dot grid texture ── */}
+        <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #E8C96B 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+
+        {/* ═══════════════════════════════ CONTENT ═══════════════════════════════ */}
+        <div className="max-w-7xl mx-auto relative z-10">
+
+          {/* ── Chapter 1: Opening Title ── */}
+          <div className="text-center mb-24 md:mb-32">
+            <span className="text-[9px] md:text-[10px] tracking-[0.42em] text-[#C9A84C] font-bold uppercase block mb-7">
+              OUR STORY & HERITAGE
             </span>
-            <p className="font-serif italic text-base md:text-xl text-[#0B3D2E] leading-relaxed max-w-2xl mx-auto mb-6">
-              "CraftNest is an artistic sanctuary dedicated to handcrafting bespoke legacy art, luxury return gifts, and creative event experiences that connect homes and hearts with traditional Indian heritage."
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[#0B3D2E] font-sans text-xs md:text-sm font-semibold tracking-wide">
+            <h2
+              className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-[88px] text-white font-medium tracking-tight leading-[1.05] mb-8"
+              style={{
+                transform: `translate(${storyMouse.x * -18}px, ${storyMouse.y * -10}px)`,
+                transition: 'transform 0.3s ease-out',
+              }}
+            >
+              Where Creativity<br />
+              <span style={{ color: '#E8C96B', textShadow: '0 0 60px rgba(232,201,107,0.25)' }}>
+                Meets Celebration
+              </span>
+            </h2>
+            <div className="w-28 h-[1.5px] mx-auto" style={{ background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)' }} />
+          </div>
+
+          {/* ── Chapter 2: The Story — editorial split ── */}
+          <div className="flex flex-col lg:flex-row gap-14 lg:gap-20 items-center mb-28 md:mb-36">
+
+            {/* Story text */}
+            <div className="w-full lg:w-[48%] space-y-6">
+              <p className="font-serif italic text-xl md:text-2xl leading-relaxed" style={{ color: 'rgba(232,201,107,0.72)' }}>
+                Born from a passion for handmade art.
+              </p>
+              <p className="font-sans text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.52)' }}>
+                CraftNest was born from a passion for handmade art, personalized gifts, and creating memorable experiences for families and children. What started as a hobby of crafting unique handmade creations gradually grew into a business dedicated to bringing joy through art and creativity.
+              </p>
+              <p className="font-sans text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.52)' }}>
+                At CraftNest, we believe handmade creations tell a story. Every item we create is crafted with love and designed to make your celebrations more meaningful and memorable.
+              </p>
+              <div className="border-l-2 pl-5 mt-2" style={{ borderColor: 'rgba(201,168,76,0.3)' }}>
+                <p className="font-serif italic text-sm leading-relaxed" style={{ color: 'rgba(232,201,107,0.5)' }}>
+                  "Thank you for supporting our small business and allowing us to be a part of your special moments."
+                </p>
+              </div>
+            </div>
+
+            {/* 3D floating image — tilts with cursor */}
+            <div
+              className="w-full lg:w-[52%]"
+              style={{
+                transform: `perspective(1000px) rotateX(${storyMouse.y * -11}deg) rotateY(${storyMouse.x * 11}deg)`,
+                transition: 'transform 0.18s ease-out',
+              }}
+            >
+              <div
+                className="relative rounded-[26px] overflow-hidden"
+                style={{
+                  border: '1px solid rgba(201,168,76,0.18)',
+                  boxShadow: '0 40px 100px rgba(0,0,0,0.7), inset 0 0 60px rgba(201,168,76,0.04)',
+                }}
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=900"
+                  alt="CraftNest handcrafted art"
+                  className="w-full h-72 md:h-[360px] object-cover"
+                />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(1,8,6,0.65) 0%, transparent 55%)' }} />
+                {/* Subtle inner border glow */}
+                <div className="absolute inset-0 rounded-[26px]" style={{ boxShadow: 'inset 0 0 50px rgba(232,201,107,0.05)' }} />
+              </div>
+            </div>
+          </div>
+
+          {/* ── Chapter 3: Specialties — 3D tilt cards ── */}
+          <div className="mb-28 md:mb-36">
+            <div className="text-center mb-12">
+              <span className="text-[9px] tracking-[0.38em] text-[#C9A84C] uppercase font-bold">WHAT WE SPECIALIZE IN</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+              {[
+                { icon: '🎨', title: 'Face Painting', desc: 'Transforming birthdays, festivals, school events, and parties into colourful and unforgettable experiences with creative, skin-safe face painting designs.' },
+                { icon: '🎁', title: 'Return Gifts', desc: 'Thoughtfully handcrafted return gifts for every occasion — custom hair accessories, bangles, and keepsakes your guests will cherish long after the celebration.' },
+                { icon: '🖌️', title: 'Crafts & Arts', desc: 'Traditional Lippan Art, personalized nameplates, mandala art, canvas painting, wood painting, and custom handmade décor — every piece crafted with love.' },
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  onMouseMove={handleMouseMove3D}
+                  onMouseLeave={(e) => {
+                    handleMouseLeave3D(e as React.MouseEvent<HTMLElement>);
+                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(201,168,76,0.14)';
+                    (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 48px rgba(0,0,0,0.55), inset 0 1px 0 rgba(232,201,107,0.04)';
+                  }}
+                  className="relative rounded-[22px] p-7 md:p-8 cursor-default group"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(15,61,40,0.6) 0%, rgba(4,14,9,0.8) 100%)',
+                    border: '1px solid rgba(201,168,76,0.14)',
+                    backdropFilter: 'blur(16px)',
+                    boxShadow: '0 12px 48px rgba(0,0,0,0.55), inset 0 1px 0 rgba(232,201,107,0.04)',
+                    transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(232,201,107,0.3)';
+                    (e.currentTarget as HTMLElement).style.boxShadow = '0 16px 64px rgba(0,0,0,0.6), 0 0 40px rgba(232,201,107,0.06), inset 0 1px 0 rgba(232,201,107,0.08)';
+                  }}
+                >
+                  {/* Top gold shimmer on hover */}
+                  <div className="absolute top-0 left-6 right-6 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: 'linear-gradient(90deg, transparent, rgba(232,201,107,0.4), transparent)' }} />
+
+                  <div
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl mb-5"
+                    style={{ background: 'rgba(232,201,107,0.07)', border: '1px solid rgba(232,201,107,0.14)' }}
+                  >
+                    {item.icon}
+                  </div>
+                  <h4 className="font-serif text-xl text-white font-medium mb-3 group-hover:text-[#E8C96B] transition-colors duration-300">
+                    {item.title}
+                  </h4>
+                  <p className="font-sans text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.42)' }}>
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Chapter 4: Heritage Finale ── */}
+          <div className="text-center">
+
+            {/* Manifesto — slow parallax */}
+            <div
+              className="max-w-3xl mx-auto mb-14"
+              style={{
+                transform: `translate(${storyMouse.x * 12}px, ${storyMouse.y * 7}px)`,
+                transition: 'transform 0.4s ease-out',
+              }}
+            >
+              <p
+                className="font-serif italic text-lg md:text-2xl leading-relaxed"
+                style={{ color: 'rgba(232,201,107,0.6)', textShadow: '0 0 40px rgba(232,201,107,0.08)' }}
+              >
+                "CraftNest is an artistic sanctuary dedicated to handcrafting bespoke legacy art, luxury return gifts, and creative event experiences that connect homes and hearts with traditional Indian heritage."
+              </p>
+            </div>
+
+            {/* Logo — 3D floating */}
+            <div
+              className="flex items-center justify-center mb-5"
+              style={{
+                transform: `perspective(700px) rotateX(${storyMouse.y * -9}deg) rotateY(${storyMouse.x * 9}deg)`,
+                transition: 'transform 0.22s ease-out',
+              }}
+            >
+              <svg viewBox="0 0 100 80" className="w-20 h-16 shiny-logo-hover" fill="none" stroke="#E8C96B" strokeWidth="2.0" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M 52 35 C 55 18, 38 12, 24 16 C 10 20, 8 38, 12 50 C 16 62, 30 70, 42 66 C 46 64, 48 58, 45 54 C 42 50, 48 44, 52 35 Z" strokeWidth="2.5" />
+                <circle cx="37" cy="51" r="5.5" strokeWidth="2.0" />
+                <circle cx="23" cy="49" r="3.2" strokeWidth="2.0" /><circle cx="20" cy="40" r="3.2" strokeWidth="2.0" />
+                <circle cx="22" cy="31" r="3.2" strokeWidth="2.0" /><circle cx="28" cy="23" r="3.2" strokeWidth="2.0" />
+                <circle cx="36" cy="23" r="3.2" strokeWidth="2.0" /><circle cx="43" cy="27" r="3.2" strokeWidth="2.0" />
+                <circle cx="46" cy="35" r="3.2" strokeWidth="2.0" />
+                <rect x="57.5" y="32" width="3.0" height="40" rx="1.5" strokeWidth="2.0" />
+                <path d="M 57.5 32 L 56.5 29 L 57.5 24 H 60.5 L 61.5 29 L 60.5 32 Z" strokeWidth="2.0" />
+                <path d="M 57.5 24 C 54.5 19, 54.5 13, 59 7 C 62.5 11, 62.5 19, 60.5 24 Z" strokeWidth="2.0" />
+              </svg>
+            </div>
+
+            {/* Founder signature */}
+            <div className="select-none py-2 flex items-center justify-center mb-2">
+              <div className="flex items-baseline">
+                <span className="text-6xl md:text-7xl font-serif font-extrabold leading-none italic" style={{ color: '#E8C96B', textShadow: '0 0 30px rgba(232,201,107,0.3)' }}>P</span>
+                <span className="text-3xl md:text-4xl tracking-wide font-normal -ml-1 mr-3" style={{ fontFamily: 'var(--font-cursive)', color: 'rgba(255,255,255,0.45)' }}>rasanthi</span>
+                <span className="text-6xl md:text-7xl font-serif font-extrabold leading-none italic" style={{ color: '#E8C96B', textShadow: '0 0 30px rgba(232,201,107,0.3)' }}>G</span>
+                <span className="text-3xl md:text-4xl tracking-wide font-normal -ml-1" style={{ fontFamily: 'var(--font-cursive)', color: 'rgba(255,255,255,0.45)' }}>anta</span>
+              </div>
+            </div>
+
+            <span className="text-[9px] md:text-[10px] tracking-[0.32em] text-[#C9A84C] font-bold uppercase block mb-12">
+              Owner, Proprietor & Founder · Craft Nest
+            </span>
+
+            {/* Contact row */}
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-sans text-xs tracking-wide" style={{ color: 'rgba(255,255,255,0.28)' }}>
               <span>📞 +1 (470) 452-7988</span>
-              <span className="text-[#C9A84C]/50">•</span>
+              <span style={{ color: 'rgba(201,168,76,0.25)' }}>•</span>
               <span>📍 Hyderabad, India</span>
-              <span className="text-[#C9A84C]/50">•</span>
+              <span style={{ color: 'rgba(201,168,76,0.25)' }}>•</span>
               <span>🌐 www.craftnestshop.com</span>
             </div>
-            <div className="w-20 h-[1px] bg-[#C9A84C]/35 mx-auto mt-8" />
+
           </div>
-
-          {/* Center Brand Logo */}
-          <div className="mb-4 reveal-element flex flex-col items-center justify-center select-none">
-            <svg 
-              viewBox="0 0 100 80" 
-              className="w-28 h-24 shiny-logo-hover" 
-              fill="none" 
-              stroke="#0B3D2E" 
-              strokeWidth="2.0" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            >
-              {/* Paint Palette Outer Shape */}
-              <path d="M 52 35 C 55 18, 38 12, 24 16 C 10 20, 8 38, 12 50 C 16 62, 30 70, 42 66 C 46 64, 48 58, 45 54 C 42 50, 48 44, 52 35 Z" strokeWidth="2.5" />
-              {/* Large Thumb Hole */}
-              <circle cx="37" cy="51" r="5.5" strokeWidth="2.0" fill="none" />
-              {/* 7 Paint Wells */}
-              <circle cx="23" cy="49" r="3.2" strokeWidth="2.0" fill="none" />
-              <circle cx="20" cy="40" r="3.2" strokeWidth="2.0" fill="none" />
-              <circle cx="22" cy="31" r="3.2" strokeWidth="2.0" fill="none" />
-              <circle cx="28" cy="23" r="3.2" strokeWidth="2.0" fill="none" />
-              <circle cx="36" cy="23" r="3.2" strokeWidth="2.0" fill="none" />
-              <circle cx="43" cy="27" r="3.2" strokeWidth="2.0" fill="none" />
-              <circle cx="46" cy="35" r="3.2" strokeWidth="2.0" fill="none" />
-              {/* Paintbrush */}
-              <rect x="57.5" y="32" width="3.0" height="40" rx="1.5" strokeWidth="2.0" fill="none" />
-              <path d="M 57.5 32 L 56.5 29 L 57.5 24 H 60.5 L 61.5 29 L 60.5 32 Z" strokeWidth="2.0" fill="none" />
-              <path d="M 57.5 24 C 54.5 19, 54.5 13, 59 7 C 62.5 11, 62.5 19, 60.5 24 Z" strokeWidth="2.0" fill="none" />
-            </svg>
-          </div>
-
-          {/* Name of Company - CRAFT NEST */}
-          <h3 className="font-serif text-2xl md:text-3xl text-[#0B3D2E] tracking-[0.3em] pl-[0.3em] font-extrabold uppercase mb-2 reveal-element">
-            CRAFT NEST
-          </h3>
-
-          {/* Role/Title */}
-          <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.25em] text-[#C9A84C] uppercase block mb-3 reveal-element">
-            Owner, Proprietor & Founder
-          </span>
-
-          {/* Custom Bizarre Handwriting Signature for Prasanthi Ganta */}
-          <div className="reveal-element select-none py-2 flex items-center justify-center scale-105 md:scale-110">
-            <div className="flex items-baseline font-cursive select-none">
-              <span className="text-6xl md:text-7xl text-[#0B3D2E] font-serif font-extrabold leading-none italic select-none">P</span>
-              <span className="text-3xl md:text-4xl text-[#C9A84C] tracking-wide font-normal -ml-1 select-none mr-3" style={{ fontFamily: 'var(--font-cursive)' }}>rasanthi</span>
-              <span className="text-6xl md:text-7xl text-[#0B3D2E] font-serif font-extrabold leading-none italic select-none">G</span>
-              <span className="text-3xl md:text-4xl text-[#C9A84C] tracking-wide font-normal -ml-1 select-none" style={{ fontFamily: 'var(--font-cursive)' }}>anta</span>
-            </div>
-          </div>
-
         </div>
       </section>
 
