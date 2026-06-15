@@ -552,94 +552,95 @@ function Home() {
         </div>
       </section>
       
-      {/* Decorative Crafts & Infinite Marquee Section */}
-      <section 
-        className="relative py-20 px-6 md:px-16 flex flex-col items-center justify-center overflow-hidden border-b border-[#C9A84C]/25"
-        style={{
-          background: 'radial-gradient(circle at center, #F6FAF7 0%, #EAF0EC 60%, #D8E5DC 100%)'
-        }}
+      {/* Crafts Strip — Stats + Dual Marquee */}
+      <section
+        className="relative overflow-hidden border-b border-[#C9A84C]/20"
+        style={{ background: 'radial-gradient(ellipse 120% 200% at 50% 50%, #0F3D28 0%, #071510 55%, #040D08 100%)' }}
       >
-        {/* Elegant Centered Header (Single Line) */}
-        <div className="max-w-6xl w-full text-center flex flex-col items-center justify-center mb-10 reveal-element">
-          
-          <div className="flex items-center justify-center gap-4 md:gap-8 w-full">
-            {/* Left Decorative Flourish */}
-            <div className="hidden lg:flex items-center gap-1.5 opacity-80 select-none">
-              <div className="w-10 md:w-16 h-[1px] bg-[#C9A84C]" />
-              <div className="w-2.5 h-2.5 rounded-full border border-[#C9A84C] flex items-center justify-center">
-                <div className="w-1 h-1 rounded-full bg-[#C9A84C]" />
-              </div>
-              <div className="w-4 h-[1px] bg-[#C9A84C]" />
-            </div>
+        {/* Subtle dot texture */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #E8C96B 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
 
-            <div className="text-center px-4">
-              <h2 className="font-serif text-xl sm:text-2xl md:text-[28px] lg:text-[34px] text-[#0B3D2E] tracking-[0.08em] font-medium leading-relaxed flex flex-wrap items-center justify-center gap-1 md:gap-2">
-                <span className="inline-block px-4 py-1.5 rounded-full transition-all duration-300 hover:bg-[#D2E2D7] hover:scale-[1.03] cursor-pointer">
-                  Handmade Crafts
+        {/* ── STATS ROW ── */}
+        <div className="relative z-10 border-b" style={{ borderColor: 'rgba(201,168,76,0.1)' }}>
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-12 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0">
+            {[
+              { num: '500+', label: 'Events Done',    sub: 'across Hyderabad' },
+              { num: '12+',  label: 'Art Forms',      sub: 'handcrafted in-house' },
+              { num: '100%', label: 'Custom Made',    sub: 'every single piece' },
+              { num: '5 ★',  label: 'Client Rating',  sub: 'loved by families' },
+            ].map((stat, i) => (
+              <div key={i} className="flex flex-col items-center text-center md:border-r last:border-r-0" style={{ borderColor: 'rgba(201,168,76,0.1)' }}>
+                <span
+                  className="font-serif font-bold leading-none mb-1.5"
+                  style={{ fontSize: 'clamp(2rem,5vw,3rem)', color: '#E8C96B', textShadow: '0 0 30px rgba(232,201,107,0.25)' }}
+                >
+                  {stat.num}
                 </span>
-                <span className="text-[#C9A84C]/60 font-light select-none mx-1">|</span>
-                <span className="inline-block px-4 py-1.5 rounded-full transition-all duration-300 hover:bg-[#D2E2D7] hover:scale-[1.03] cursor-pointer">
-                  Face Painting
+                <span className="font-sans text-xs md:text-sm font-bold tracking-[0.14em] uppercase mb-0.5" style={{ color: 'rgba(255,255,255,0.75)' }}>
+                  {stat.label}
                 </span>
-                <span className="text-[#C9A84C]/60 font-light select-none mx-1">|</span>
-                <span className="inline-block px-4 py-1.5 rounded-full font-semibold transition-all duration-300 hover:bg-[#D2E2D7] hover:scale-[1.03] cursor-pointer">
-                  Gifts
+                <span className="font-sans text-[9px] md:text-[10px]" style={{ color: 'rgba(201,168,76,0.38)' }}>
+                  {stat.sub}
                 </span>
-              </h2>
-            </div>
-
-            {/* Right Decorative Flourish */}
-            <div className="hidden lg:flex items-center gap-1.5 opacity-80 select-none">
-              <div className="w-4 h-[1px] bg-[#C9A84C]" />
-              <div className="w-2.5 h-2.5 rounded-full border border-[#C9A84C] flex items-center justify-center">
-                <div className="w-1 h-1 rounded-full bg-[#C9A84C]" />
               </div>
-              <div className="w-10 md:w-16 h-[1px] bg-[#C9A84C]" />
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* Infinite Moving Marquee Ticker */}
-        <div className="w-full relative py-6 border-y border-[#C9A84C]/25" style={{ background: 'rgba(250, 246, 235, 0.45)' }}>
+        {/* ── HEADING ROW ── */}
+        <div className="relative z-10 py-8 md:py-10 flex items-center justify-center gap-3 md:gap-6 px-4 border-b" style={{ borderColor: 'rgba(201,168,76,0.08)' }}>
+          {/* Left flourish */}
+          <div className="hidden sm:flex items-center gap-2 shrink-0 select-none">
+            <div className="h-[1px] w-8 md:w-14" style={{ background: 'linear-gradient(to right, transparent, #C9A84C)' }} />
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 0L8.5 5.5H14L9.5 8.5L11 14L7 11L3 14L4.5 8.5L0 5.5H5.5L7 0Z" fill="#C9A84C" opacity="0.6"/></svg>
+            <div className="h-[1px] w-4" style={{ background: '#C9A84C', opacity: 0.4 }} />
+          </div>
+
+          <h2 className="font-serif text-base sm:text-xl md:text-2xl lg:text-[28px] font-medium tracking-[0.1em] text-center select-none" style={{ color: 'rgba(255,255,255,0.82)' }}>
+            <span className="transition-colors duration-300 cursor-default hover:text-[#E8C96B]">Handmade Crafts</span>
+            <span className="mx-3 md:mx-5 font-light" style={{ color: 'rgba(201,168,76,0.35)' }}>·</span>
+            <span className="transition-colors duration-300 cursor-default hover:text-[#E8C96B]">Face Painting</span>
+            <span className="mx-3 md:mx-5 font-light" style={{ color: 'rgba(201,168,76,0.35)' }}>·</span>
+            <span className="transition-colors duration-300 cursor-default hover:text-[#E8C96B]">Bespoke Gifts</span>
+          </h2>
+
+          {/* Right flourish */}
+          <div className="hidden sm:flex items-center gap-2 shrink-0 select-none">
+            <div className="h-[1px] w-4" style={{ background: '#C9A84C', opacity: 0.4 }} />
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 0L8.5 5.5H14L9.5 8.5L11 14L7 11L3 14L4.5 8.5L0 5.5H5.5L7 0Z" fill="#C9A84C" opacity="0.6"/></svg>
+            <div className="h-[1px] w-8 md:w-14" style={{ background: 'linear-gradient(to left, transparent, #C9A84C)' }} />
+          </div>
+        </div>
+
+        {/* ── MARQUEE ROW 1 (left → right scroll) ── */}
+        <div className="relative z-10 py-3 border-b overflow-hidden" style={{ borderColor: 'rgba(201,168,76,0.07)', background: 'rgba(232,201,107,0.03)' }}>
           <div className="marquee-container">
-            <div className="marquee-content font-serif italic text-lg md:text-2xl text-[#C9A84C] tracking-widest">
-              <span className="marquee-item">Mehandi</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Mandala</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Return Gifts</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Name Plates</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Jewellery</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Face Painting</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Kundan Bangles</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Lippan Art</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-            </div>
-            
-            {/* Duplicated for seamless loop */}
-            <div className="marquee-content font-serif italic text-lg md:text-2xl text-[#C9A84C] tracking-widest" aria-hidden="true">
-              <span className="marquee-item">Mehandi</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Mandala</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Return Gifts</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Name Plates</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Jewellery</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Face Painting</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Kundan Bangles</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-              <span className="marquee-item">Lippan Art</span>
-              <span className="text-[#C9A84C]/45 select-none mx-2">•</span>
-            </div>
+            {[0, 1].map(copy => (
+              <div key={copy} className="marquee-content font-serif italic text-xl md:text-2xl tracking-widest select-none" style={{ color: '#C9A84C' }} aria-hidden={copy === 1}>
+                {['Mehandi', 'Mandala Art', 'Return Gifts', 'Name Plates', 'Jewellery', 'Face Painting', 'Kundan Bangles', 'Lippan Art', 'Canvas Painting', 'Meenakari'].map((item, j) => (
+                  <span key={j} className="inline-flex items-center gap-4">
+                    <span className="marquee-item">{item}</span>
+                    <span className="text-[#E8C96B]/30 text-base" style={{ fontStyle: 'normal' }}>◆</span>
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── MARQUEE ROW 2 (right → left, reversed, slightly faster) ── */}
+        <div className="relative z-10 py-3 overflow-hidden">
+          <div className="marquee-container">
+            {[0, 1].map(copy => (
+              <div key={copy} className="marquee-content-reverse font-sans text-[10px] md:text-xs font-bold tracking-[0.28em] uppercase select-none" style={{ color: 'rgba(232,201,107,0.38)' }} aria-hidden={copy === 1}>
+                {['Handcrafted with Love', 'Hyderabad\'s Finest', 'Event Specialists', 'Bespoke Creations', 'Artisan Family', 'Premium Quality', 'Celebrations Elevated', 'Traditional Art'].map((item, j) => (
+                  <span key={j} className="inline-flex items-center gap-5">
+                    <span>{item}</span>
+                    <span style={{ color: 'rgba(201,168,76,0.2)' }}>—</span>
+                  </span>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </section>

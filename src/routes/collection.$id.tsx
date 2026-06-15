@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Heart, ShoppingBag } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 

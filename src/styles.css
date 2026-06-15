@@ -132,12 +132,29 @@ body {
 
 /* Ensure smooth, continuous animation */
 @keyframes marquee-scroll {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Reverse marquee — scrolls right to left at faster pace */
+.marquee-content-reverse {
+  display: flex;
+  flex-shrink: 0;
+  min-width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1.5rem;
+  animation: marquee-scroll-reverse 22s linear infinite;
+}
+
+@keyframes marquee-scroll-reverse {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0%); }
+}
+
+/* Pause reverse marquee on hover too */
+.marquee-container:hover .marquee-content-reverse {
+  animation-play-state: paused;
 }
 
 /* Pause scroll animation on hover */
