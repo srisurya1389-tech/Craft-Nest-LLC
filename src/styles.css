@@ -472,6 +472,43 @@ body {
   }
 }
 
+/* Hide scrollbar utility */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* On very small phones show only 1 film reel column */
+@media (max-width: 479px) {
+  .hero-film-reels-container .film-strip-column:nth-child(2),
+  .hero-film-reels-container .film-strip-column:nth-child(3) {
+    display: none;
+  }
+}
+
+/* Input / select field dark color scheme for date pickers */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7) sepia(1) saturate(3) hue-rotate(3deg);
+  cursor: pointer;
+  opacity: 0.6;
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Form field focus — ensure autofill bg stays dark */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #071A10 inset !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.9) !important;
+  caret-color: #E8C96B;
+}
+
 
 
 
