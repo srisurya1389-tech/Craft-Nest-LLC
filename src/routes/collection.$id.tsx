@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
-import { Heart, ShoppingBag } from 'lucide-react'
-import { useCart } from '../context/CartContext'
+import { Heart } from 'lucide-react'
 
 export const Route = createFileRoute('/collection/$id')({
   component: CollectionPage,
@@ -40,18 +39,49 @@ const collectionData: Record<string, {
     title: 'Return Gifts',
     subtitle: 'Memories wrapped\nin craftsmanship',
     tag: 'RETURN GIFTS',
-    bannerImg: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=1400',
+    bannerImg: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703432/WhatsApp_Image_2026-06-15_at_11.44.38_PM_rrjcsk.jpg',
     heroDesc: 'Curated, handcrafted keepsakes your guests will treasure long after the celebration ends.',
-    promoTitle: 'BUY 12 AT ₹4,999',
-    promoSubtitle: 'Premium velvet wraps + personalised tags included',
-    filters: ['All', 'Wedding', 'Birthday', 'Corporate', 'Festival', 'Custom'],
+    promoTitle: 'CUSTOM RETURN GIFTS',
+    promoSubtitle: 'Minimum 10 pieces · Premium wraps + personalised tags included',
+    filters: ['All', 'Bronze', 'Silver', 'Wood', 'Fabric'],
     products: [
-      { title: 'Torus Sacred Keepsake Case', badge: 'Bestseller', desc: 'Premium walnut wood box featuring laser-carved Sacred Torus lines, padded with ivory velvet.', price: '₹1,800', img: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=600', occasion: 'Wedding' },
-      { title: 'Cube-in-Cube Gold Box', badge: 'New', desc: 'Folding metallic gift casing aligned with 4D hypercube frames, layered in thin gold foil.', price: '₹2,400', img: 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=600', occasion: 'Festival' },
-      { title: 'Meridian Brass Gifting Urn', badge: 'Custom', desc: 'A gorgeous decorative gifting vessel crafted with perfect lathe concentric brass alignments.', price: '₹1,500', img: 'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&q=80&w=600', occasion: 'Corporate' },
-      { title: 'Hexagon Crystal Tray', badge: 'Limited', desc: 'An elegant glass return tray shaped in six-fold crystal geometry for hosting keepsakes.', price: '₹3,200', img: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80&w=600', occasion: 'Wedding' },
-      { title: 'Metatron Gift Box', badge: 'Festival', desc: 'Premium paper-board festive boxes printed with holographic Metatron vector matrices.', price: '₹2,100', img: 'https://images.unsplash.com/photo-1589156280159-27698a70f29e?auto=format&fit=crop&q=80&w=600', occasion: 'Festival' },
-      { title: 'Flower of Life Hamper', badge: 'Bridal', desc: 'Artisan hampers containing select keepsakes, printed with the classical Flower of Life grid.', price: '₹4,800', img: 'https://images.unsplash.com/photo-1572913166580-c179c3a37319?auto=format&fit=crop&q=80&w=600', occasion: 'Wedding' },
+      { title: 'Brass Diya Set',                  badge: 'Bestseller',  desc: 'Polished brass oil lamp diyas — the most cherished and auspicious return gift for every pooja and wedding celebration.',         price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703432/WhatsApp_Image_2026-06-15_at_11.44.38_PM_rrjcsk.jpg',    occasion: 'Bronze' },
+      { title: 'German Silver Katori Set',         badge: 'Traditional', desc: 'Classic German silver katori (bowl) set with intricate floral engravings — a timeless gifting staple for all occasions.',         price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703457/WhatsApp_Image_2026-06-15_at_11.45.59_PM_1_rskjp3.jpg',  occasion: 'Silver' },
+      { title: 'Personalised Wooden Keychain',     badge: 'Popular',     desc: 'Custom laser-engraved wooden keychain with name or monogram — a practical and charming keepsake every guest will use.',            price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703458/WhatsApp_Image_2026-06-15_at_11.45.59_PM_pq4sd9.jpg',    occasion: 'Wood' },
+      { title: 'Embroidered Potli Bag',            badge: 'Bestseller',  desc: 'Hand-embroidered silk potli bags with drawstring — elegantly filled with sweets or mementos, ideal for weddings and festivals.',   price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703460/WhatsApp_Image_2026-06-15_at_11.44.39_PM_17_jtud4w.jpg', occasion: 'Fabric' },
+      { title: 'Brass Ganesha Idol',               badge: 'Traditional', desc: 'Miniature hand-cast brass Ganesha idol — a sacred and meaningful return gift that blesses every home it enters.',                   price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703460/WhatsApp_Image_2026-06-15_at_11.44.39_PM_12_ljakzf.jpg', occasion: 'Bronze' },
+      { title: 'Silver-Plated Photo Frame',        badge: 'Popular',     desc: 'Elegant silver-plated photo frame with ornate border — a sentimental keepsake your guests will proudly display at home.',           price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703464/WhatsApp_Image_2026-06-15_at_11.44.39_PM_16_zxyqct.jpg', occasion: 'Silver' },
+      { title: 'Wooden Coaster Set',               badge: 'New',         desc: 'Set of 4 hand-painted wooden coasters with mandala or floral motifs — a stylish and practical everyday keepsake.',                   price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703465/WhatsApp_Image_2026-06-15_at_11.44.39_PM_14_nkiamc.jpg', occasion: 'Wood' },
+      { title: 'Silk Gift Pouch',                  badge: 'Popular',     desc: 'Luxurious pure silk drawstring pouch in festive colours — perfect for tucking in small gifts, dry fruits, or trinkets.',            price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703465/WhatsApp_Image_2026-06-15_at_11.44.39_PM_13_vzch7z.jpg', occasion: 'Fabric' },
+      { title: 'Brass Kumkum Box',                 badge: 'Traditional', desc: 'Intricately etched brass kumkum dabbi with lid — a sacred gifting essential for poojas, namakarnams, and weddings.',                price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703466/WhatsApp_Image_2026-06-15_at_11.44.39_PM_5_fp5ev6.jpg',  occasion: 'Bronze' },
+      { title: 'German Silver Bowl',               badge: 'Bestseller',  desc: 'Heavy-gauge German silver bowl with hammered finish — a premium gifting choice for corporate and wedding celebrations alike.',        price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703470/WhatsApp_Image_2026-06-15_at_11.44.39_PM_11_ut0qm5.jpg', occasion: 'Silver' },
+      { title: 'Hand-Painted Name Plate',          badge: 'Custom',      desc: 'Personalised hand-painted wooden name plate with your choice of colour, font and motif — a unique gift guests will remember.',        price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703472/WhatsApp_Image_2026-06-15_at_11.44.39_PM_15_psm5z7.jpg', occasion: 'Wood' },
+      { title: 'Handmade Scrunchie Set',           badge: 'Popular',     desc: 'Set of 3 handmade fabric scrunchies in coordinating prints — a fun, affordable and much-loved return gift for all ages.',            price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703473/WhatsApp_Image_2026-06-15_at_11.44.39_PM_4_urdkmz.jpg',  occasion: 'Fabric' },
+      { title: 'Brass Incense Holder',             badge: 'Traditional', desc: 'Ornamental brass agarbatti stand with peacock or lotus design — brings fragrance and elegance to every home pooja corner.',           price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703474/WhatsApp_Image_2026-06-15_at_11.44.39_PM_6_ffkcw3.jpg',  occasion: 'Bronze' },
+      { title: 'German Silver Coin',               badge: 'Traditional', desc: 'Embossed German silver coin with Lakshmi or Ganesha motif — an auspicious token gifted at poojas, weddings, and namakarnams.',       price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703478/WhatsApp_Image_2026-06-15_at_11.44.39_PM_9_okeqny.jpg',  occasion: 'Silver' },
+      { title: 'Engraved Wooden Box',              badge: 'Popular',     desc: 'Laser-engraved wooden keepsake box with personalised name and date — ideal for storing jewellery, rings, or precious mementos.',       price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703478/WhatsApp_Image_2026-06-15_at_11.44.39_PM_10_wuurwg.jpg', occasion: 'Wood' },
+      { title: 'Cotton Tote Bag',                  badge: 'New',         desc: 'Printed cotton tote bag with event name or motif — an eco-friendly, reusable return gift loved by guests of every generation.',        price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703481/WhatsApp_Image_2026-06-15_at_11.44.39_PM_8_o6edty.jpg',  occasion: 'Fabric' },
+      { title: 'Brass Puja Bell',                  badge: 'Traditional', desc: 'Handcrafted brass ghanti with wooden handle — a classic return gift item that carries divine resonance to every household.',          price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703482/WhatsApp_Image_2026-06-15_at_11.44.39_PM_7_jghcyy.jpg',  occasion: 'Bronze' },
+      { title: 'Velvet Gift Pouch',                badge: 'Popular',     desc: 'Plush velvet drawstring pouch in rich jewel tones — a sophisticated packaging choice for coins, trinkets, or small gift items.',       price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703488/WhatsApp_Image_2026-06-15_at_11.44.39_PM_3_ogkcmu.jpg',  occasion: 'Fabric' },
+      { title: 'Silver-Plated Keychain',           badge: 'Popular',     desc: 'Personalised silver-plated keychain with engraved name or charm — a sleek, everyday keepsake your guests will carry with them.',       price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703488/WhatsApp_Image_2026-06-15_at_11.44.38_PM_17_lpewy6.jpg', occasion: 'Silver' },
+      { title: 'Wooden Pen Stand',                 badge: 'New',         desc: 'Hand-finished wooden pen stand with carved detailing — a desk-worthy return gift for corporate events and school functions.',           price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703488/WhatsApp_Image_2026-06-15_at_11.44.39_PM_1_u3xdrk.jpg',  occasion: 'Wood' },
+      { title: 'Brass Elephant Figurine',          badge: 'Bestseller',  desc: 'Polished brass elephant idol with raised trunk — a symbol of good fortune and prosperity, cherished as a return gift across cultures.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703491/WhatsApp_Image_2026-06-15_at_11.44.38_PM_12_akfzuq.jpg', occasion: 'Bronze' },
+      { title: 'German Silver Spoon Set',          badge: 'Traditional', desc: 'Set of 2 German silver spoons with floral engravings — a classic housewarming and wedding return gift with lasting sentimental value.',price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703491/WhatsApp_Image_2026-06-15_at_11.44.38_PM_16_u6zdtb.jpg', occasion: 'Silver' },
+      { title: 'Embroidered Key Pouch',            badge: 'Custom',      desc: 'Handmade fabric key pouch with mirror-work or thread embroidery — a compact, personalised return gift with artisan flair.',            price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703490/WhatsApp_Image_2026-06-15_at_11.44.38_PM_13_v03xkv.jpg', occasion: 'Fabric' },
+      { title: 'Painted Wooden Diya',              badge: 'Popular',     desc: 'Handcrafted and hand-painted wooden diya with gold and floral motifs — a decorative festive return gift with a traditional heart.',     price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703491/WhatsApp_Image_2026-06-15_at_11.44.39_PM_rbq9hh.jpg',    occasion: 'Wood' },
+      { title: 'Brass Kalash',                     badge: 'Traditional', desc: 'Sacred brass kalash with coin lid — offered as a return gift at griha pravesh, naming ceremonies, and auspicious family events.',       price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703493/WhatsApp_Image_2026-06-15_at_11.44.38_PM_10_fnjykf.jpg', occasion: 'Bronze' },
+      { title: 'Silk Drawstring Pouch',            badge: 'New',         desc: 'Fine silk pouch in bridal or festive palette, finished with golden tassels — an elegant wrapping for small gifts and dry fruits.',       price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703500/WhatsApp_Image_2026-06-15_at_11.44.38_PM_4_smujcn.jpg',  occasion: 'Fabric' },
+      { title: 'Wooden Photo Frame',               badge: 'Custom',      desc: 'Personalised hand-carved or painted wooden photo frame — a heartfelt return gift families will display for years to come.',             price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703498/WhatsApp_Image_2026-06-15_at_11.44.38_PM_5_jzajky.jpg',  occasion: 'Wood' },
+      { title: 'Silver-Plated Bowl',               badge: 'Bestseller',  desc: 'Classic silver-plated katori bowl — a time-honoured return gift for weddings and poojas that every Indian household treasures.',         price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703497/WhatsApp_Image_2026-06-15_at_11.44.38_PM_9_ccmlvt.jpg',  occasion: 'Silver' },
+      { title: 'Brass Namaskar Idol',              badge: 'Traditional', desc: 'Brass figurine in the classic namaskar pose — a spiritually meaningful and beautifully finished return gift for all celebrations.',       price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703497/WhatsApp_Image_2026-06-15_at_11.44.38_PM_7_v0ft5e.jpg',  occasion: 'Bronze' },
+      { title: 'German Silver Pen Stand',          badge: 'Popular',     desc: 'German silver desk pen stand with etched patterns — a refined return gift for corporate galas, school events, and office farewells.',    price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703495/WhatsApp_Image_2026-06-15_at_11.44.38_PM_15_ksfmdn.jpg', occasion: 'Silver' },
+      { title: 'Engraved Wooden Coaster',          badge: 'New',         desc: 'Single personalised wooden coaster with laser-engraved mandala or name — a thoughtful everyday keepsake for every guest.',               price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703494/WhatsApp_Image_2026-06-15_at_11.44.38_PM_11_c76arm.jpg', occasion: 'Wood' },
+      { title: 'Handwoven Gift Pouch',             badge: 'Custom',      desc: 'Artisan handwoven fabric pouch in traditional weave patterns — a unique and eco-conscious return gift with authentic cultural character.',  price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703501/WhatsApp_Image_2026-06-15_at_11.44.38_PM_6_y9ykiz.jpg',  occasion: 'Fabric' },
+      { title: 'Brass Oil Lamp',                   badge: 'Bestseller',  desc: 'Traditional brass deepam oil lamp with decorative wick holder — a divine return gift for griha pravesh, weddings, and poojas.',          price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703502/WhatsApp_Image_2026-06-15_at_11.44.38_PM_3_hiqswu.jpg',  occasion: 'Bronze' },
+      { title: 'Silver-Plated Keychain Tag',       badge: 'New',         desc: 'Engraved silver-plated tag keychain with event name or date — a minimalist, modern return gift with lasting personal value.',             price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703503/WhatsApp_Image_2026-06-15_at_11.44.38_PM_8_es76b1.jpg',  occasion: 'Silver' },
+      { title: 'Personalised Wooden Gift Box',     badge: 'Popular',     desc: 'Custom-engraved wooden gift box with magnetic lid — a premium presentation box that doubles as a lasting keepsake for the guest.',        price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703504/WhatsApp_Image_2026-06-15_at_11.44.38_PM_1_reku6q.jpg',  occasion: 'Wood' },
+      { title: 'Beaded Fabric Pouch',              badge: 'Custom',      desc: 'Hand-beaded fabric pouch with mirror-work accents — a festive, artisan return gift that doubles as a gorgeous jewellery holder.',         price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703504/WhatsApp_Image_2026-06-15_at_11.44.38_PM_2_dh8mzk.jpg',  occasion: 'Fabric' },
+      { title: 'Brass Puja Thali',                 badge: 'Traditional', desc: 'Handcrafted brass puja thali with engraved border and matching accessories — a complete sacred return gift for every auspicious occasion.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703505/WhatsApp_Image_2026-06-15_at_11.44.38_PM_14_fnib9m.jpg', occasion: 'Bronze' },
     ]
   },
   painting: {
@@ -75,14 +105,16 @@ const collectionData: Record<string, {
 }
 
 const badgeColors: Record<string, string> = {
-  Bestseller: 'bg-[#C9A84C] text-[#0B3D2E]',
-  New: 'bg-emerald-600 text-white',
-  Custom: 'bg-[#0F3D28] border border-[#C9A84C]/40 text-[#E8C96B]',
-  Limited: 'bg-red-700/80 text-white',
-  Bridal: 'bg-rose-700/80 text-white',
-  Festival: 'bg-amber-700/80 text-white',
-  Adults: 'bg-slate-700 text-white',
-  Kids: 'bg-sky-700 text-white',
+  Bestseller:  'bg-[#C9A84C] text-[#0B3D2E]',
+  New:         'bg-emerald-600 text-white',
+  Custom:      'bg-[#0F3D28] border border-[#C9A84C]/40 text-[#E8C96B]',
+  Limited:     'bg-red-700/80 text-white',
+  Bridal:      'bg-rose-700/80 text-white',
+  Festival:    'bg-amber-700/80 text-white',
+  Adults:      'bg-slate-700 text-white',
+  Kids:        'bg-sky-700 text-white',
+  Traditional: 'bg-amber-900/70 text-amber-200',
+  Popular:     'bg-teal-800/80 text-teal-100',
 }
 
 function CollectionPage() {
@@ -91,8 +123,6 @@ function CollectionPage() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeFilter, setActiveFilter] = useState('All')
   const [wishlist, setWishlist] = useState<string[]>([])
-
-  const { cartItems, setIsCartOpen, addToCart } = useCart()
 
   const toggleWishlist = (t: string) =>
     setWishlist(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t])
@@ -139,19 +169,6 @@ function CollectionPage() {
           >
             ← BACK TO SERVICES
           </a>
-
-          <button 
-            onClick={() => setIsCartOpen(true)}
-            className="relative p-2.5 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:text-white hover:bg-white/5 transition-all duration-300 cursor-pointer"
-            aria-label="Shopping Cart"
-          >
-            <ShoppingBag className="w-4 h-4 stroke-[2.0]" />
-            {cartItems.length > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#E8C96B] text-[#0B3D2E] text-[9px] font-sans font-bold rounded-full flex items-center justify-center">
-                {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
-              </span>
-            )}
-          </button>
 
           <div className="relative">
             <button className="p-2.5 rounded-full border border-[#C9A84C]/40 text-[#E8C96B] hover:border-[#C9A84C] transition-all cursor-pointer">
@@ -276,22 +293,14 @@ function CollectionPage() {
                     {item.desc}
                   </p>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-[#C9A84C]/10">
-                    <span className="font-serif text-lg text-[#E8C96B] font-medium">{item.price}</span>
-                    <button
-                      onClick={() => {
-                        const numericPrice = parseInt(item.price.replace(/[^\d]/g, ''), 10)
-                        addToCart({
-                          title: item.title,
-                          price: numericPrice,
-                          img: item.img
-                        })
-                      }}
-                      className="inline-flex items-center gap-1.5 text-[9px] tracking-[0.18em] font-bold uppercase bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] px-4 py-2.5 rounded-full transition-all hover:scale-105 cursor-pointer shadow-[0_2px_12px_rgba(201,168,76,0.15)] hover:shadow-[0_4px_20px_rgba(201,168,76,0.3)]"
+                  <div className="pt-4 border-t border-[#C9A84C]/10">
+                    <a
+                      href={`https://wa.me/14704527988?text=${encodeURIComponent(`Hi CraftNest! I'm interested in the "${item.title}". Please share more details.`)}`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-[9px] tracking-[0.18em] font-bold uppercase bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] px-4 py-2.5 rounded-full transition-all hover:scale-105 cursor-pointer shadow-[0_2px_12px_rgba(201,168,76,0.15)] hover:shadow-[0_4px_20px_rgba(201,168,76,0.3)] w-full justify-center"
                     >
-                      <ShoppingBag className="w-3.5 h-3.5 stroke-[2.0]" />
-                      ADD TO CART
-                    </button>
+                      ENQUIRE ON WHATSAPP →
+                    </a>
                   </div>
                 </div>
               </div>
@@ -315,7 +324,7 @@ function CollectionPage() {
       {/* Footer */}
       <footer className="border-t border-[#C9A84C]/10 py-8 text-center">
         <p className="font-sans text-[10px] tracking-[0.25em] text-[#C9A84C]/35 uppercase">
-          © {new Date().getFullYear()} Craft Nest · Handmade with Pride in India
+          © {new Date().getFullYear()} Craft Nest · Handmade with Pride in Georgia, USA
         </p>
       </footer>
     </div>

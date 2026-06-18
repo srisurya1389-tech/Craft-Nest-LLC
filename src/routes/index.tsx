@@ -9,50 +9,121 @@ export const Route = createFileRoute('/')({
 })
 
 const heroReelImages = [
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.05.47_AM_6_zqnnzf.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.08.40_AM_1_apkkry.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_yjrp0j.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-11_at_9.19.32_AM_2_noq9ou.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_3_lerit5.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289145/WhatsApp_Image_2026-06-11_at_9.05.47_AM_gkzub9.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_11_eomsmr.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289145/WhatsApp_Image_2026-06-11_at_9.05.47_AM_3_iax90h.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-11_at_9.19.32_AM_1_goilu2.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.05.47_AM_5_io41wh.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_2_bc00k5.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_7_easj0i.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289144/WhatsApp_Image_2026-06-11_at_9.05.47_AM_2_cermbl.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.08.40_AM_2_pfm5vm.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_3_lerit5.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289149/WhatsApp_Image_2026-06-11_at_9.05.47_AM_4_h8ktwz.jpg",
-  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.08.40_AM_2_pfm5vm.jpg"
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.05.47_AM_6_zqnnzf.jpg",   // 0
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.08.40_AM_1_apkkry.jpg",   // 1
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_yjrp0j.jpg",    // 2
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-11_at_9.19.32_AM_2_noq9ou.jpg",  // 3
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_3_lerit5.jpg",  // 4
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289145/WhatsApp_Image_2026-06-11_at_9.05.47_AM_gkzub9.jpg",   // 5
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_11_eomsmr.jpg",// 6
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289145/WhatsApp_Image_2026-06-11_at_9.05.47_AM_3_iax90h.jpg", // 7
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-11_at_9.19.32_AM_1_goilu2.jpg", // 8
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.05.47_AM_5_io41wh.jpg", // 9
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_2_bc00k5.jpg", // 10
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_7_easj0i.jpg", // 11
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289144/WhatsApp_Image_2026-06-11_at_9.05.47_AM_2_cermbl.jpg", // 12
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.08.40_AM_2_pfm5vm.jpg", // 13
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781702095/WhatsApp_Image_2026-06-15_at_11.38.26_PM_ohjhxt.jpg",  // 14 — pooja
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781289149/WhatsApp_Image_2026-06-11_at_9.05.47_AM_4_h8ktwz.jpg", // 15
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781702111/WhatsApp_Image_2026-06-15_at_11.37.40_PM_2_zysiib.jpg",// 16 — pooja
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_5_uqlyui.jpg",// 17 — pooja
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_wbpr2w.jpg",  // 18 — pooja
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_3_xpszqo.jpg",// 19 — pooja
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781702095/WhatsApp_Image_2026-06-15_at_11.37.40_PM_4_suwo3v.jpg",// 20 — pooja
+  "https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_1_ldq5qt.jpg",// 21 — pooja
 ];
 
-// Distinct permutations for columns to ensure they don't show the same image horizontally aligned
+// Distinct permutations across all 22 images so each column shows a unique order
 const reel1Images = [
-  heroReelImages[0], heroReelImages[1], heroReelImages[2], heroReelImages[3],
-  heroReelImages[4], heroReelImages[5], heroReelImages[6], heroReelImages[7],
-  heroReelImages[8], heroReelImages[9], heroReelImages[10], heroReelImages[11],
-  heroReelImages[12], heroReelImages[13], heroReelImages[14], heroReelImages[15],
-  heroReelImages[16]
+  heroReelImages[0],  heroReelImages[3],  heroReelImages[6],  heroReelImages[9],
+  heroReelImages[12], heroReelImages[15], heroReelImages[17], heroReelImages[1],
+  heroReelImages[4],  heroReelImages[7],  heroReelImages[10], heroReelImages[13],
+  heroReelImages[16], heroReelImages[19], heroReelImages[2],  heroReelImages[5],
+  heroReelImages[8],  heroReelImages[11], heroReelImages[14], heroReelImages[18],
+  heroReelImages[20], heroReelImages[21],
 ];
 
 const reel2Images = [
-  heroReelImages[6], heroReelImages[11], heroReelImages[15], heroReelImages[0],
-  heroReelImages[8], heroReelImages[12], heroReelImages[1], heroReelImages[9],
-  heroReelImages[3], heroReelImages[13], heroReelImages[5], heroReelImages[2],
-  heroReelImages[10], heroReelImages[4], heroReelImages[7], heroReelImages[16],
-  heroReelImages[14]
+  heroReelImages[5],  heroReelImages[10], heroReelImages[15], heroReelImages[0],
+  heroReelImages[18], heroReelImages[8],  heroReelImages[13], heroReelImages[3],
+  heroReelImages[20], heroReelImages[6],  heroReelImages[11], heroReelImages[16],
+  heroReelImages[1],  heroReelImages[19], heroReelImages[9],  heroReelImages[14],
+  heroReelImages[4],  heroReelImages[21], heroReelImages[7],  heroReelImages[12],
+  heroReelImages[17], heroReelImages[2],
 ];
 
 const reel3Images = [
-  heroReelImages[12], heroReelImages[3], heroReelImages[7], heroReelImages[10],
-  heroReelImages[1], heroReelImages[14], heroReelImages[9], heroReelImages[5],
-  heroReelImages[15], heroReelImages[2], heroReelImages[13], heroReelImages[6],
-  heroReelImages[0], heroReelImages[11], heroReelImages[8], heroReelImages[4],
-  heroReelImages[16]
+  heroReelImages[11], heroReelImages[4],  heroReelImages[19], heroReelImages[7],
+  heroReelImages[14], heroReelImages[2],  heroReelImages[21], heroReelImages[9],
+  heroReelImages[16], heroReelImages[5],  heroReelImages[20], heroReelImages[0],
+  heroReelImages[13], heroReelImages[8],  heroReelImages[18], heroReelImages[3],
+  heroReelImages[15], heroReelImages[10], heroReelImages[6],  heroReelImages[17],
+  heroReelImages[1],  heroReelImages[12],
 ];
 
+type GalleryCat = 'all' | 'events' | 'arts' | 'other'
+const GALLERY_ITEMS: { id: number; src: string; category: Exclude<GalleryCat, 'all'>; caption: string }[] = [
+  { id: 0,  src: heroReelImages[0],  category: 'events', caption: 'Birthday Celebration' },
+  { id: 1,  src: heroReelImages[1],  category: 'arts',   caption: 'Handcraft Creation' },
+  { id: 2,  src: heroReelImages[2],  category: 'other',  caption: 'CraftNest Studio' },
+  { id: 3,  src: heroReelImages[3],  category: 'events', caption: 'Festival Event' },
+  { id: 4,  src: heroReelImages[4],  category: 'arts',   caption: 'Artisan Detail' },
+  { id: 5,  src: heroReelImages[5],  category: 'events', caption: 'Party Moments' },
+  { id: 6,  src: heroReelImages[6],  category: 'arts',   caption: 'Craft Workshop' },
+  { id: 7,  src: heroReelImages[7],  category: 'other',  caption: 'Behind the Scenes' },
+  { id: 8,  src: heroReelImages[8],  category: 'events', caption: 'Live Face Painting' },
+  { id: 9,  src: heroReelImages[9],  category: 'arts',   caption: 'Handmade Gifts' },
+  { id: 10, src: heroReelImages[10], category: 'other',  caption: 'Craft Collection' },
+  { id: 11, src: heroReelImages[11], category: 'events', caption: 'School Event' },
+  { id: 12, src: heroReelImages[12], category: 'arts',   caption: 'Mandala Art' },
+  { id: 13, src: heroReelImages[13], category: 'other',  caption: 'Custom Creations' },
+  { id: 14, src: heroReelImages[15], category: 'events', caption: 'Family Celebration' },
+  { id: 15, src: heroReelImages[16], category: 'arts',   caption: 'Jewellery Craft' },
+  { id: 16, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_5_uqlyui.jpg',  category: 'other', caption: 'Pooja & Event Décor' },
+  { id: 17, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_wbpr2w.jpg',    category: 'other', caption: 'Festive Event Props' },
+  { id: 18, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_3_xpszqo.jpg',  category: 'other', caption: 'Sacred Pooja Items' },
+  { id: 19, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781702095/WhatsApp_Image_2026-06-15_at_11.37.40_PM_4_suwo3v.jpg',  category: 'other', caption: 'Celebration Rentals' },
+  { id: 20, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_1_ldq5qt.jpg',  category: 'other', caption: 'Décor & Accessories' },
+  { id: 21, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781702095/WhatsApp_Image_2026-06-15_at_11.38.26_PM_ohjhxt.jpg',    category: 'other', caption: 'Pooja Rental Collection' },
+  { id: 22, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781702111/WhatsApp_Image_2026-06-15_at_11.37.40_PM_2_zysiib.jpg',  category: 'other', caption: 'Event Décor Rental' },
+  { id: 23, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703432/WhatsApp_Image_2026-06-15_at_11.44.38_PM_rrjcsk.jpg',    category: 'other', caption: 'Handcrafted Return Gift' },
+  { id: 24, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703457/WhatsApp_Image_2026-06-15_at_11.45.59_PM_1_rskjp3.jpg',  category: 'other', caption: 'Custom Keepsake' },
+  { id: 25, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703458/WhatsApp_Image_2026-06-15_at_11.45.59_PM_pq4sd9.jpg',    category: 'other', caption: 'Return Gift Collection' },
+  { id: 26, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703460/WhatsApp_Image_2026-06-15_at_11.44.39_PM_17_jtud4w.jpg', category: 'other', caption: 'Wedding Return Gift' },
+  { id: 27, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703460/WhatsApp_Image_2026-06-15_at_11.44.39_PM_12_ljakzf.jpg', category: 'other', caption: 'Festival Keepsake' },
+  { id: 28, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703464/WhatsApp_Image_2026-06-15_at_11.44.39_PM_16_zxyqct.jpg', category: 'other', caption: 'Personalised Gift' },
+  { id: 29, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703465/WhatsApp_Image_2026-06-15_at_11.44.39_PM_14_nkiamc.jpg', category: 'other', caption: 'Artisan Gift Box' },
+  { id: 30, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703465/WhatsApp_Image_2026-06-15_at_11.44.39_PM_13_vzch7z.jpg', category: 'other', caption: 'Bespoke Keepsake' },
+  { id: 31, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703466/WhatsApp_Image_2026-06-15_at_11.44.39_PM_5_fp5ev6.jpg',  category: 'other', caption: 'Celebration Gift' },
+  { id: 32, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703470/WhatsApp_Image_2026-06-15_at_11.44.39_PM_11_ut0qm5.jpg', category: 'other', caption: 'Handmade Memento' },
+  { id: 33, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703472/WhatsApp_Image_2026-06-15_at_11.44.39_PM_15_psm5z7.jpg', category: 'other', caption: 'Gifting Collection' },
+  { id: 34, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703473/WhatsApp_Image_2026-06-15_at_11.44.39_PM_4_urdkmz.jpg',  category: 'other', caption: 'Premium Return Gift' },
+  { id: 35, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703474/WhatsApp_Image_2026-06-15_at_11.44.39_PM_6_ffkcw3.jpg',  category: 'other', caption: 'Curated Keepsake' },
+  { id: 36, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703478/WhatsApp_Image_2026-06-15_at_11.44.39_PM_9_okeqny.jpg',  category: 'other', caption: 'Event Return Gift' },
+  { id: 37, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703478/WhatsApp_Image_2026-06-15_at_11.44.39_PM_10_wuurwg.jpg', category: 'other', caption: 'Custom Gift Pack' },
+  { id: 38, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703481/WhatsApp_Image_2026-06-15_at_11.44.39_PM_8_o6edty.jpg',  category: 'other', caption: 'Luxury Keepsake' },
+  { id: 39, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703482/WhatsApp_Image_2026-06-15_at_11.44.39_PM_7_jghcyy.jpg',  category: 'other', caption: 'Gift Craft' },
+  { id: 40, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703488/WhatsApp_Image_2026-06-15_at_11.44.39_PM_3_ogkcmu.jpg',  category: 'other', caption: 'Artisan Keepsake' },
+  { id: 41, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703488/WhatsApp_Image_2026-06-15_at_11.44.38_PM_17_lpewy6.jpg', category: 'other', caption: 'Thoughtful Return Gift' },
+  { id: 42, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703488/WhatsApp_Image_2026-06-15_at_11.44.39_PM_1_u3xdrk.jpg',  category: 'other', caption: 'Birthday Gift' },
+  { id: 43, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703491/WhatsApp_Image_2026-06-15_at_11.44.38_PM_12_akfzuq.jpg', category: 'other', caption: 'Handcrafted Memento' },
+  { id: 44, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703491/WhatsApp_Image_2026-06-15_at_11.44.38_PM_16_u6zdtb.jpg', category: 'other', caption: 'Custom Souvenir' },
+  { id: 45, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703490/WhatsApp_Image_2026-06-15_at_11.44.38_PM_13_v03xkv.jpg', category: 'other', caption: 'Party Return Gift' },
+  { id: 46, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703491/WhatsApp_Image_2026-06-15_at_11.44.39_PM_rbq9hh.jpg',    category: 'other', caption: 'Gifting Craft' },
+  { id: 47, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703493/WhatsApp_Image_2026-06-15_at_11.44.38_PM_10_fnjykf.jpg', category: 'other', caption: 'Handmade Gift' },
+  { id: 48, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703500/WhatsApp_Image_2026-06-15_at_11.44.38_PM_4_smujcn.jpg',  category: 'other', caption: 'Return Gift Set' },
+  { id: 49, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703498/WhatsApp_Image_2026-06-15_at_11.44.38_PM_5_jzajky.jpg',  category: 'other', caption: 'Festive Return Gift' },
+  { id: 50, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703497/WhatsApp_Image_2026-06-15_at_11.44.38_PM_9_ccmlvt.jpg',  category: 'other', caption: 'Celebration Keepsake' },
+  { id: 51, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703497/WhatsApp_Image_2026-06-15_at_11.44.38_PM_7_v0ft5e.jpg',  category: 'other', caption: 'Special Gift' },
+  { id: 52, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703495/WhatsApp_Image_2026-06-15_at_11.44.38_PM_15_ksfmdn.jpg', category: 'other', caption: 'Unique Return Gift' },
+  { id: 53, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703494/WhatsApp_Image_2026-06-15_at_11.44.38_PM_11_c76arm.jpg', category: 'other', caption: 'Traditional Gift' },
+  { id: 54, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703501/WhatsApp_Image_2026-06-15_at_11.44.38_PM_6_y9ykiz.jpg',  category: 'other', caption: 'Craft Gift Box' },
+  { id: 55, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703502/WhatsApp_Image_2026-06-15_at_11.44.38_PM_3_hiqswu.jpg',  category: 'other', caption: 'Handcrafted Souvenir' },
+  { id: 56, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703503/WhatsApp_Image_2026-06-15_at_11.44.38_PM_8_es76b1.jpg',  category: 'other', caption: 'Keepsake Gift' },
+  { id: 57, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703504/WhatsApp_Image_2026-06-15_at_11.44.38_PM_1_reku6q.jpg',  category: 'other', caption: 'Gift Collection' },
+  { id: 58, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703504/WhatsApp_Image_2026-06-15_at_11.44.38_PM_2_dh8mzk.jpg',  category: 'other', caption: 'Artisan Return Gift' },
+  { id: 59, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703505/WhatsApp_Image_2026-06-15_at_11.44.38_PM_14_fnib9m.jpg', category: 'other', caption: 'Bespoke Gift' },
+]
 
 function Home() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -101,8 +172,14 @@ function Home() {
   const [activeServiceTab, setActiveServiceTab] = useState(0)
   // Active craft index for Arts & Crafts masonry modal
   const [activeCraftModal, setActiveCraftModal] = useState<number | null>(null)
+  // Slideshow index for the craft detail modal
+  const [craftSlideIdx, setCraftSlideIdx] = useState(0)
   // Cursor position for the 3D storytelling section (normalized -0.5 to 0.5)
   const [storyMouse, setStoryMouse] = useState({ x: 0, y: 0 })
+
+  // Gallery filter + lightbox state
+  const [galleryFilter, setGalleryFilter] = useState<GalleryCat>('all')
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null)
 
   // Global Shopping Cart State
   const { cartItems, setIsCartOpen, addToCart } = useCart()
@@ -118,6 +195,19 @@ function Home() {
     }, 3800)
     return () => clearInterval(timer)
   }, [])
+
+  // Lightbox keyboard navigation
+  useEffect(() => {
+    if (lightboxIdx === null) return
+    const filtered = galleryFilter === 'all' ? GALLERY_ITEMS : GALLERY_ITEMS.filter(g => g.category === galleryFilter)
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxIdx(null)
+      if (e.key === 'ArrowRight') setLightboxIdx(prev => prev === null ? 0 : (prev + 1) % filtered.length)
+      if (e.key === 'ArrowLeft')  setLightboxIdx(prev => prev === null ? 0 : (prev - 1 + filtered.length) % filtered.length)
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [lightboxIdx, galleryFilter])
 
   // Contact Form State
   const [formSubmitted, setFormSubmitted] = useState(false)
@@ -172,9 +262,9 @@ function Home() {
       desc: 'Curated, handcrafted keepsakes that turn your celebrations into lifetime memories. Each piece is designed with intention — a lasting token of gratitude for every guest.',
       features: ['Fully personalised per theme', 'Minimum 10 pieces per order', 'Gift-wrapped & ready to give'],
       images: [
-        'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&q=80&w=900',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781703432/WhatsApp_Image_2026-06-15_at_11.44.38_PM_rrjcsk.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781703457/WhatsApp_Image_2026-06-15_at_11.45.59_PM_1_rskjp3.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781703458/WhatsApp_Image_2026-06-15_at_11.45.59_PM_pq4sd9.jpg',
       ],
     },
     {
@@ -193,42 +283,66 @@ function Home() {
   const craftItems = [
     {
       title: 'Lippan Art', tag: 'LIPPAN ART',
-      img: 'https://images.unsplash.com/photo-1561715276-a2d087060f1d?auto=format&fit=crop&q=80&w=900',
+      images: [
+        'https://images.unsplash.com/photo-1561715276-a2d087060f1d?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=900',
+      ],
       desc: 'Traditional clay and mirror work showcasing intricate patterns and radial geometry. Each piece is handcrafted to reflect light beautifully, bringing an ancient art form into contemporary spaces.',
       spanClass: 'col-span-1 sm:col-span-2 md:col-span-2',
       heightClass: 'h-60 sm:h-72 md:h-80',
     },
     {
       title: 'Mandala Art', tag: 'MANDALA ART',
-      img: 'https://res.cloudinary.com/diancfp03/image/upload/v1780162699/home_sa22ka.png',
+      images: [
+        'https://res.cloudinary.com/diancfp03/image/upload/v1780162699/home_sa22ka.png',
+        'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=900',
+      ],
       desc: 'Sacred concentric circular designs capturing cosmic symmetry, masterfully drafted using authentic artisan colours and precise geometric techniques passed down through generations.',
       spanClass: '',
       heightClass: 'h-60 sm:h-72 md:h-80',
     },
     {
       title: 'Custom Name Plates', tag: 'NAME PLATES',
-      img: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=900',
+      images: [
+        'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&q=80&w=900',
+      ],
       desc: 'Bespoke hand-carved name plaques designed to represent family identity through stunning hand-painted wooden contours and personalised lettering for every home.',
       spanClass: '',
       heightClass: 'h-56 sm:h-72 md:h-72',
     },
     {
       title: 'Canvas Painting', tag: 'CANVAS PAINTING',
-      img: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&q=80&w=900',
+      images: [
+        'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=900',
+      ],
       desc: 'Premium traditional paintings on high-quality stretched canvas, capturing cultural scenes, geometric alignments, and original artisan compositions in rich, lasting colour.',
       spanClass: 'col-span-1 sm:col-span-2 md:col-span-2',
       heightClass: 'h-56 sm:h-64 md:h-72',
     },
     {
       title: 'Mehandi', tag: 'MEHANDI',
-      img: 'https://images.unsplash.com/photo-1590075865003-e48277faa558?auto=format&fit=crop&q=80&w=900',
+      images: [
+        'https://images.unsplash.com/photo-1590075865003-e48277faa558?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=900',
+      ],
       desc: 'Intricate and traditional bridal-grade henna patterns hand-drawn with organic plant-based pastes — from elegant minimalist designs to elaborate full-hand bridal art.',
       spanClass: 'col-span-1 md:col-span-2',
       heightClass: 'h-56 sm:h-64 md:h-72',
     },
     {
       title: 'Wood & Pot Painting', tag: 'WOOD & POT',
-      img: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=900',
+      images: [
+        'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&q=80&w=900',
+        'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=900',
+      ],
       desc: 'Vibrant acrylic detailing applied on natural clay vessels and high-quality seasoned wood, each hand-painted with traditional motifs that transform everyday objects into art.',
       spanClass: '',
       heightClass: 'h-56 sm:h-64 md:h-72',
@@ -267,6 +381,7 @@ function Home() {
         <nav className="hidden lg:flex items-center gap-7 text-[#C9A84C] font-sans text-xs tracking-[0.18em] font-semibold">
           <a href="#services" className="hover:text-white transition-colors uppercase">Our Services</a>
           <a href="#arts-crafts" className="hover:text-white transition-colors uppercase">Arts & Crafts</a>
+          <a href="#gallery" className="hover:text-white transition-colors uppercase">Gallery</a>
           <a href="#our-story" className="hover:text-white transition-colors uppercase">Our Story</a>
           <a href="#contact" className="hover:text-white transition-colors uppercase">Contact</a>
         </nav>
@@ -310,6 +425,7 @@ function Home() {
                 { href: '#services', label: 'Our Services' },
                 { href: '#arts-crafts', label: 'Arts & Crafts' },
                 { href: '#pooja-rentals', label: 'Pooja & Rentals' },
+                { href: '#gallery', label: 'Gallery' },
                 { href: '#our-story', label: 'Our Story' },
                 { href: '#contact', label: 'Contact' },
               ].map(item => (
@@ -483,61 +599,6 @@ function Home() {
             ))}
           </p>
 
-          {/* Two Side-by-Side CTA Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-4 mt-2">
-            <a 
-              href="#services"
-              className="font-sans font-semibold transition-all duration-300 uppercase cursor-pointer"
-              style={{
-                border: '1.5px solid rgba(201, 168, 76, 0.75)',
-                color: '#D4AA56',
-                background: 'transparent',
-                letterSpacing: '0.2em',
-                padding: '14px 32px',
-                fontSize: '12px',
-                minWidth: '160px',
-                textAlign: 'center'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(201, 168, 76, 0.12)';
-                e.currentTarget.style.borderColor = '#E8C96B';
-                e.currentTarget.style.color = '#F0D070';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.borderColor = 'rgba(201, 168, 76, 0.75)';
-                e.currentTarget.style.color = '#D4AA56';
-              }}
-            >
-              TO BUY
-            </a>
-            <a 
-              href="#contact"
-              className="font-sans font-semibold transition-all duration-300 uppercase cursor-pointer"
-              style={{
-                border: '1.5px solid #C9A84C',
-                color: '#04140E',
-                background: '#C9A84C',
-                letterSpacing: '0.2em',
-                padding: '14px 32px',
-                fontSize: '12px',
-                minWidth: '160px',
-                textAlign: 'center'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#E8C96B';
-                e.currentTarget.style.borderColor = '#E8C96B';
-                e.currentTarget.style.color = '#04140E';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#C9A84C';
-                e.currentTarget.style.borderColor = '#C9A84C';
-                e.currentTarget.style.color = '#04140E';
-              }}
-            >
-              BOOK AN EVENT
-            </a>
-          </div>
         </div>
 
         {/* Bouncing Chevron down scroll indicator */}
@@ -564,7 +625,7 @@ function Home() {
         <div className="relative z-10 border-b" style={{ borderColor: 'rgba(201,168,76,0.1)' }}>
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-12 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0">
             {[
-              { num: '500+', label: 'Events Done',    sub: 'across Hyderabad' },
+              { num: '10+',  label: 'Events Done',    sub: 'across Georgia' },
               { num: '12+',  label: 'Art Forms',      sub: 'handcrafted in-house' },
               { num: '100%', label: 'Custom Made',    sub: 'every single piece' },
               { num: '5 ★',  label: 'Client Rating',  sub: 'loved by families' },
@@ -633,7 +694,7 @@ function Home() {
           <div className="marquee-container">
             {[0, 1].map(copy => (
               <div key={copy} className="marquee-content-reverse font-sans text-[10px] md:text-xs font-bold tracking-[0.28em] uppercase select-none" style={{ color: 'rgba(232,201,107,0.38)' }} aria-hidden={copy === 1}>
-                {['Handcrafted with Love', 'Hyderabad\'s Finest', 'Event Specialists', 'Bespoke Creations', 'Artisan Family', 'Premium Quality', 'Celebrations Elevated', 'Traditional Art'].map((item, j) => (
+                {['Handcrafted with Love', 'Georgia\'s Finest', 'Event Specialists', 'Bespoke Creations', 'Artisan Family', 'Premium Quality', 'Celebrations Elevated', 'Traditional Art'].map((item, j) => (
                   <span key={j} className="inline-flex items-center gap-5">
                     <span>{item}</span>
                     <span style={{ color: 'rgba(201,168,76,0.2)' }}>—</span>
@@ -658,7 +719,7 @@ function Home() {
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-500" />
-            <div className="absolute bottom-6 left-6 z-10">
+            <div className="absolute bottom-5 left-5 z-10 hidden sm:block">
               <span className="text-[8px] md:text-[9px] font-sans font-bold tracking-[0.25em] text-[#E8C96B] uppercase block mb-1">CELEBRATION ART</span>
               <h4 className="font-serif text-sm md:text-base text-white font-medium">Face Painting</h4>
             </div>
@@ -666,13 +727,13 @@ function Home() {
 
           {/* Collage Item 2: Return Gifts */}
           <div className="relative h-full w-full overflow-hidden group select-none">
-            <img 
-              src="https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&q=80&w=600" 
-              alt="Bespoke Return Gifts" 
+            <img
+              src="https://res.cloudinary.com/diancfp03/image/upload/v1781703457/WhatsApp_Image_2026-06-15_at_11.45.59_PM_1_rskjp3.jpg"
+              alt="Bespoke Return Gifts"
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-500" />
-            <div className="absolute bottom-6 left-6 z-10">
+            <div className="absolute bottom-5 left-5 z-10 hidden sm:block">
               <span className="text-[8px] md:text-[9px] font-sans font-bold tracking-[0.25em] text-[#E8C96B] uppercase block mb-1">HANDMADE MEMORIES</span>
               <h4 className="font-serif text-sm md:text-base text-white font-medium">Return Gifts</h4>
             </div>
@@ -686,7 +747,7 @@ function Home() {
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-500" />
-            <div className="absolute bottom-6 left-6 z-10">
+            <div className="absolute bottom-5 left-5 z-10 hidden sm:block">
               <span className="text-[8px] md:text-[9px] font-sans font-bold tracking-[0.25em] text-[#E8C96B] uppercase block mb-1">CREATIVE REALMS</span>
               <h4 className="font-serif text-sm md:text-base text-white font-medium">Crafts & Arts</h4>
             </div>
@@ -700,7 +761,7 @@ function Home() {
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-500" />
-            <div className="absolute bottom-6 left-6 z-10">
+            <div className="absolute bottom-5 left-5 z-10 hidden sm:block">
               <span className="text-[8px] md:text-[9px] font-sans font-bold tracking-[0.25em] text-[#E8C96B] uppercase block mb-1">DIVINE CELEBRATIONS</span>
               <h4 className="font-serif text-sm md:text-base text-white font-medium">Pooja Rentals</h4>
             </div>
@@ -709,17 +770,17 @@ function Home() {
         </div>
 
         {/* Central Brand Stamp Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none px-4">
-          <div className="bg-[#04140E]/85 backdrop-blur-md border border-[#C9A84C]/45 rounded-[24px] p-6 md:p-8 text-center max-w-lg shadow-2xl relative gold-glow">
-            <span className="text-[9px] tracking-[0.3em] font-sans font-bold text-[#C9A84C] uppercase mb-2 block">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none px-5 sm:px-10 z-20">
+          <div className="bg-[#04140E]/90 backdrop-blur-md border border-[#C9A84C]/45 rounded-[20px] sm:rounded-[24px] p-4 sm:p-6 md:p-8 text-center w-full max-w-xs sm:max-w-sm md:max-w-lg shadow-2xl relative gold-glow">
+            <span className="text-[8px] sm:text-[9px] tracking-[0.22em] sm:tracking-[0.3em] font-sans font-bold text-[#C9A84C] uppercase mb-1.5 sm:mb-2 block">
               CRAFTNEST ARTISTRY
             </span>
-            <h3 className="font-serif text-lg md:text-2xl font-medium text-white tracking-wide leading-tight">
+            <h3 className="font-serif text-[13px] sm:text-lg md:text-2xl font-medium text-white tracking-wide leading-snug break-words">
               Handcrafted with Love, Shared with Joy
             </h3>
-            <div className="w-16 h-[1px] bg-[#C9A84C]/35 mx-auto my-3" />
-            <p className="font-sans text-[10px] md:text-xs text-[rgba(250,246,235,0.7)] tracking-wide">
-              Face Painting • Return Gifts • Crafts & Arts • Pooja Rentals
+            <div className="w-12 sm:w-16 h-[1px] bg-[#C9A84C]/35 mx-auto my-2 sm:my-3" />
+            <p className="font-sans text-[8px] sm:text-[10px] md:text-xs text-[rgba(250,246,235,0.7)] tracking-wide leading-relaxed break-words">
+              Face Painting • Return Gifts • Crafts &amp; Arts • Pooja Rentals
             </p>
           </div>
         </div>
@@ -817,13 +878,13 @@ function Home() {
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/40 pointer-events-none hidden lg:block" />
                   <div className="absolute bottom-5 left-5 z-10 select-none pointer-events-none">
                     <span className="text-[10px] font-sans font-semibold text-white/40 tracking-[0.15em]">
-                      {String(slideIndices[panelIdx] + 1).padStart(2, '0')} / 03
+                      {String(slideIndices[panelIdx] + 1).padStart(2, '0')} / {String(panel.images.length).padStart(2, '0')}
                     </span>
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/10 z-10">
                     <div
                       className="h-full bg-[#E8C96B]/60 transition-all duration-700"
-                      style={{ width: `${((slideIndices[panelIdx] + 1) / 3) * 100}%` }}
+                      style={{ width: `${((slideIndices[panelIdx] + 1) / panel.images.length) * 100}%` }}
                     />
                   </div>
                 </div>
@@ -897,7 +958,7 @@ function Home() {
               >
                 {/* Image */}
                 <img
-                  src={craft.img}
+                  src={craft.images[0]}
                   alt={craft.title}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                 />
@@ -963,21 +1024,21 @@ function Home() {
             {/* Featured Card — 2/3 width, taller */}
             <div className="group relative overflow-hidden rounded-[20px] cursor-pointer md:col-span-2 h-[380px] md:h-[440px]">
               <img
-                src="https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=1000"
-                alt="Brass Samai Lamps"
+                src="https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_5_uqlyui.jpg"
+                alt="Pooja Rentals"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#040D08]/90 via-[#040D08]/30 to-transparent" />
               <div className="absolute inset-[1px] rounded-[19px] opacity-0 group-hover:opacity-100 outline outline-[2px] outline-[#E8C96B]/40 transition-all duration-500" />
 
               <div className="absolute bottom-0 left-0 right-0 p-7 md:p-9">
-                <span className="text-[8px] tracking-[0.32em] text-[#E8C96B] font-bold uppercase block mb-2">DIVINE LIGHTS</span>
-                <h3 className="font-serif text-2xl md:text-3xl text-white font-medium mb-3 leading-tight">Brass Samai Lamps</h3>
+                <span className="text-[8px] tracking-[0.32em] text-[#E8C96B] font-bold uppercase block mb-2">DIVINE RENTALS</span>
+                <h3 className="font-serif text-2xl md:text-3xl text-white font-medium mb-3 leading-tight">Pooja & Event Décor</h3>
                 <p className="font-sans text-xs text-white/55 leading-relaxed mb-5 max-w-md hidden sm:block">
-                  Stunning polished Kuthu Vilakku lamps crafted to bring divine and traditional warmth to any home celebration or ceremony.
+                  Sacred props and festive décor handpicked to bring divine warmth and elegance to every ceremony and celebration.
                 </p>
                 <a
-                  href={`https://wa.me/14704527988?text=${encodeURIComponent('Hi CraftNest! I\'d like to enquire about Brass Samai Lamps rental for my event.')}`}
+                  href={`https://wa.me/14704527988?text=${encodeURIComponent('Hi CraftNest! I\'d like to enquire about Pooja & Event Rentals for my event.')}`}
                   target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-[#E8C96B] hover:bg-[#FFF0B5] text-[#0B3D2E] text-[9px] font-bold tracking-[0.2em] uppercase px-6 py-2.5 rounded-full transition-all hover:scale-105 cursor-pointer"
                 >
@@ -989,18 +1050,18 @@ function Home() {
             {/* Side Card 1 */}
             <div className="group relative overflow-hidden rounded-[20px] cursor-pointer h-[380px] md:h-[440px]">
               <img
-                src="https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&q=80&w=700"
-                alt="Traditional Backdrops"
+                src="https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_wbpr2w.jpg"
+                alt="Festive Rentals"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#040D08]/85 via-[#040D08]/20 to-transparent" />
               <div className="absolute inset-[1px] rounded-[19px] opacity-0 group-hover:opacity-100 outline outline-[2px] outline-[#E8C96B]/40 transition-all duration-500" />
 
               <div className="absolute inset-0 flex flex-col justify-end p-6">
-                <span className="text-[8px] tracking-[0.3em] text-[#E8C96B] font-bold uppercase block mb-1.5 transition-transform duration-500 group-hover:-translate-y-1">STAGE BACKDROPS</span>
-                <h3 className="font-serif text-xl text-white font-medium leading-tight transition-transform duration-500 group-hover:-translate-y-1">Traditional Backdrops</h3>
+                <span className="text-[8px] tracking-[0.3em] text-[#E8C96B] font-bold uppercase block mb-1.5 transition-transform duration-500 group-hover:-translate-y-1">FESTIVE DÉCOR</span>
+                <h3 className="font-serif text-xl text-white font-medium leading-tight transition-transform duration-500 group-hover:-translate-y-1">Festive Event Props</h3>
                 <div className="overflow-hidden max-h-0 group-hover:max-h-24 transition-all duration-500 ease-in-out">
-                  <p className="font-sans text-[11px] text-white/60 leading-relaxed mt-2 mb-3">Marigold and lotus-draped event backdrops for weddings and poojas.</p>
+                  <p className="font-sans text-[11px] text-white/60 leading-relaxed mt-2 mb-3">Beautiful handcrafted props and décor for your weddings, poojas and celebrations.</p>
                   <span className="text-[9px] text-[#E8C96B] font-bold tracking-[0.2em] uppercase">Enquire →</span>
                 </div>
               </div>
@@ -1010,9 +1071,9 @@ function Home() {
           {/* Row 2: Three compact cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
             {[
-              { title: 'Artisan Urli Bowls', tag: 'DECORATIVE URLIS', img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=700', desc: 'Hammered brass bowls for floating flowers and candles.' },
-              { title: 'Pooja Mandir & Chowkis', tag: 'SACRED CHOWKIS', img: 'https://images.unsplash.com/photo-1589156280159-27698a70f29e?auto=format&fit=crop&q=80&w=700', desc: 'Hand-carved wooden mandirs with gold-leaf finish.' },
-              { title: 'Umbrellas & Festive Props', tag: 'FESTIVE PROPS', img: 'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&q=80&w=700', desc: 'Parasols, brass bells, and décor to elevate your event.' },
+              { title: 'Sacred Pooja Items', tag: 'POOJA ESSENTIALS', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_3_xpszqo.jpg', desc: 'Handcrafted sacred items to bless every ceremony with divine energy.' },
+              { title: 'Celebration Rentals', tag: 'EVENT RENTALS', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781702095/WhatsApp_Image_2026-06-15_at_11.37.40_PM_4_suwo3v.jpg', desc: 'Premium rental items curated for birthdays, weddings and festive events.' },
+              { title: 'Décor & Accessories', tag: 'FESTIVE PROPS', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_1_ldq5qt.jpg', desc: 'Elegant décor accessories to elevate the ambience of any celebration.' },
             ].map((item) => (
               <div key={item.title} className="group relative overflow-hidden rounded-[20px] cursor-pointer h-60 md:h-72">
                 <img
@@ -1145,7 +1206,7 @@ function Home() {
             </div>
 
             {/* Showcase Product Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className={`grid gap-4 mb-8 ${activeModal === 'gifts' ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5' : 'grid-cols-1 md:grid-cols-3'}`}>
               {activeModal === 'jewellery' && [
                 {
                   title: 'Chakra Mandala Necklace',
@@ -1173,27 +1234,49 @@ function Home() {
               ))}
 
               {activeModal === 'gifts' && [
-                {
-                  title: 'Torus Sacred Keepsake Case',
-                  geom: '3D Sacred Torus Engraving',
-                  desc: 'Premium walnut wood box featuring laser-carved Sacred Torus lines, padded with ivory velvet.'
-                },
-                {
-                  title: 'Cube-in-Cube Gold Box',
-                  geom: 'Metatron Hypercube Frame',
-                  desc: 'Folding metallic return-gift casing aligned with 4D hypercube frames, layered in thin gold foil.'
-                },
-                {
-                  title: 'Meridian Brass Gifting Urn',
-                  geom: 'Concentric brass rings',
-                  desc: 'A gorgeous decorative gifting vessel crafted with perfect lathe concentric brass alignments.'
-                }
-              ].map((item, idx) => (
-                <div key={idx} className="p-6 bg-[#0F5C42]/50 border border-[#C9A84C]/25 rounded-[16px] hover:border-[#E8C96B]/80 hover:scale-[1.03] transition-all duration-300 shadow-lg flex flex-col justify-between group cursor-default text-left">
-                  <div>
-                    <span className="text-[9px] uppercase tracking-widest text-[#C9A84C]/70 font-semibold">{item.geom}</span>
-                    <h4 className="font-serif text-lg text-white font-medium mt-1 mb-3 group-hover:text-[#E8C96B] transition-colors">{item.title}</h4>
-                    <p className="text-xs font-sans text-[rgba(232,201,107,0.7)] leading-relaxed">{item.desc}</p>
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703432/WhatsApp_Image_2026-06-15_at_11.44.38_PM_rrjcsk.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703457/WhatsApp_Image_2026-06-15_at_11.45.59_PM_1_rskjp3.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703458/WhatsApp_Image_2026-06-15_at_11.45.59_PM_pq4sd9.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703460/WhatsApp_Image_2026-06-15_at_11.44.39_PM_17_jtud4w.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703460/WhatsApp_Image_2026-06-15_at_11.44.39_PM_12_ljakzf.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703464/WhatsApp_Image_2026-06-15_at_11.44.39_PM_16_zxyqct.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703465/WhatsApp_Image_2026-06-15_at_11.44.39_PM_14_nkiamc.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703465/WhatsApp_Image_2026-06-15_at_11.44.39_PM_13_vzch7z.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703466/WhatsApp_Image_2026-06-15_at_11.44.39_PM_5_fp5ev6.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703470/WhatsApp_Image_2026-06-15_at_11.44.39_PM_11_ut0qm5.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703472/WhatsApp_Image_2026-06-15_at_11.44.39_PM_15_psm5z7.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703473/WhatsApp_Image_2026-06-15_at_11.44.39_PM_4_urdkmz.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703474/WhatsApp_Image_2026-06-15_at_11.44.39_PM_6_ffkcw3.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703478/WhatsApp_Image_2026-06-15_at_11.44.39_PM_9_okeqny.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703478/WhatsApp_Image_2026-06-15_at_11.44.39_PM_10_wuurwg.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703481/WhatsApp_Image_2026-06-15_at_11.44.39_PM_8_o6edty.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703482/WhatsApp_Image_2026-06-15_at_11.44.39_PM_7_jghcyy.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703488/WhatsApp_Image_2026-06-15_at_11.44.39_PM_3_ogkcmu.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703488/WhatsApp_Image_2026-06-15_at_11.44.38_PM_17_lpewy6.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703488/WhatsApp_Image_2026-06-15_at_11.44.39_PM_1_u3xdrk.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703491/WhatsApp_Image_2026-06-15_at_11.44.38_PM_12_akfzuq.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703491/WhatsApp_Image_2026-06-15_at_11.44.38_PM_16_u6zdtb.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703490/WhatsApp_Image_2026-06-15_at_11.44.38_PM_13_v03xkv.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703491/WhatsApp_Image_2026-06-15_at_11.44.39_PM_rbq9hh.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703493/WhatsApp_Image_2026-06-15_at_11.44.38_PM_10_fnjykf.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703500/WhatsApp_Image_2026-06-15_at_11.44.38_PM_4_smujcn.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703498/WhatsApp_Image_2026-06-15_at_11.44.38_PM_5_jzajky.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703497/WhatsApp_Image_2026-06-15_at_11.44.38_PM_9_ccmlvt.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703497/WhatsApp_Image_2026-06-15_at_11.44.38_PM_7_v0ft5e.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703495/WhatsApp_Image_2026-06-15_at_11.44.38_PM_15_ksfmdn.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703494/WhatsApp_Image_2026-06-15_at_11.44.38_PM_11_c76arm.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703501/WhatsApp_Image_2026-06-15_at_11.44.38_PM_6_y9ykiz.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703502/WhatsApp_Image_2026-06-15_at_11.44.38_PM_3_hiqswu.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703503/WhatsApp_Image_2026-06-15_at_11.44.38_PM_8_es76b1.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703504/WhatsApp_Image_2026-06-15_at_11.44.38_PM_1_reku6q.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703504/WhatsApp_Image_2026-06-15_at_11.44.38_PM_2_dh8mzk.jpg',
+                'https://res.cloudinary.com/diancfp03/image/upload/v1781703505/WhatsApp_Image_2026-06-15_at_11.44.38_PM_14_fnib9m.jpg',
+              ].map((src, idx) => (
+                <div key={idx} className="group relative overflow-hidden rounded-[14px] aspect-square cursor-pointer border border-[#C9A84C]/15 hover:border-[#E8C96B]/50 transition-all duration-300 hover:scale-[1.03]">
+                  <img src={src} alt={`Return Gift ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span className="text-[9px] font-sans font-bold text-[#E8C96B] tracking-[0.15em] uppercase">Gift {idx + 1}</span>
                   </div>
                 </div>
               ))}
@@ -1607,7 +1690,7 @@ function Home() {
                     icon: <svg className="w-[18px] h-[18px] fill-current shrink-0" viewBox="0 0 24 24"><path d="M6.62 10.79a15.15 15.15 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>,
                   },
                   {
-                    label: 'Location', value: 'Hyderabad, India', href: null,
+                    label: 'Location', value: 'Georgia, USA', href: null,
                     icon: <svg className="w-[18px] h-[18px] fill-none stroke-current shrink-0" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>,
                   },
                   {
@@ -1721,7 +1804,7 @@ function Home() {
                           type="tel" required
                           value={contactData.phoneNumber}
                           onChange={e => setContactData(prev => ({ ...prev, phoneNumber: e.target.value }))}
-                          placeholder="+91 00000 00000"
+                          placeholder="+1 000 000 0000"
                           className="w-full rounded-[10px] px-4 py-3 font-sans text-sm text-white placeholder-white/20 focus:outline-none transition-all"
                           style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(201,168,76,0.15)' }}
                           onFocus={e => { e.currentTarget.style.border = '1px solid rgba(232,201,107,0.5)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(232,201,107,0.06)'; }}
@@ -1805,7 +1888,235 @@ function Home() {
         </div>
       </section>
 
-      {/* Our Story & Heritage — Combined 3D Cinematic Ending */}
+      {/* ─── GALLERY SECTION ─────────────────────────────────────────────────────── */}
+      {(() => {
+        const filtered = galleryFilter === 'all' ? GALLERY_ITEMS : GALLERY_ITEMS.filter(g => g.category === galleryFilter)
+        const FILTERS: { id: GalleryCat; label: string; icon: string }[] = [
+          { id: 'all',    label: 'All Photos', icon: '✦' },
+          { id: 'events', label: 'Events',     icon: '🎉' },
+          { id: 'arts',   label: 'Arts',       icon: '🎨' },
+          { id: 'other',  label: 'Others',     icon: '📸' },
+        ]
+        // Heights cycle to create varied masonry feel
+        const HEIGHTS = ['h-64', 'h-80', 'h-72', 'h-96', 'h-60', 'h-88', 'h-72', 'h-64', 'h-80', 'h-96', 'h-60', 'h-72', 'h-80', 'h-64', 'h-96', 'h-72']
+
+        return (
+          <section
+            id="gallery"
+            className="relative py-20 md:py-28 px-4 sm:px-6 md:px-12 lg:px-16 border-t border-[#C9A84C]/15"
+            style={{ background: 'radial-gradient(ellipse 110% 80% at 50% 0%, #0A2318 0%, #050F0A 55%, #020806 100%)' }}
+          >
+            {/* Dot texture */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #E8C96B 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+
+            <div className="max-w-7xl mx-auto relative z-10">
+
+              {/* Section Header */}
+              <div className="text-center mb-12">
+                <span className="text-[9px] md:text-[10px] tracking-[0.38em] text-[#C9A84C] font-bold uppercase block mb-3">CRAFTNEST PORTFOLIO</span>
+                <h2 className="font-serif text-3xl md:text-5xl text-white font-medium tracking-wide mb-4">
+                  Our <span style={{ color: '#E8C96B', textShadow: '0 0 40px rgba(232,201,107,0.2)' }}>Gallery</span>
+                </h2>
+                <div className="w-20 h-[1px] mx-auto mb-4" style={{ background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)' }} />
+                <p className="font-sans text-xs md:text-sm max-w-md mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,0.38)' }}>
+                  A glimpse into our world of handmade crafts, live events, and artisan creations — every frame tells a story.
+                </p>
+              </div>
+
+              {/* Filter Tabs */}
+              <div className="flex flex-wrap items-center justify-center gap-2.5 mb-10">
+                {FILTERS.map(f => {
+                  const isActive = galleryFilter === f.id
+                  return (
+                    <button
+                      key={f.id}
+                      onClick={() => setGalleryFilter(f.id)}
+                      className="flex items-center gap-1.5 px-5 py-2.5 rounded-full font-sans text-[10px] font-bold tracking-[0.16em] uppercase cursor-pointer transition-all duration-200"
+                      style={{
+                        background: isActive ? '#E8C96B' : 'rgba(255,255,255,0.04)',
+                        color: isActive ? '#0B3D2E' : 'rgba(255,255,255,0.45)',
+                        border: isActive ? '1px solid #E8C96B' : '1px solid rgba(201,168,76,0.12)',
+                        boxShadow: isActive ? '0 0 18px rgba(232,201,107,0.22)' : 'none',
+                        transform: isActive ? 'translateY(-1px)' : 'translateY(0)',
+                      }}
+                    >
+                      <span className="text-sm leading-none">{f.icon}</span>
+                      {f.label}
+                      <span
+                        className="ml-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full"
+                        style={{
+                          background: isActive ? 'rgba(11,61,46,0.25)' : 'rgba(201,168,76,0.1)',
+                          color: isActive ? '#0B3D2E' : 'rgba(201,168,76,0.45)',
+                        }}
+                      >
+                        {f.id === 'all' ? GALLERY_ITEMS.length : GALLERY_ITEMS.filter(g => g.category === f.id).length}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* Masonry Grid (CSS columns) */}
+              {filtered.length === 0 ? (
+                <div className="text-center py-20" style={{ color: 'rgba(255,255,255,0.25)' }}>
+                  <p className="font-serif text-xl">No photos yet in this category</p>
+                  <p className="font-sans text-xs mt-2">Check back soon — we're adding more!</p>
+                </div>
+              ) : (
+                <div className="gallery-masonry" style={{ columnGap: '14px' }}>
+                  {filtered.map((item, i) => (
+                    <div
+                      key={item.id}
+                      onClick={() => setLightboxIdx(i)}
+                      className={`group relative overflow-hidden rounded-[16px] cursor-pointer ${HEIGHTS[i % HEIGHTS.length]}`}
+                      style={{
+                        breakInside: 'avoid',
+                        marginBottom: '14px',
+                        display: 'block',
+                      }}
+                    >
+                      <img
+                        src={item.src}
+                        alt={item.caption}
+                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                      />
+                      {/* Dark overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent transition-opacity duration-400 opacity-60 group-hover:opacity-80" />
+                      {/* Gold border ring on hover */}
+                      <div className="absolute inset-[1px] rounded-[15px] opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ outline: '1.5px solid rgba(232,201,107,0.5)' }} />
+
+                      {/* Category badge */}
+                      <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-1 group-hover:translate-y-0">
+                        <span
+                          className="font-sans text-[8px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-full"
+                          style={{
+                            background: item.category === 'events' ? 'rgba(232,201,107,0.85)' : item.category === 'arts' ? 'rgba(141,184,124,0.85)' : 'rgba(155,114,207,0.85)',
+                            color: '#fff',
+                          }}
+                        >
+                          {item.category}
+                        </span>
+                      </div>
+
+                      {/* Caption + expand icon */}
+                      <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-350">
+                        <div className="flex items-end justify-between">
+                          <span className="font-sans text-xs font-semibold text-white/90 leading-tight">{item.caption}</span>
+                          <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0 ml-2">
+                            <svg className="w-3.5 h-3.5 fill-none stroke-white" strokeWidth="2" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M11 19A8 8 0 1011 3a8 8 0 000 16z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M11 8v6M8 11h6" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Bottom CTA */}
+              <div className="mt-14 text-center">
+                <p className="font-serif italic text-sm mb-5" style={{ color: 'rgba(232,201,107,0.45)' }}>
+                  Want to see more? Follow us on Instagram for daily updates.
+                </p>
+                <a
+                  href="https://www.instagram.com/jewelryhivebycraftnest/?hl=en"
+                  target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2.5 text-white px-7 py-3.5 rounded-full font-sans text-[10px] font-bold tracking-[0.18em] uppercase transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                  style={{ background: 'linear-gradient(135deg, #833ab4 0%, #E1306C 50%, #F77737 100%)', boxShadow: '0 4px 18px rgba(225,48,108,0.25)' }}
+                >
+                  <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                  Follow on Instagram
+                </a>
+              </div>
+            </div>
+          </section>
+        )
+      })()}
+
+      {/* Gallery Lightbox */}
+      {lightboxIdx !== null && (() => {
+        const filtered = galleryFilter === 'all' ? GALLERY_ITEMS : GALLERY_ITEMS.filter(g => g.category === galleryFilter)
+        const item = filtered[lightboxIdx]
+        if (!item) return null
+        const goPrev = () => setLightboxIdx((lightboxIdx - 1 + filtered.length) % filtered.length)
+        const goNext = () => setLightboxIdx((lightboxIdx + 1) % filtered.length)
+        return (
+          <div
+            className="fixed inset-0 z-[9999] flex items-center justify-center animate-fade-in"
+            style={{ background: 'rgba(2,8,5,0.94)', backdropFilter: 'blur(18px)' }}
+            onClick={() => setLightboxIdx(null)}
+          >
+            {/* Close */}
+            <button
+              onClick={e => { e.stopPropagation(); setLightboxIdx(null) }}
+              className="absolute top-5 right-5 w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white transition-colors cursor-pointer z-10"
+              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}
+            >
+              <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+
+            {/* Counter */}
+            <div className="absolute top-5 left-1/2 -translate-x-1/2 font-sans text-[10px] font-bold tracking-[0.2em] uppercase z-10" style={{ color: 'rgba(201,168,76,0.55)' }}>
+              {lightboxIdx + 1} <span style={{ color: 'rgba(255,255,255,0.18)' }}>/ {filtered.length}</span>
+            </div>
+
+            {/* Prev arrow */}
+            <button
+              onClick={e => { e.stopPropagation(); goPrev() }}
+              className="absolute left-4 md:left-8 w-11 h-11 rounded-full flex items-center justify-center text-white/50 hover:text-white cursor-pointer transition-all hover:scale-110 z-10"
+              style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}
+            >
+              <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 18l-6-6 6-6" /></svg>
+            </button>
+
+            {/* Image container */}
+            <div
+              className="relative max-w-4xl w-full mx-16 md:mx-24 animate-scale-in"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="rounded-[20px] overflow-hidden" style={{ boxShadow: '0 40px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(201,168,76,0.12)' }}>
+                <img
+                  src={item.src}
+                  alt={item.caption}
+                  className="w-full max-h-[80vh] object-contain"
+                  style={{ background: '#020A05' }}
+                />
+              </div>
+              {/* Caption bar */}
+              <div className="mt-4 flex items-center justify-between px-1">
+                <div className="flex items-center gap-3">
+                  <span
+                    className="font-sans text-[8px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-full"
+                    style={{
+                      background: item.category === 'events' ? 'rgba(232,201,107,0.15)' : item.category === 'arts' ? 'rgba(141,184,124,0.15)' : 'rgba(155,114,207,0.15)',
+                      color: item.category === 'events' ? '#E8C96B' : item.category === 'arts' ? '#8DB87C' : '#9B72CF',
+                      border: `1px solid ${item.category === 'events' ? 'rgba(232,201,107,0.25)' : item.category === 'arts' ? 'rgba(141,184,124,0.25)' : 'rgba(155,114,207,0.25)'}`,
+                    }}
+                  >
+                    {item.category}
+                  </span>
+                  <span className="font-sans text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>{item.caption}</span>
+                </div>
+                <span className="font-sans text-[9px]" style={{ color: 'rgba(255,255,255,0.2)' }}>Press ← → to navigate • Esc to close</span>
+              </div>
+            </div>
+
+            {/* Next arrow */}
+            <button
+              onClick={e => { e.stopPropagation(); goNext() }}
+              className="absolute right-4 md:right-8 w-11 h-11 rounded-full flex items-center justify-center text-white/50 hover:text-white cursor-pointer transition-all hover:scale-110 z-10"
+              style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}
+            >
+              <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 18l6-6-6-6" /></svg>
+            </button>
+          </div>
+        )
+      })()}
+
+
+            {/* Our Story & Heritage — Combined 3D Cinematic Ending */}
       <section
         id="our-story"
         className="relative overflow-hidden py-20 md:py-28 lg:py-36 px-4 sm:px-6 md:px-12 lg:px-16 border-t border-[#C9A84C]/10"
@@ -1991,7 +2302,7 @@ function Home() {
                 className="font-serif italic text-lg md:text-2xl leading-relaxed"
                 style={{ color: 'rgba(232,201,107,0.6)', textShadow: '0 0 40px rgba(232,201,107,0.08)' }}
               >
-                "CraftNest is an artistic sanctuary dedicated to handcrafting bespoke legacy art, luxury return gifts, and creative event experiences that connect homes and hearts with traditional Indian heritage."
+                "CraftNest is an artistic sanctuary dedicated to handcrafting bespoke legacy art, luxury return gifts, and creative event experiences that connect homes and hearts across Georgia and beyond."
               </p>
             </div>
 
@@ -2034,7 +2345,7 @@ function Home() {
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-sans text-xs tracking-wide" style={{ color: 'rgba(255,255,255,0.28)' }}>
               <span>📞 +1 (470) 452-7988</span>
               <span style={{ color: 'rgba(201,168,76,0.25)' }}>•</span>
-              <span>📍 Hyderabad, India</span>
+              <span>📍 Georgia, USA</span>
               <span style={{ color: 'rgba(201,168,76,0.25)' }}>•</span>
               <span>🌐 www.craftnestshop.com</span>
             </div>
@@ -2053,17 +2364,17 @@ function Home() {
             {/* Brand */}
             <div className="text-center sm:text-left">
               <span className="font-serif text-base tracking-[0.25em] font-bold uppercase" style={{ color: '#E8C96B' }}>CRAFT NEST</span>
-              <p className="font-sans text-[10px] mt-1" style={{ color: 'rgba(255,255,255,0.28)' }}>Handmade with pride in India</p>
+              <p className="font-sans text-[10px] mt-1" style={{ color: 'rgba(255,255,255,0.28)' }}>Handmade with pride in Georgia, USA</p>
             </div>
             {/* Quick links */}
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-              {['#services', '#arts-crafts', '#pooja-rentals', '#our-story', '#contact'].map((href, i) => (
+              {['#services', '#arts-crafts', '#pooja-rentals', '#gallery', '#our-story', '#contact'].map((href, i) => (
                 <a key={href} href={href} className="font-sans text-[9px] font-semibold tracking-[0.15em] uppercase transition-colors"
                   style={{ color: 'rgba(201,168,76,0.5)' }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#E8C96B')}
                   onMouseLeave={e => (e.currentTarget.style.color = 'rgba(201,168,76,0.5)')}
                 >
-                  {['Our Services', 'Arts & Crafts', 'Pooja Rentals', 'Our Story', 'Contact'][i]}
+                  {['Our Services', 'Arts & Crafts', 'Pooja Rentals', 'Gallery', 'Our Story', 'Contact'][i]}
                 </a>
               ))}
             </div>
