@@ -151,7 +151,7 @@ const GALLERY_ITEMS: { id: number; src: string; category: Exclude<GalleryCat, 'a
   { id: 86, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755001/WhatsApp_Image_2026-06-17_at_6.23.28_PM_4_zezrnp.jpg', category: 'arts', caption: 'Wood Art Creation' },
   { id: 87, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755001/WhatsApp_Image_2026-06-17_at_6.23.28_PM_6_aqnzoc.jpg', category: 'arts', caption: 'Painted Wood Art' },
   { id: 88, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.43_PM_9_ulwugp.jpg', category: 'arts', caption: 'Lippan Art Creation' },
-  { id: 89, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_7_ufudhj.jpg', category: 'arts', caption: 'Handpainted Name Plate' },
+  { id: 89, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_7_ufudhj.jpg', category: 'arts', caption: 'Folk Art Canvas Painting' },
   { id: 90, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_8_uvtbvd.jpg', category: 'arts', caption: 'Name Plate Art' },
   { id: 91, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_5_uyvsuo.jpg', category: 'arts', caption: 'Canvas Painting' },
   { id: 92, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_3_z8s1hx.jpg', category: 'arts', caption: 'Canvas Art' },
@@ -370,11 +370,10 @@ function Home() {
     {
       title: 'Custom Name Plates', tag: 'NAME PLATES',
       images: [
-        'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_7_ufudhj.jpg',
-        'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_8_uvtbvd.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781289148/WhatsApp_Image_2026-06-11_at_9.08.40_AM_2_pfm5vm.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-11_at_9.19.32_AM_1_goilu2.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781289147/WhatsApp_Image_2026-06-11_at_9.19.32_AM_2_noq9ou.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_8_uvtbvd.jpg',
       ],
       desc: 'Bespoke hand-carved name plaques designed to represent family identity through stunning hand-painted wooden contours and personalised lettering for every home.',
       spanClass: '',
@@ -383,6 +382,7 @@ function Home() {
     {
       title: 'Canvas Painting', tag: 'CANVAS PAINTING',
       images: [
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_7_ufudhj.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_5_uyvsuo.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_3_z8s1hx.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_6_eenwsu.jpg',
