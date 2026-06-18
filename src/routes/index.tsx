@@ -122,26 +122,6 @@ const GALLERY_ITEMS: { id: number; src: string; category: Exclude<GalleryCat, 'a
   { id: 57, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703504/WhatsApp_Image_2026-06-15_at_11.44.38_PM_1_reku6q.jpg',  category: 'other', caption: 'Gift Collection' },
   { id: 58, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703504/WhatsApp_Image_2026-06-15_at_11.44.38_PM_2_dh8mzk.jpg',  category: 'other', caption: 'Artisan Return Gift' },
   { id: 59, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703505/WhatsApp_Image_2026-06-15_at_11.44.38_PM_14_fnib9m.jpg', category: 'other', caption: 'Bespoke Gift' },
-  { id: 60, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_13_ispbuh.jpg',  category: 'arts', caption: 'Butterfly Wing Design' },
-  { id: 61, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_11_eomsmr.jpg',  category: 'arts', caption: 'Tiger Face Art' },
-  { id: 62, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_8_wmt1xn.jpg',   category: 'arts', caption: 'Spider-Man Mask' },
-  { id: 63, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_9_ijammz.jpg',   category: 'arts', caption: 'Floral Crown Design' },
-  { id: 64, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289144/WhatsApp_Image_2026-06-12_at_7.23.02_PM_12_jwdaxe.jpg',  category: 'arts', caption: 'Rainbow Butterfly' },
-  { id: 65, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_7_easj0i.jpg',   category: 'arts', caption: 'Galaxy Eye Art' },
-  { id: 66, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_6_aheirr.jpg',   category: 'arts', caption: 'Dragon Scale Design' },
-  { id: 67, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_5_fdu4di.jpg',   category: 'arts', caption: 'Princess Tiara Art' },
-  { id: 68, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_4_ugo4sc.jpg',   category: 'arts', caption: 'Superhero Shield Mask' },
-  { id: 69, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_3_lerit5.jpg',   category: 'arts', caption: 'Mermaid Ocean Design' },
-  { id: 70, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_2_hgsutd.jpg',   category: 'arts', caption: 'Mandala Forehead Art' },
-  { id: 71, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_1_dn7nya.jpg',   category: 'arts', caption: 'Lion King Design' },
-  { id: 72, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_yjlsgm.jpg',     category: 'arts', caption: 'Peacock Feather Eye' },
-  { id: 73, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.01_PM_7_zrixno.jpg',   category: 'arts', caption: 'Pirate Skull Art' },
-  { id: 74, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.01_PM_5_qvnadm.jpg',   category: 'arts', caption: 'Fairy Garden Design' },
-  { id: 75, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_3_rwygcq.jpg',   category: 'arts', caption: 'Cosmic Galaxy Art' },
-  { id: 76, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.01_PM_6_sc3uag.jpg',   category: 'arts', caption: 'Tribal Warrior Design' },
-  { id: 77, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_1_i3fjz8.jpg',   category: 'arts', caption: 'Floral Vine Pattern' },
-  { id: 78, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_4_wlcaon.jpg',   category: 'arts', caption: 'Neon Splash Art' },
-  { id: 79, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_yjrp0j.jpg',     category: 'arts', caption: 'Golden Phoenix Design' },
   { id: 80, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.28_PM_10_rn5joh.jpg', category: 'arts', caption: 'Lippan Art Creation' },
   { id: 81, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.28_PM_9_suu6fd.jpg',  category: 'arts', caption: 'Lippan Mirror Work' },
   { id: 82, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.28_PM_11_f6xa9n.jpg', category: 'arts', caption: 'Clay & Mirror Art' },
@@ -179,6 +159,21 @@ const GALLERY_ITEMS: { id: number; src: string; category: Exclude<GalleryCat, 'a
   { id: 114, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781777586/WhatsApp_Image_2026-06-16_at_7.27.41_AM_6_nwhjit.jpg', category: 'arts', caption: 'Sacred Geometry' },
   { id: 115, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781777586/WhatsApp_Image_2026-06-16_at_7.27.41_AM_7_n7y1sc.jpg', category: 'arts', caption: 'Mandala Pattern' },
   { id: 116, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781777594/WhatsApp_Image_2026-06-16_at_7.27.41_AM_5_t6qowc.jpg', category: 'arts', caption: 'Mandala Creation' },
+  { id: 117, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779151/WhatsApp_Image_2026-06-18_at_4.02.38_PM_3_npjwar.jpg',  category: 'arts', caption: 'Rose Petal Cheek Art' },
+  { id: 118, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779150/WhatsApp_Image_2026-06-18_at_4.02.38_PM_5_v1ks8l.jpg',  category: 'arts', caption: 'Glitter Star Design' },
+  { id: 119, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779150/WhatsApp_Image_2026-06-18_at_4.02.38_PM_4_wyokds.jpg',  category: 'arts', caption: 'Indian Festival Art' },
+  { id: 120, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779151/WhatsApp_Image_2026-06-18_at_4.02.39_PM_1_aobbpi.jpg',  category: 'arts', caption: 'Peacock Eye Design' },
+  { id: 121, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779151/WhatsApp_Image_2026-06-18_at_4.02.38_PM_2_kihgir.jpg',  category: 'arts', caption: 'Floral Cheek Design' },
+  { id: 122, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779151/WhatsApp_Image_2026-06-18_at_4.02.39_PM_po62il.jpg',    category: 'arts', caption: 'Butterfly Cheek Art' },
+  { id: 123, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779152/WhatsApp_Image_2026-06-18_at_4.02.40_PM_1_fypkcd.jpg',  category: 'arts', caption: 'Crown & Flower Design' },
+  { id: 124, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779151/WhatsApp_Image_2026-06-18_at_4.02.40_PM_4_k4ydik.jpg',  category: 'arts', caption: 'Geometric Eye Art' },
+  { id: 125, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779152/WhatsApp_Image_2026-06-18_at_4.02.40_PM_nv6jah.jpg',    category: 'arts', caption: 'Vine Blossom Design' },
+  { id: 126, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779153/WhatsApp_Image_2026-06-18_at_4.02.41_PM_2_bacyln.jpg',  category: 'arts', caption: 'Rainbow Star Art' },
+  { id: 127, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779164/WhatsApp_Image_2026-06-18_at_4.02.41_PM_1_wzzhps.jpg',  category: 'arts', caption: 'Henna Inspired Design' },
+  { id: 128, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779164/WhatsApp_Image_2026-06-18_at_4.02.41_PM_cvnufq.jpg',    category: 'arts', caption: 'Lotus Eye Design' },
+  { id: 129, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779164/WhatsApp_Image_2026-06-18_at_4.02.38_PM_z9jni8.jpg',    category: 'arts', caption: 'Tribal Cheek Art' },
+  { id: 130, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779165/WhatsApp_Image_2026-06-18_at_4.02.37_PM_nvy09n.jpg',    category: 'arts', caption: 'Glitter Swirl Design' },
+  { id: 131, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779179/WhatsApp_Image_2026-06-18_at_4.02.38_PM_1_ykpgu8.jpg',  category: 'arts', caption: 'Sparkling Bloom Art' },
 ]
 
 function Home() {
@@ -323,6 +318,7 @@ function Home() {
       images: [
         'https://res.cloudinary.com/diancfp03/image/upload/v1781703432/WhatsApp_Image_2026-06-15_at_11.44.38_PM_rrjcsk.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781703460/WhatsApp_Image_2026-06-15_at_11.44.39_PM_17_jtud4w.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781703464/WhatsApp_Image_2026-06-15_at_11.44.39_PM_16_zxyqct.jpg',
       ],
     },
     {
@@ -331,9 +327,9 @@ function Home() {
       desc: 'Whimsical, safe, and event-ready designs for every age and festive occasion — bringing joy and vibrant colour to every face at your celebration.',
       features: ['Suitable for all age groups', 'Only certified skin-safe colours', 'Book for parties, schools & festivals'],
       images: [
-        'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_13_ispbuh.jpg',
-        'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_11_eomsmr.jpg',
-        'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_7_easj0i.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779151/WhatsApp_Image_2026-06-18_at_4.02.38_PM_3_npjwar.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779150/WhatsApp_Image_2026-06-18_at_4.02.38_PM_5_v1ks8l.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779150/WhatsApp_Image_2026-06-18_at_4.02.38_PM_4_wyokds.jpg',
       ],
     },
   ]
@@ -791,7 +787,7 @@ function Home() {
           {/* Collage Item 1: Face Painting */}
           <div className="relative h-full w-full overflow-hidden group select-none">
             <img 
-              src="https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=600" 
+              src="https://res.cloudinary.com/diancfp03/image/upload/v1781779165/WhatsApp_Image_2026-06-18_at_4.02.37_PM_nvy09n.jpg"
               alt="Colorful Celebrations" 
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             />
