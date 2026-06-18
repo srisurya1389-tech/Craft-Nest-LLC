@@ -21,6 +21,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body,
@@ -38,7 +39,10 @@ body {
 
 /* Gallery masonry responsive columns */
 .gallery-masonry {
-  columns: 2;
+  columns: 1;
+}
+@media (min-width: 375px) {
+  .gallery-masonry { columns: 2; }
 }
 @media (min-width: 640px) {
   .gallery-masonry { columns: 3; }

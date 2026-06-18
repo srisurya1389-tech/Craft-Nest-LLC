@@ -43,7 +43,7 @@ const collectionData: Record<string, {
     heroDesc: 'Curated, handcrafted keepsakes your guests will treasure long after the celebration ends.',
     promoTitle: 'CUSTOM RETURN GIFTS',
     promoSubtitle: 'Minimum 10 pieces · Premium wraps + personalised tags included',
-    filters: ['All', 'Bronze', 'Silver', 'Wood', 'Fabric'],
+    filters: [],
     products: [
       { title: 'Brass Diya Set',                  badge: 'Bestseller',  desc: 'Polished brass oil lamp diyas — the most cherished and auspicious return gift for every pooja and wedding celebration.',         price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703432/WhatsApp_Image_2026-06-15_at_11.44.38_PM_rrjcsk.jpg',    occasion: 'Bronze' },
       { title: 'German Silver Katori Set',         badge: 'Traditional', desc: 'Classic German silver katori (bowl) set with intricate floral engravings — a timeless gifting staple for all occasions.',         price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703457/WhatsApp_Image_2026-06-15_at_11.45.59_PM_1_rskjp3.jpg',  occasion: 'Silver' },
@@ -88,18 +88,32 @@ const collectionData: Record<string, {
     title: 'Face Painting',
     subtitle: 'Art that wears\nthe crowd',
     tag: 'FACE PAINTING',
-    bannerImg: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=1400',
+    bannerImg: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_13_ispbuh.jpg',
     heroDesc: 'Whimsical, safe, and event-ready designs. Only certified skin-safe colours. Perfect for all ages.',
-    promoTitle: 'BOOK 3, GET 1 FREE',
-    promoSubtitle: 'Natural organic paint upgrades included',
-    filters: ['All', 'Kids', 'Adults', 'Festival', 'Corporate', 'Custom'],
+    promoTitle: 'BOOK YOUR EVENT NOW',
+    promoSubtitle: 'Parties · Schools · Festivals · Corporate Events — all ages welcome',
+    filters: [],
     products: [
-      { title: 'Fractal Butterfly Design', badge: 'Bestseller', desc: 'Full-face colorful butterfly mask painted using perfect organic fractal grid alignments.', price: '₹2,500', img: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=600', occasion: 'Kids' },
-      { title: 'Golden Spiral Eye Frame', badge: 'Adults', desc: 'Elegant orbital strokes applied around the temple and eyes in shimmering gold, based on golden ratios.', price: '₹1,800', img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600', occasion: 'Adults' },
-      { title: 'Mandala Forehead Piece', badge: 'Festival', desc: 'Intricate micro-mandala center dot painted centered on the forehead using organic natural dyes.', price: '₹3,000', img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=600', occasion: 'Festival' },
-      { title: 'Cosmic Solar Eye Paint', badge: 'New', desc: 'A gorgeous radial sunburst painted with copper and gold minerals surrounding the left temple.', price: '₹2,200', img: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&q=80&w=600', occasion: 'Adults' },
-      { title: 'Tiger Fractal Pattern', badge: 'Kids', desc: 'A highly detailed fractal representation of tiger fur lines designed centered around the forehead and nose.', price: '₹3,500', img: 'https://images.unsplash.com/photo-1516062423079-7ca13cca77a8?auto=format&fit=crop&q=80&w=600', occasion: 'Kids' },
-      { title: 'Tribal Geometry Strokes', badge: 'Custom', desc: 'Clean chevron cheek stripes and linear dots painted using vegan organic paints.', price: '₹1,500', img: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=600', occasion: 'Corporate' },
+      { title: 'Butterfly Wing Design',    badge: 'Bestseller', desc: 'Full-face rainbow butterfly mask with layered wing gradients — the most requested design for birthday parties and kids events.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_13_ispbuh.jpg',  occasion: '' },
+      { title: 'Tiger Face Art',           badge: 'Popular',    desc: 'Bold tiger stripe design with amber and black — fierce, detailed, and a favourite among kids who love wild animals.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_11_eomsmr.jpg',  occasion: '' },
+      { title: 'Spider-Man Mask',          badge: 'Bestseller', desc: 'Iconic web-pattern Spider-Man face art with red and navy — brings out the superhero in every child at parties and school events.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_8_wmt1xn.jpg',   occasion: '' },
+      { title: 'Floral Crown Design',      badge: 'New',        desc: 'Delicate hand-painted floral crown with pastel roses and green leaves — elegant and perfect for garden parties and weddings.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_9_ijammz.jpg',   occasion: '' },
+      { title: 'Rainbow Butterfly',        badge: 'Popular',    desc: 'Vibrant rainbow-coloured butterfly spread across both cheeks — fun, colourful, and loved by kids and adults alike.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289144/WhatsApp_Image_2026-06-12_at_7.23.02_PM_12_jwdaxe.jpg',  occasion: '' },
+      { title: 'Galaxy Eye Art',           badge: 'New',        desc: 'Celestial galaxy eye design with deep blue, purple and gold star dust — a showstopper for festival and themed events.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_7_easj0i.jpg',   occasion: '' },
+      { title: 'Dragon Scale Design',      badge: 'Popular',    desc: 'Shimmering dragon scale texture painted on cheeks with metallic greens and golds — perfect for fantasy-themed events.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_6_aheirr.jpg',   occasion: '' },
+      { title: 'Princess Tiara Art',       badge: 'Bestseller', desc: 'Sparkling princess tiara with pink roses and gold glitter — every little girl\'s dream design for birthday parties.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_5_fdu4di.jpg',   occasion: '' },
+      { title: 'Superhero Shield Mask',    badge: 'Popular',    desc: 'Bold superhero half-mask design in red and gold — versatile for any character and a hit at all kids\' parties and fairs.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_4_ugo4sc.jpg',   occasion: '' },
+      { title: 'Mermaid Ocean Design',     badge: 'New',        desc: 'Oceanic mermaid scales in turquoise and coral with pearl accents — a dreamy underwater look for themed parties.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_3_lerit5.jpg',   occasion: '' },
+      { title: 'Mandala Forehead Art',     badge: 'Popular',    desc: 'Sacred mandala pattern centred on the forehead with fine detailing — elegant for festivals, cultural events, and adult celebrations.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_2_hgsutd.jpg',   occasion: '' },
+      { title: 'Lion King Design',         badge: 'Bestseller', desc: 'Majestic lion face with golden mane strokes — a powerful and dramatic design that steals the show at any event.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_1_dn7nya.jpg',   occasion: '' },
+      { title: 'Peacock Feather Eye',      badge: 'New',        desc: 'Intricate peacock feather eye design with teal, green and gold — stunning for cultural shows, festivals, and photo shoots.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_yjlsgm.jpg',     occasion: '' },
+      { title: 'Pirate Skull Art',         badge: 'Popular',    desc: 'Dramatic pirate skull and crossbones eye patch design — an adventure favourite for kids\' treasure hunt and pirate parties.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.01_PM_7_zrixno.jpg',   occasion: '' },
+      { title: 'Fairy Garden Design',      badge: 'New',        desc: 'Whimsical fairy design with pastel wings, stars, and flowers — magical and delightful for garden parties and kids\' events.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.01_PM_5_qvnadm.jpg',   occasion: '' },
+      { title: 'Cosmic Galaxy Art',        badge: 'Popular',    desc: 'Deep space galaxy swirl with nebula colours and glitter stars — a bold and artistic design for all ages and night events.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_3_rwygcq.jpg',   occasion: '' },
+      { title: 'Tribal Warrior Design',    badge: 'Bestseller', desc: 'Strong geometric tribal warrior stripes in bold black and ochre — striking and versatile for festival and corporate events.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.01_PM_6_sc3uag.jpg',   occasion: '' },
+      { title: 'Floral Vine Pattern',      badge: 'New',        desc: 'Delicate trailing vine and bloom pattern along the cheekbone — a subtle, feminine design that photographs beautifully.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_1_i3fjz8.jpg',   occasion: '' },
+      { title: 'Neon Splash Art',          badge: 'Popular',    desc: 'Vibrant neon colour splash design with UV-reactive paints — electric and eye-catching for night events and glow parties.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_4_wlcaon.jpg',   occasion: '' },
+      { title: 'Golden Phoenix Design',    badge: 'Bestseller', desc: 'Majestic golden phoenix with fiery wing feathers spreading across the cheek — a premium design for galas and special events.', price: '', img: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_yjrp0j.jpg',     occasion: '' },
     ]
   }
 }
@@ -184,7 +198,7 @@ function CollectionPage() {
       </header>
 
       {/* Cinematic Hero */}
-      <div className="relative h-[70vh] min-h-[480px] overflow-hidden">
+      <div className="relative h-[60vh] sm:h-[65vh] md:h-[70vh] min-h-[260px] sm:min-h-[340px] md:min-h-[480px] overflow-hidden">
         <img src={data.bannerImg} alt={data.title} className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(4,20,10,0.3) 0%, rgba(4,20,10,0.55) 50%, rgba(4,20,10,0.95) 100%)' }} />
 
@@ -222,30 +236,32 @@ function CollectionPage() {
       </div>
 
       {/* Filter Bar */}
-      <div className="sticky top-[68px] z-40 border-b border-[#C9A84C]/10 px-6 md:px-16 py-4 overflow-x-auto" style={{ background: 'rgba(4,20,10,0.97)', backdropFilter: 'blur(12px)' }}>
-        <div className="flex items-center gap-2 max-w-7xl mx-auto min-w-max">
-          <span className="text-[9px] tracking-[0.25em] text-[#C9A84C]/50 font-bold uppercase mr-2 shrink-0">FILTER</span>
-          {data.filters.map(f => (
-            <button
-              key={f}
-              onClick={() => setActiveFilter(f)}
-              className={`text-[9px] md:text-[10px] tracking-[0.15em] font-bold px-4 py-2 rounded-full border transition-all duration-250 uppercase cursor-pointer whitespace-nowrap ${
-                activeFilter === f
-                  ? 'bg-[#E8C96B] border-[#E8C96B] text-[#0B3D2E]'
-                  : 'border-[#C9A84C]/25 text-[#C9A84C]/60 hover:border-[#C9A84C]/60 hover:text-[#C9A84C]'
-              }`}
-            >
-              {f}
-            </button>
-          ))}
-          <span className="ml-auto text-[9px] text-[#C9A84C]/35 font-sans shrink-0 pl-4">
-            {visibleProducts.length} {visibleProducts.length === 1 ? 'item' : 'items'}
-          </span>
+      {data.filters.length > 0 && (
+        <div className="sticky top-16 md:top-[68px] z-40 border-b border-[#C9A84C]/10 px-4 sm:px-6 md:px-16 py-3 sm:py-4 overflow-x-auto" style={{ background: 'rgba(4,20,10,0.97)', backdropFilter: 'blur(12px)' }}>
+          <div className="flex items-center gap-2 max-w-7xl mx-auto min-w-max">
+            <span className="text-[9px] tracking-[0.25em] text-[#C9A84C]/50 font-bold uppercase mr-2 shrink-0">FILTER</span>
+            {data.filters.map(f => (
+              <button
+                key={f}
+                onClick={() => setActiveFilter(f)}
+                className={`text-[9px] md:text-[10px] tracking-[0.15em] font-bold px-4 py-2 rounded-full border transition-all duration-250 uppercase cursor-pointer whitespace-nowrap ${
+                  activeFilter === f
+                    ? 'bg-[#E8C96B] border-[#E8C96B] text-[#0B3D2E]'
+                    : 'border-[#C9A84C]/25 text-[#C9A84C]/60 hover:border-[#C9A84C]/60 hover:text-[#C9A84C]'
+                }`}
+              >
+                {f}
+              </button>
+            ))}
+            <span className="ml-auto text-[9px] text-[#C9A84C]/35 font-sans shrink-0 pl-4">
+              {visibleProducts.length} {visibleProducts.length === 1 ? 'item' : 'items'}
+            </span>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Product Grid */}
-      <main className="flex-grow px-6 md:px-16 py-12 max-w-7xl mx-auto w-full">
+      <main className="flex-grow px-4 sm:px-6 md:px-16 py-8 sm:py-12 max-w-7xl mx-auto w-full">
         {visibleProducts.length === 0 ? (
           <div className="text-center py-24">
             <p className="font-serif text-2xl text-white/30">No items match this filter.</p>
@@ -254,7 +270,7 @@ function CollectionPage() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-6 lg:gap-8">
             {visibleProducts.map((item, idx) => (
               <div
                 key={idx}
@@ -267,6 +283,7 @@ function CollectionPage() {
                     src={item.img}
                     alt={item.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    style={id === 'painting' ? { filter: 'saturate(1.4) contrast(1.08) brightness(1.05)' } : undefined}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0F1D16]/60 to-transparent" />
 

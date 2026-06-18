@@ -123,6 +123,47 @@ const GALLERY_ITEMS: { id: number; src: string; category: Exclude<GalleryCat, 'a
   { id: 57, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703504/WhatsApp_Image_2026-06-15_at_11.44.38_PM_1_reku6q.jpg',  category: 'other', caption: 'Gift Collection' },
   { id: 58, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703504/WhatsApp_Image_2026-06-15_at_11.44.38_PM_2_dh8mzk.jpg',  category: 'other', caption: 'Artisan Return Gift' },
   { id: 59, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781703505/WhatsApp_Image_2026-06-15_at_11.44.38_PM_14_fnib9m.jpg', category: 'other', caption: 'Bespoke Gift' },
+  { id: 60, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_13_ispbuh.jpg',  category: 'arts', caption: 'Butterfly Wing Design' },
+  { id: 61, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_11_eomsmr.jpg',  category: 'arts', caption: 'Tiger Face Art' },
+  { id: 62, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_8_wmt1xn.jpg',   category: 'arts', caption: 'Spider-Man Mask' },
+  { id: 63, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_9_ijammz.jpg',   category: 'arts', caption: 'Floral Crown Design' },
+  { id: 64, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289144/WhatsApp_Image_2026-06-12_at_7.23.02_PM_12_jwdaxe.jpg',  category: 'arts', caption: 'Rainbow Butterfly' },
+  { id: 65, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_7_easj0i.jpg',   category: 'arts', caption: 'Galaxy Eye Art' },
+  { id: 66, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_6_aheirr.jpg',   category: 'arts', caption: 'Dragon Scale Design' },
+  { id: 67, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_5_fdu4di.jpg',   category: 'arts', caption: 'Princess Tiara Art' },
+  { id: 68, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_4_ugo4sc.jpg',   category: 'arts', caption: 'Superhero Shield Mask' },
+  { id: 69, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_3_lerit5.jpg',   category: 'arts', caption: 'Mermaid Ocean Design' },
+  { id: 70, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_2_hgsutd.jpg',   category: 'arts', caption: 'Mandala Forehead Art' },
+  { id: 71, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_1_dn7nya.jpg',   category: 'arts', caption: 'Lion King Design' },
+  { id: 72, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.02_PM_yjlsgm.jpg',     category: 'arts', caption: 'Peacock Feather Eye' },
+  { id: 73, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.01_PM_7_zrixno.jpg',   category: 'arts', caption: 'Pirate Skull Art' },
+  { id: 74, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.01_PM_5_qvnadm.jpg',   category: 'arts', caption: 'Fairy Garden Design' },
+  { id: 75, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_3_rwygcq.jpg',   category: 'arts', caption: 'Cosmic Galaxy Art' },
+  { id: 76, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289146/WhatsApp_Image_2026-06-12_at_7.23.01_PM_6_sc3uag.jpg',   category: 'arts', caption: 'Tribal Warrior Design' },
+  { id: 77, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_1_i3fjz8.jpg',   category: 'arts', caption: 'Floral Vine Pattern' },
+  { id: 78, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_4_wlcaon.jpg',   category: 'arts', caption: 'Neon Splash Art' },
+  { id: 79, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289147/WhatsApp_Image_2026-06-12_at_7.23.01_PM_yjrp0j.jpg',     category: 'arts', caption: 'Golden Phoenix Design' },
+  { id: 80, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.28_PM_10_rn5joh.jpg', category: 'arts', caption: 'Lippan Art Creation' },
+  { id: 81, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.28_PM_9_suu6fd.jpg',  category: 'arts', caption: 'Lippan Mirror Work' },
+  { id: 82, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.28_PM_11_f6xa9n.jpg', category: 'arts', caption: 'Clay & Mirror Art' },
+  { id: 83, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.28_PM_8_xl2n0z.jpg',  category: 'arts', caption: 'Lippan Art Detail' },
+  { id: 84, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755001/WhatsApp_Image_2026-06-17_at_6.23.28_PM_7_qr5oqb.jpg', category: 'arts', caption: 'Mandala Art' },
+  { id: 85, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755001/WhatsApp_Image_2026-06-17_at_6.23.28_PM_5_vi0tek.jpg', category: 'arts', caption: 'Mandala Design' },
+  { id: 86, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755001/WhatsApp_Image_2026-06-17_at_6.23.28_PM_4_zezrnp.jpg', category: 'arts', caption: 'Sacred Mandala' },
+  { id: 87, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755001/WhatsApp_Image_2026-06-17_at_6.23.28_PM_6_aqnzoc.jpg', category: 'arts', caption: 'Mandala Pattern' },
+  { id: 88, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.43_PM_9_ulwugp.jpg', category: 'arts', caption: 'Lippan Art Creation' },
+  { id: 89, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_7_ufudhj.jpg', category: 'arts', caption: 'Handpainted Name Plate' },
+  { id: 90, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_8_uvtbvd.jpg', category: 'arts', caption: 'Name Plate Art' },
+  { id: 91, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_5_uyvsuo.jpg', category: 'arts', caption: 'Canvas Painting' },
+  { id: 92, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_3_z8s1hx.jpg', category: 'arts', caption: 'Canvas Art' },
+  { id: 93, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_6_eenwsu.jpg', category: 'arts', caption: 'Artisan Canvas Work' },
+  { id: 94, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_4_zjzej4.jpg', category: 'arts', caption: 'Canvas Creation' },
+  { id: 95, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755003/WhatsApp_Image_2026-06-17_at_6.23.43_PM_1_ywvzg6.jpg', category: 'arts', caption: 'Mehandi Design' },
+  { id: 96, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755003/WhatsApp_Image_2026-06-17_at_6.23.43_PM_2_gdtss3.jpg', category: 'arts', caption: 'Henna Art' },
+  { id: 97, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755003/WhatsApp_Image_2026-06-17_at_6.23.43_PM_pzvi3r.jpg',  category: 'arts', caption: 'Bridal Mehandi' },
+  { id: 98, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755003/WhatsApp_Image_2026-06-17_at_6.23.50_PM_1_uqjbrr.jpg', category: 'arts', caption: 'Wood & Pot Painting' },
+  { id: 99, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755004/WhatsApp_Image_2026-06-17_at_6.23.50_PM_e2roes.jpg',  category: 'arts', caption: 'Pot Art' },
+  { id: 100, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755003/WhatsApp_Image_2026-06-17_at_6.23.50_PM_2_ph99qn.jpg', category: 'arts', caption: 'Painted Pot Creation' },
 ]
 
 function Home() {
@@ -177,9 +218,12 @@ function Home() {
   // Cursor position for the 3D storytelling section (normalized -0.5 to 0.5)
   const [storyMouse, setStoryMouse] = useState({ x: 0, y: 0 })
 
+  useEffect(() => { setCraftSlideIdx(0) }, [activeCraftModal])
+
   // Gallery filter + lightbox state
   const [galleryFilter, setGalleryFilter] = useState<GalleryCat>('all')
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null)
+  const [galleryShowAll, setGalleryShowAll] = useState(false)
 
   // Global Shopping Cart State
   const { cartItems, setIsCartOpen, addToCart } = useCart()
@@ -273,9 +317,9 @@ function Home() {
       desc: 'Whimsical, safe, and event-ready designs for every age and festive occasion — bringing joy and vibrant colour to every face at your celebration.',
       features: ['Suitable for all age groups', 'Only certified skin-safe colours', 'Book for parties, schools & festivals'],
       images: [
-        'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=900',
+        'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_13_ispbuh.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289143/WhatsApp_Image_2026-06-12_at_7.23.02_PM_11_eomsmr.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781289145/WhatsApp_Image_2026-06-12_at_7.23.02_PM_7_easj0i.jpg',
       ],
     },
   ]
@@ -284,9 +328,11 @@ function Home() {
     {
       title: 'Lippan Art', tag: 'LIPPAN ART',
       images: [
-        'https://images.unsplash.com/photo-1561715276-a2d087060f1d?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=900',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.43_PM_9_ulwugp.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.28_PM_10_rn5joh.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.28_PM_9_suu6fd.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.28_PM_11_f6xa9n.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.28_PM_8_xl2n0z.jpg',
       ],
       desc: 'Traditional clay and mirror work showcasing intricate patterns and radial geometry. Each piece is handcrafted to reflect light beautifully, bringing an ancient art form into contemporary spaces.',
       spanClass: 'col-span-1 sm:col-span-2 md:col-span-2',
@@ -295,9 +341,10 @@ function Home() {
     {
       title: 'Mandala Art', tag: 'MANDALA ART',
       images: [
-        'https://res.cloudinary.com/diancfp03/image/upload/v1780162699/home_sa22ka.png',
-        'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=900',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755001/WhatsApp_Image_2026-06-17_at_6.23.28_PM_7_qr5oqb.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755001/WhatsApp_Image_2026-06-17_at_6.23.28_PM_5_vi0tek.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755001/WhatsApp_Image_2026-06-17_at_6.23.28_PM_4_zezrnp.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755001/WhatsApp_Image_2026-06-17_at_6.23.28_PM_6_aqnzoc.jpg',
       ],
       desc: 'Sacred concentric circular designs capturing cosmic symmetry, masterfully drafted using authentic artisan colours and precise geometric techniques passed down through generations.',
       spanClass: '',
@@ -306,9 +353,8 @@ function Home() {
     {
       title: 'Custom Name Plates', tag: 'NAME PLATES',
       images: [
-        'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&q=80&w=900',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_7_ufudhj.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_8_uvtbvd.jpg',
       ],
       desc: 'Bespoke hand-carved name plaques designed to represent family identity through stunning hand-painted wooden contours and personalised lettering for every home.',
       spanClass: '',
@@ -317,9 +363,10 @@ function Home() {
     {
       title: 'Canvas Painting', tag: 'CANVAS PAINTING',
       images: [
-        'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&q=80&w=900',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_5_uyvsuo.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_3_z8s1hx.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_6_eenwsu.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_4_zjzej4.jpg',
       ],
       desc: 'Premium traditional paintings on high-quality stretched canvas, capturing cultural scenes, geometric alignments, and original artisan compositions in rich, lasting colour.',
       spanClass: 'col-span-1 sm:col-span-2 md:col-span-2',
@@ -328,9 +375,9 @@ function Home() {
     {
       title: 'Mehandi', tag: 'MEHANDI',
       images: [
-        'https://images.unsplash.com/photo-1590075865003-e48277faa558?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=900',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755003/WhatsApp_Image_2026-06-17_at_6.23.43_PM_1_ywvzg6.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755003/WhatsApp_Image_2026-06-17_at_6.23.43_PM_2_gdtss3.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755003/WhatsApp_Image_2026-06-17_at_6.23.43_PM_pzvi3r.jpg',
       ],
       desc: 'Intricate and traditional bridal-grade henna patterns hand-drawn with organic plant-based pastes — from elegant minimalist designs to elaborate full-hand bridal art.',
       spanClass: 'col-span-1 md:col-span-2',
@@ -339,9 +386,9 @@ function Home() {
     {
       title: 'Wood & Pot Painting', tag: 'WOOD & POT',
       images: [
-        'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=900',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755003/WhatsApp_Image_2026-06-17_at_6.23.50_PM_1_uqjbrr.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755004/WhatsApp_Image_2026-06-17_at_6.23.50_PM_e2roes.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755003/WhatsApp_Image_2026-06-17_at_6.23.50_PM_2_ph99qn.jpg',
       ],
       desc: 'Vibrant acrylic detailing applied on natural clay vessels and high-quality seasoned wood, each hand-painted with traditional motifs that transform everyday objects into art.',
       spanClass: '',
@@ -591,7 +638,7 @@ function Home() {
           />
 
           {/* Tagline */}
-          <p className="font-serif italic text-xl md:text-3xl text-[#C4A050] tracking-wide mb-10 flex flex-wrap items-center justify-center gap-x-3">
+          <p className="font-serif italic text-base sm:text-lg md:text-2xl lg:text-3xl text-[#C4A050] tracking-wide mb-10 flex flex-wrap items-center justify-center gap-x-3">
             {"Handmade with Love".split(" ").map((word, index) => (
               <span key={index} className="shiny-word">
                 {word}
@@ -719,51 +766,51 @@ function Home() {
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-500" />
-            <div className="absolute bottom-5 left-5 z-10 hidden sm:block">
-              <span className="text-[8px] md:text-[9px] font-sans font-bold tracking-[0.25em] text-[#E8C96B] uppercase block mb-1">CELEBRATION ART</span>
-              <h4 className="font-serif text-sm md:text-base text-white font-medium">Face Painting</h4>
+            <div className="absolute bottom-5 left-5 z-10">
+              <span className="text-[7px] sm:text-[8px] md:text-[9px] font-sans font-bold tracking-[0.22em] text-[#E8C96B] uppercase block mb-0.5 sm:mb-1">CELEBRATION ART</span>
+              <h4 className="font-serif text-xs sm:text-sm md:text-base text-white font-medium">Face Painting</h4>
             </div>
           </div>
 
           {/* Collage Item 2: Return Gifts */}
           <div className="relative h-full w-full overflow-hidden group select-none">
             <img
-              src="https://res.cloudinary.com/diancfp03/image/upload/v1781703457/WhatsApp_Image_2026-06-15_at_11.45.59_PM_1_rskjp3.jpg"
+              src="https://res.cloudinary.com/diancfp03/image/upload/v1781703491/WhatsApp_Image_2026-06-15_at_11.44.38_PM_16_u6zdtb.jpg"
               alt="Bespoke Return Gifts"
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+              className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-500" />
-            <div className="absolute bottom-5 left-5 z-10 hidden sm:block">
-              <span className="text-[8px] md:text-[9px] font-sans font-bold tracking-[0.25em] text-[#E8C96B] uppercase block mb-1">HANDMADE MEMORIES</span>
-              <h4 className="font-serif text-sm md:text-base text-white font-medium">Return Gifts</h4>
+            <div className="absolute bottom-5 left-5 z-10">
+              <span className="text-[7px] sm:text-[8px] md:text-[9px] font-sans font-bold tracking-[0.22em] text-[#E8C96B] uppercase block mb-0.5 sm:mb-1">HANDMADE MEMORIES</span>
+              <h4 className="font-serif text-xs sm:text-sm md:text-base text-white font-medium">Return Gifts</h4>
             </div>
           </div>
 
           {/* Collage Item 3: Crafts & Arts */}
           <div className="relative h-full w-full overflow-hidden group select-none">
             <img
-              src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&q=80&w=600"
+              src="https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.28_PM_10_rn5joh.jpg"
               alt="Sacred Mandala & Lippan Art"
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+              className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-500" />
-            <div className="absolute bottom-5 left-5 z-10 hidden sm:block">
-              <span className="text-[8px] md:text-[9px] font-sans font-bold tracking-[0.25em] text-[#E8C96B] uppercase block mb-1">CREATIVE REALMS</span>
-              <h4 className="font-serif text-sm md:text-base text-white font-medium">Crafts & Arts</h4>
+            <div className="absolute bottom-5 left-5 z-10">
+              <span className="text-[7px] sm:text-[8px] md:text-[9px] font-sans font-bold tracking-[0.22em] text-[#E8C96B] uppercase block mb-0.5 sm:mb-1">CREATIVE REALMS</span>
+              <h4 className="font-serif text-xs sm:text-sm md:text-base text-white font-medium">Crafts & Arts</h4>
             </div>
           </div>
 
           {/* Collage Item 4: Pooja & Event Rentals */}
           <div className="relative h-full w-full overflow-hidden group select-none">
             <img
-              src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=600"
+              src="https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_5_uqlyui.jpg"
               alt="Bespoke Festive Props"
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+              className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-500" />
-            <div className="absolute bottom-5 left-5 z-10 hidden sm:block">
-              <span className="text-[8px] md:text-[9px] font-sans font-bold tracking-[0.25em] text-[#E8C96B] uppercase block mb-1">DIVINE CELEBRATIONS</span>
-              <h4 className="font-serif text-sm md:text-base text-white font-medium">Pooja Rentals</h4>
+            <div className="absolute bottom-5 left-5 z-10">
+              <span className="text-[7px] sm:text-[8px] md:text-[9px] font-sans font-bold tracking-[0.22em] text-[#E8C96B] uppercase block mb-0.5 sm:mb-1">DIVINE CELEBRATIONS</span>
+              <h4 className="font-serif text-xs sm:text-sm md:text-base text-white font-medium">Pooja Rentals</h4>
             </div>
           </div>
 
@@ -816,7 +863,7 @@ function Home() {
                   <button
                     key={tabIdx}
                     onClick={() => setActiveServiceTab(tabIdx)}
-                    className="relative flex-1 px-5 md:px-10 lg:px-16 py-4 md:py-5 flex flex-col items-center gap-1 transition-all duration-300 cursor-pointer group"
+                    className="relative flex-1 px-2 sm:px-5 md:px-10 lg:px-16 py-3 sm:py-4 md:py-5 flex flex-col items-center gap-1 transition-all duration-300 cursor-pointer group"
                   >
                     <span
                       className="text-[9px] font-sans font-bold tracking-[0.2em] transition-all duration-300"
@@ -862,10 +909,10 @@ function Home() {
               <div
                 key={panelIdx}
                 className="animate-panel-enter flex flex-col lg:flex-row bg-[#071510] border border-[#C9A84C]/15 border-t-0 rounded-b-[24px] overflow-hidden"
-                style={{ minHeight: '520px' }}
+                style={{ minHeight: 'clamp(300px, 70vh, 520px)' }}
               >
                 {/* Left: Image Slideshow */}
-                <div className="relative w-full lg:w-[55%] h-64 sm:h-72 lg:h-auto overflow-hidden bg-[#04140E] flex-shrink-0 lg:min-h-[520px]">
+                <div className="relative w-full lg:w-[55%] h-52 sm:h-64 md:h-72 lg:h-auto overflow-hidden bg-[#04140E] flex-shrink-0 lg:min-h-[520px]">
                   {panel.images.map((imgUrl, imgIdx) => (
                     <img
                       key={imgIdx}
@@ -954,7 +1001,7 @@ function Home() {
               <div
                 key={idx}
                 onClick={() => setActiveCraftModal(idx)}
-                className={`group relative overflow-hidden rounded-[18px] cursor-pointer select-none ${craft.heightClass} ${craft.spanClass}`}
+                className={`group relative overflow-hidden rounded-[18px] cursor-pointer select-none border border-[#C9A84C]/20 hover:border-[#E8C96B]/50 transition-all duration-400 ${craft.heightClass} ${craft.spanClass}`}
               >
                 {/* Image */}
                 <img
@@ -1022,7 +1069,7 @@ function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 mb-4 md:mb-5">
 
             {/* Featured Card — 2/3 width, taller */}
-            <div className="group relative overflow-hidden rounded-[20px] cursor-pointer md:col-span-2 h-[380px] md:h-[440px]">
+            <div className="group relative overflow-hidden rounded-[20px] cursor-pointer md:col-span-2 h-[220px] sm:h-[300px] md:h-[440px]">
               <img
                 src="https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_5_uqlyui.jpg"
                 alt="Pooja Rentals"
@@ -1048,7 +1095,7 @@ function Home() {
             </div>
 
             {/* Side Card 1 */}
-            <div className="group relative overflow-hidden rounded-[20px] cursor-pointer h-[380px] md:h-[440px]">
+            <div className="group relative overflow-hidden rounded-[20px] cursor-pointer h-[220px] sm:h-[300px] md:h-[440px]">
               <img
                 src="https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_wbpr2w.jpg"
                 alt="Festive Rentals"
@@ -1132,17 +1179,54 @@ function Home() {
                 ✕
               </button>
 
-              {/* Left — image */}
-              <div className="relative w-full md:w-[58%] h-64 md:h-auto flex-shrink-0">
+              {/* Left — image slideshow */}
+              <div className="relative w-full md:w-[58%] h-64 md:h-auto flex-shrink-0 overflow-hidden">
                 <img
-                  src={craft.img}
+                  key={craftSlideIdx}
+                  src={craft.images[craftSlideIdx]}
                   alt={craft.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-opacity duration-400"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <span className="absolute bottom-5 left-5 text-[9px] tracking-[0.3em] text-[#E8C96B] font-bold uppercase">
                   {craft.tag}
                 </span>
+
+                {/* Slide counter */}
+                <div className="absolute top-4 left-4 font-sans text-[9px] font-bold tracking-[0.18em] text-white/60 bg-black/40 px-2.5 py-1 rounded-full">
+                  {String(craftSlideIdx + 1).padStart(2,'0')} / {String(craft.images.length).padStart(2,'0')}
+                </div>
+
+                {/* Prev / Next arrows */}
+                {craft.images.length > 1 && (
+                  <>
+                    <button
+                      onClick={e => { e.stopPropagation(); setCraftSlideIdx(i => (i - 1 + craft.images.length) % craft.images.length) }}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 border border-white/20 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all cursor-pointer"
+                    >
+                      <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 18l-6-6 6-6"/></svg>
+                    </button>
+                    <button
+                      onClick={e => { e.stopPropagation(); setCraftSlideIdx(i => (i + 1) % craft.images.length) }}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 border border-white/20 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all cursor-pointer"
+                    >
+                      <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 18l6-6-6-6"/></svg>
+                    </button>
+                  </>
+                )}
+
+                {/* Dot indicators */}
+                {craft.images.length > 1 && (
+                  <div className="absolute bottom-14 left-0 right-0 flex justify-center gap-1.5">
+                    {craft.images.map((_, di) => (
+                      <button
+                        key={di}
+                        onClick={e => { e.stopPropagation(); setCraftSlideIdx(di) }}
+                        className={`w-1.5 h-1.5 rounded-full transition-all cursor-pointer ${di === craftSlideIdx ? 'bg-[#E8C96B] scale-125' : 'bg-white/35 hover:bg-white/60'}`}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Right — content */}
@@ -1891,6 +1975,8 @@ function Home() {
       {/* ─── GALLERY SECTION ─────────────────────────────────────────────────────── */}
       {(() => {
         const filtered = galleryFilter === 'all' ? GALLERY_ITEMS : GALLERY_ITEMS.filter(g => g.category === galleryFilter)
+        const GALLERY_LIMIT = 12
+        const visibleItems = galleryShowAll ? filtered : filtered.slice(0, GALLERY_LIMIT)
         const FILTERS: { id: GalleryCat; label: string; icon: string }[] = [
           { id: 'all',    label: 'All Photos', icon: '✦' },
           { id: 'events', label: 'Events',     icon: '🎉' },
@@ -1898,7 +1984,7 @@ function Home() {
           { id: 'other',  label: 'Others',     icon: '📸' },
         ]
         // Heights cycle to create varied masonry feel
-        const HEIGHTS = ['h-64', 'h-80', 'h-72', 'h-96', 'h-60', 'h-88', 'h-72', 'h-64', 'h-80', 'h-96', 'h-60', 'h-72', 'h-80', 'h-64', 'h-96', 'h-72']
+        const HEIGHTS = ['h-44 sm:h-64', 'h-52 sm:h-80', 'h-48 sm:h-72', 'h-56 sm:h-96', 'h-40 sm:h-60', 'h-52 sm:h-80', 'h-48 sm:h-72', 'h-44 sm:h-64', 'h-52 sm:h-80', 'h-56 sm:h-96', 'h-40 sm:h-60', 'h-48 sm:h-72', 'h-52 sm:h-80', 'h-44 sm:h-64', 'h-56 sm:h-96', 'h-48 sm:h-72']
 
         return (
           <section
@@ -1924,13 +2010,13 @@ function Home() {
               </div>
 
               {/* Filter Tabs */}
-              <div className="flex flex-wrap items-center justify-center gap-2.5 mb-10">
+              <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2.5 mb-8 sm:mb-10 px-2 sm:px-0">
                 {FILTERS.map(f => {
                   const isActive = galleryFilter === f.id
                   return (
                     <button
                       key={f.id}
-                      onClick={() => setGalleryFilter(f.id)}
+                      onClick={() => { setGalleryFilter(f.id); setGalleryShowAll(false) }}
                       className="flex items-center gap-1.5 px-5 py-2.5 rounded-full font-sans text-[10px] font-bold tracking-[0.16em] uppercase cursor-pointer transition-all duration-200"
                       style={{
                         background: isActive ? '#E8C96B' : 'rgba(255,255,255,0.04)',
@@ -1963,8 +2049,11 @@ function Home() {
                   <p className="font-sans text-xs mt-2">Check back soon — we're adding more!</p>
                 </div>
               ) : (
+                <>
                 <div className="gallery-masonry" style={{ columnGap: '14px' }}>
-                  {filtered.map((item, i) => (
+                  {visibleItems.map((item) => {
+                    const i = filtered.findIndex(g => g.id === item.id)
+                    return (
                     <div
                       key={item.id}
                       onClick={() => setLightboxIdx(i)}
@@ -2011,8 +2100,38 @@ function Home() {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  )
+                  })}
                 </div>
+
+                {/* Show More / Show Less button */}
+                {filtered.length > GALLERY_LIMIT && (
+                  <div className="text-center mt-10">
+                    <button
+                      onClick={() => setGalleryShowAll(prev => !prev)}
+                      className="inline-flex items-center gap-2.5 font-sans text-[10px] font-bold tracking-[0.22em] uppercase px-8 py-3.5 rounded-full border transition-all duration-300 hover:scale-105 cursor-pointer"
+                      style={{
+                        background: galleryShowAll ? 'rgba(201,168,76,0.1)' : 'rgba(232,201,107,0.92)',
+                        color: galleryShowAll ? '#E8C96B' : '#0B3D2E',
+                        border: galleryShowAll ? '1px solid rgba(201,168,76,0.35)' : '1px solid #E8C96B',
+                        boxShadow: galleryShowAll ? 'none' : '0 4px 20px rgba(232,201,107,0.2)',
+                      }}
+                    >
+                      {galleryShowAll ? (
+                        <>
+                          <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" /></svg>
+                          SHOW LESS
+                        </>
+                      ) : (
+                        <>
+                          VIEW ALL {filtered.length} PHOTOS
+                          <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
+                </>
               )}
 
               {/* Bottom CTA */}
@@ -2173,7 +2292,7 @@ function Home() {
               OUR STORY & HERITAGE
             </span>
             <h2
-              className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-[80px] xl:text-[88px] text-white font-medium tracking-tight leading-[1.08] mb-8"
+              className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[80px] text-white font-medium tracking-tight leading-[1.08] mb-8"
               style={{
                 transform: `translate(${storyMouse.x * -18}px, ${storyMouse.y * -10}px)`,
                 transition: 'transform 0.3s ease-out',
@@ -2192,7 +2311,7 @@ function Home() {
 
             {/* Story text */}
             <div className="w-full lg:w-[48%] space-y-6">
-              <p className="font-serif italic text-xl md:text-2xl leading-relaxed" style={{ color: 'rgba(232,201,107,0.72)' }}>
+              <p className="font-serif italic text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed" style={{ color: 'rgba(232,201,107,0.72)' }}>
                 Born from a passion for handmade art.
               </p>
               <p className="font-sans text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.52)' }}>
@@ -2226,7 +2345,7 @@ function Home() {
                 <img
                   src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=900"
                   alt="CraftNest handcrafted art"
-                  className="w-full h-72 md:h-[360px] object-cover"
+                  className="w-full h-52 sm:h-64 md:h-72 lg:h-[360px] object-cover"
                 />
                 <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(1,8,6,0.65) 0%, transparent 55%)' }} />
                 {/* Subtle inner border glow */}
@@ -2360,14 +2479,14 @@ function Home() {
       <footer className="border-t" style={{ background: '#040D08', borderColor: 'rgba(201,168,76,0.1)' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-12 py-10 md:py-12">
           {/* Top row: logo + nav links */}
-          <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-7 mb-8 pb-8" style={{ borderBottom: '1px solid rgba(201,168,76,0.08)' }}>
+          <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4 sm:gap-7 mb-6 sm:mb-8 pb-6 sm:pb-8" style={{ borderBottom: '1px solid rgba(201,168,76,0.08)' }}>
             {/* Brand */}
             <div className="text-center sm:text-left">
               <span className="font-serif text-base tracking-[0.25em] font-bold uppercase" style={{ color: '#E8C96B' }}>CRAFT NEST</span>
               <p className="font-sans text-[10px] mt-1" style={{ color: 'rgba(255,255,255,0.28)' }}>Handmade with pride in Georgia, USA</p>
             </div>
             {/* Quick links */}
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <div className="flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-6 gap-y-1.5 sm:gap-y-2">
               {['#services', '#arts-crafts', '#pooja-rentals', '#gallery', '#our-story', '#contact'].map((href, i) => (
                 <a key={href} href={href} className="font-sans text-[9px] font-semibold tracking-[0.15em] uppercase transition-colors"
                   style={{ color: 'rgba(201,168,76,0.5)' }}
