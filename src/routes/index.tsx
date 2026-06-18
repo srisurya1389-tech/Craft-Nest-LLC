@@ -2401,9 +2401,9 @@ function Home() {
                 }}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=900"
+                  src="https://res.cloudinary.com/diancfp03/image/upload/v1781815164/WhatsApp_Image_2026-06-19_at_2.08.43_AM_hbl5rg.jpg"
                   alt="CraftNest handcrafted art"
-                  className="w-full h-52 sm:h-64 md:h-72 lg:h-[360px] object-cover"
+                  className="w-full h-52 sm:h-64 md:h-72 lg:h-[360px] object-cover object-center"
                 />
                 <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(1,8,6,0.65) 0%, transparent 55%)' }} />
                 {/* Subtle inner border glow */}
