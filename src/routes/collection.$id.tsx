@@ -157,7 +157,7 @@ function CollectionPage() {
 
       {/* Sticky Header */}
       <header
-        className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 md:px-16 h-[68px] transition-all duration-400"
+        className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-4 sm:px-6 md:px-16 h-[60px] sm:h-[68px] transition-all duration-400"
         style={{
           background: isScrolled ? 'rgba(4,20,10,0.96)' : 'transparent',
           backdropFilter: isScrolled ? 'blur(14px)' : 'none',
@@ -180,9 +180,9 @@ function CollectionPage() {
         <div className="flex items-center gap-3">
           <a
             href="/#services"
-            className="inline-flex items-center gap-2 text-[10px] font-sans font-bold tracking-[0.2em] uppercase px-5 py-2 rounded-full border border-[#C9A84C]/35 text-[#E8C96B] hover:bg-[#0F3D28] hover:border-[#E8C96B]/50 transition-all"
+            className="inline-flex items-center gap-1.5 text-[9px] sm:text-[10px] font-sans font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase px-3 sm:px-5 py-2 rounded-full border border-[#C9A84C]/35 text-[#E8C96B] hover:bg-[#0F3D28] hover:border-[#E8C96B]/50 transition-all"
           >
-            ← BACK TO SERVICES
+            <span>←</span><span className="hidden xs:inline sm:inline">BACK TO SERVICES</span><span className="sm:hidden">BACK</span>
           </a>
 
           <div className="relative">
@@ -199,15 +199,15 @@ function CollectionPage() {
       </header>
 
       {/* Cinematic Hero */}
-      <div className="relative h-[60vh] sm:h-[65vh] md:h-[70vh] min-h-[260px] sm:min-h-[340px] md:min-h-[480px] overflow-hidden">
+      <div className="relative h-[52vh] sm:h-[58vh] md:h-[65vh] min-h-[240px] sm:min-h-[320px] md:min-h-[420px] overflow-hidden">
         <img src={data.bannerImg} alt={data.title} className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(4,20,10,0.3) 0%, rgba(4,20,10,0.55) 50%, rgba(4,20,10,0.95) 100%)' }} />
 
-        <div className="absolute inset-0 flex flex-col justify-end px-6 md:px-16 pb-14 max-w-7xl mx-auto left-0 right-0">
-          <span className="text-[9px] md:text-[10px] tracking-[0.35em] text-[#C9A84C] font-bold uppercase mb-4 block">
+        <div className="absolute inset-0 flex flex-col justify-end px-5 sm:px-8 md:px-16 pb-10 sm:pb-12 md:pb-14 max-w-7xl mx-auto left-0 right-0">
+          <span className="text-[9px] md:text-[10px] tracking-[0.35em] text-[#C9A84C] font-bold uppercase mb-3 block">
             {data.tag}
           </span>
-          <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white font-medium leading-tight whitespace-pre-line mb-4">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white font-medium leading-tight whitespace-pre-line mb-3">
             {data.subtitle}
           </h1>
           <div className="w-20 h-[1.5px] bg-[#C9A84C]/60 mb-4" />
@@ -218,8 +218,8 @@ function CollectionPage() {
       </div>
 
       {/* Promo Banner */}
-      <div className="border-y border-[#C9A84C]/15 py-5 px-6 md:px-16" style={{ background: 'rgba(15,61,40,0.6)' }}>
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="border-y border-[#C9A84C]/15 py-4 sm:py-5 px-4 sm:px-8 md:px-16" style={{ background: 'rgba(15,61,40,0.6)' }}>
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-5">
           <div>
             <span className="text-[9px] tracking-[0.3em] text-[#C9A84C] font-bold uppercase block mb-1">SPECIAL CAMPAIGN</span>
             <p className="font-serif text-xl md:text-2xl text-white font-medium">{data.promoTitle}</p>
@@ -271,15 +271,15 @@ function CollectionPage() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-8">
             {visibleProducts.map((item, idx) => (
               <div
                 key={idx}
-                className="group relative flex flex-col overflow-hidden rounded-[20px] border border-[#C9A84C]/15 hover:border-[#C9A84C]/45 transition-all duration-400 hover:shadow-[0_12px_40px_rgba(201,168,76,0.1)]"
+                className="group relative flex flex-col overflow-hidden rounded-[16px] sm:rounded-[20px] border border-[#C9A84C]/15 hover:border-[#C9A84C]/45 transition-all duration-400 hover:shadow-[0_12px_40px_rgba(201,168,76,0.1)]"
                 style={{ background: 'rgba(15,29,22,0.9)' }}
               >
                 {/* Image */}
-                <div className="relative h-64 overflow-hidden">
+                <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
                   <img
                     src={item.img}
                     alt={item.title}
@@ -303,11 +303,11 @@ function CollectionPage() {
                 </div>
 
                 {/* Content */}
-                <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="font-serif text-lg text-white font-medium mb-2 group-hover:text-[#E8C96B] transition-colors leading-snug">
+                <div className="p-4 sm:p-5 md:p-6 flex flex-col flex-grow">
+                  <h3 className="font-serif text-base sm:text-lg text-white font-medium mb-1.5 sm:mb-2 group-hover:text-[#E8C96B] transition-colors leading-snug">
                     {item.title}
                   </h3>
-                  <p className="font-sans text-[11px] text-white/45 leading-relaxed mb-5 flex-grow">
+                  <p className="font-sans text-[10px] sm:text-[11px] text-white/45 leading-relaxed mb-4 sm:mb-5 flex-grow">
                     {item.desc}
                   </p>
 

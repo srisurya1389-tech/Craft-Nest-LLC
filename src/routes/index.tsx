@@ -813,7 +813,7 @@ function Home() {
       </section>
 
       {/* Large Brand Artistry Collage Banner Section */}
-      <section className="relative w-full h-[420px] md:h-[520px] overflow-hidden border-y border-[#C9A84C]/35">
+      <section className="relative w-full h-[300px] sm:h-[380px] md:h-[480px] lg:h-[520px] overflow-hidden border-y border-[#C9A84C]/35">
         {/* Grid of All Specialties Pics */}
         <div className="absolute inset-0 grid grid-cols-2 md:grid-cols-4 h-full w-full">
           
@@ -904,7 +904,7 @@ function Home() {
             <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.25em] text-[#C9A84C] uppercase mb-3 block">
               FEATURED COLLECTIONS
             </span>
-            <h2 className="font-serif text-3xl md:text-[46px] text-[#E8C96B] font-medium tracking-wide">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-[42px] lg:text-[46px] text-[#E8C96B] font-medium tracking-wide">
               Our Services
             </h2>
             <div className="w-24 h-[1px] bg-[#C9A84C]/35 mx-auto mt-5 mb-5" />
@@ -996,11 +996,11 @@ function Home() {
                 </div>
 
                 {/* Right: Details */}
-                <div className="w-full lg:w-[45%] p-6 sm:p-8 md:p-10 lg:p-14 flex flex-col justify-center">
-                  <span className="text-[#C9A84C]/18 font-serif text-6xl md:text-7xl font-bold leading-none select-none mb-2 block">
+                <div className="w-full lg:w-[45%] p-5 sm:p-7 md:p-10 lg:p-14 flex flex-col justify-center overflow-y-auto">
+                  <span className="text-[#C9A84C]/18 font-serif text-4xl sm:text-5xl md:text-6xl font-bold leading-none select-none mb-2 block">
                     {panel.num}
                   </span>
-                  <h3 className="font-serif text-3xl md:text-4xl text-white font-medium leading-tight mb-2">
+                  <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-white font-medium leading-tight mb-2">
                     {panel.name}
                   </h3>
                   <p className="font-serif italic text-sm md:text-base text-[#C9A84C]/60 mb-5">
@@ -1045,7 +1045,7 @@ function Home() {
             <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.25em] text-[#C9A84C] uppercase mb-3 block">
               EXPLORE HERITAGE SKILLS
             </span>
-            <h2 className="font-serif text-3xl md:text-[46px] text-white font-medium tracking-wide">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-[42px] lg:text-[46px] text-white font-medium tracking-wide">
               Our Arts & Crafts
             </h2>
             <div className="w-24 h-[1px] bg-[#C9A84C]/35 mx-auto mt-5 mb-5" />
@@ -1115,7 +1115,7 @@ function Home() {
             <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.3em] text-[#C9A84C] uppercase mb-3 block">
               CELEBRATIONS MADE DIVINE
             </span>
-            <h2 className="font-serif text-3xl md:text-[46px] text-white font-medium tracking-wide">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-[42px] lg:text-[46px] text-white font-medium tracking-wide">
               Pooja & Event Rentals
             </h2>
             <div className="w-24 h-[1px] bg-[#C9A84C]/35 mx-auto mt-5 mb-5" />
@@ -1175,13 +1175,13 @@ function Home() {
           </div>
 
           {/* Row 2: Three compact cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
             {[
               { title: 'Sacred Pooja Items', tag: 'POOJA ESSENTIALS', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_3_xpszqo.jpg', desc: 'Handcrafted sacred items to bless every ceremony with divine energy.' },
               { title: 'Celebration Rentals', tag: 'EVENT RENTALS', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781702095/WhatsApp_Image_2026-06-15_at_11.37.40_PM_4_suwo3v.jpg', desc: 'Premium rental items curated for birthdays, weddings and festive events.' },
               { title: 'Décor & Accessories', tag: 'FESTIVE PROPS', img: 'https://res.cloudinary.com/diancfp03/image/upload/v1781702094/WhatsApp_Image_2026-06-15_at_11.37.40_PM_1_ldq5qt.jpg', desc: 'Elegant décor accessories to elevate the ambience of any celebration.' },
             ].map((item) => (
-              <div key={item.title} className="group relative overflow-hidden rounded-[20px] cursor-pointer h-60 md:h-72">
+              <div key={item.title} className="group relative overflow-hidden rounded-[16px] sm:rounded-[20px] cursor-pointer h-44 sm:h-56 md:h-72">
                 <img
                   src={item.img}
                   alt={item.title}
@@ -1289,8 +1289,8 @@ function Home() {
               </div>
 
               {/* Right — content */}
-              <div className="flex flex-col justify-center p-8 md:p-10 w-full">
-                <h3 className="font-serif text-2xl md:text-3xl text-white font-medium mb-4 leading-tight">
+              <div className="flex flex-col justify-center p-5 sm:p-7 md:p-10 w-full overflow-y-auto">
+                <h3 className="font-serif text-xl sm:text-2xl md:text-3xl text-white font-medium mb-4 leading-tight">
                   {craft.title}
                 </h3>
                 <div className="w-14 h-[1px] bg-[#C9A84C]/50 mb-5" />
@@ -1802,7 +1802,7 @@ function Home() {
           </div>
 
           {/* Two-column layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 lg:gap-14 items-start">
 
             {/* LEFT: Brand & contact info */}
             <div className="space-y-8">

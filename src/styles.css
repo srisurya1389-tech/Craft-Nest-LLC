@@ -521,6 +521,17 @@ body {
   }
 }
 
+/* Prevent long text overflow on all screens */
+p, h1, h2, h3, h4, h5, h6, span {
+  overflow-wrap: break-word;
+}
+
+/* Minimum tap target size for all interactive elements */
+button, a, [role="button"] {
+  min-height: 36px;
+  min-width: 36px;
+}
+
 /* Input / select field dark color scheme for date pickers */
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.7) sepia(1) saturate(3) hue-rotate(3deg);
