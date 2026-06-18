@@ -1,9 +1,4 @@
-type SitemapEntry = {
-  url: string
-  lastModified?: Date | string
-  changeFrequency?: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
-  priority?: number
-}
+import type { MetadataRoute } from 'next'
 
 const BASE_URL = 'https://craftnestshop.com'
 
@@ -14,10 +9,10 @@ async function getProductSlugs(): Promise<string[]> {
   return []
 }
 
-export default async function sitemap(): Promise<SitemapEntry[]> {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const productSlugs = await getProductSlugs()
 
-  const staticRoutes: SitemapEntry[] = [
+  const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
       lastModified: new Date(),
@@ -50,7 +45,7 @@ export default async function sitemap(): Promise<SitemapEntry[]> {
     },
   ]
 
-  const productRoutes: SitemapEntry[] = productSlugs.map((slug) => ({
+  const productRoutes: MetadataRoute.Sitemap = productSlugs.map((slug) => ({
     url: `${BASE_URL}/products/${slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
