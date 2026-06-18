@@ -133,7 +133,7 @@ const GALLERY_ITEMS: { id: number; src: string; category: Exclude<GalleryCat, 'a
   { id: 88, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755000/WhatsApp_Image_2026-06-17_at_6.23.43_PM_9_ulwugp.jpg', category: 'arts', caption: 'Lippan Art Creation' },
   { id: 89, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_7_ufudhj.jpg', category: 'arts', caption: 'Folk Art Canvas Painting' },
   { id: 90, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_8_uvtbvd.jpg', category: 'arts', caption: 'Name Plate Art' },
-  { id: 91, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_5_uyvsuo.jpg', category: 'arts', caption: 'Canvas Painting' },
+  { id: 91, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_5_uyvsuo.jpg', category: 'arts', caption: 'Wood & Pot Painting' },
   { id: 92, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_3_z8s1hx.jpg', category: 'arts', caption: 'Canvas Art' },
   { id: 93, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_6_eenwsu.jpg', category: 'arts', caption: 'Artisan Canvas Work' },
   { id: 94, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_4_zjzej4.jpg', category: 'arts', caption: 'Canvas Creation' },
@@ -159,21 +159,41 @@ const GALLERY_ITEMS: { id: number; src: string; category: Exclude<GalleryCat, 'a
   { id: 114, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781777586/WhatsApp_Image_2026-06-16_at_7.27.41_AM_6_nwhjit.jpg', category: 'arts', caption: 'Sacred Geometry' },
   { id: 115, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781777586/WhatsApp_Image_2026-06-16_at_7.27.41_AM_7_n7y1sc.jpg', category: 'arts', caption: 'Mandala Pattern' },
   { id: 116, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781777594/WhatsApp_Image_2026-06-16_at_7.27.41_AM_5_t6qowc.jpg', category: 'arts', caption: 'Mandala Creation' },
-  { id: 117, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779151/WhatsApp_Image_2026-06-18_at_4.02.38_PM_3_npjwar.jpg',  category: 'arts', caption: 'Rose Petal Cheek Art' },
-  { id: 118, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779150/WhatsApp_Image_2026-06-18_at_4.02.38_PM_5_v1ks8l.jpg',  category: 'arts', caption: 'Glitter Star Design' },
-  { id: 119, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779150/WhatsApp_Image_2026-06-18_at_4.02.38_PM_4_wyokds.jpg',  category: 'arts', caption: 'Indian Festival Art' },
-  { id: 120, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779151/WhatsApp_Image_2026-06-18_at_4.02.39_PM_1_aobbpi.jpg',  category: 'arts', caption: 'Peacock Eye Design' },
-  { id: 121, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779151/WhatsApp_Image_2026-06-18_at_4.02.38_PM_2_kihgir.jpg',  category: 'arts', caption: 'Floral Cheek Design' },
-  { id: 122, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779151/WhatsApp_Image_2026-06-18_at_4.02.39_PM_po62il.jpg',    category: 'arts', caption: 'Butterfly Cheek Art' },
-  { id: 123, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779152/WhatsApp_Image_2026-06-18_at_4.02.40_PM_1_fypkcd.jpg',  category: 'arts', caption: 'Crown & Flower Design' },
-  { id: 124, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779151/WhatsApp_Image_2026-06-18_at_4.02.40_PM_4_k4ydik.jpg',  category: 'arts', caption: 'Geometric Eye Art' },
-  { id: 125, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779152/WhatsApp_Image_2026-06-18_at_4.02.40_PM_nv6jah.jpg',    category: 'arts', caption: 'Vine Blossom Design' },
-  { id: 126, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779153/WhatsApp_Image_2026-06-18_at_4.02.41_PM_2_bacyln.jpg',  category: 'arts', caption: 'Rainbow Star Art' },
-  { id: 127, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779164/WhatsApp_Image_2026-06-18_at_4.02.41_PM_1_wzzhps.jpg',  category: 'arts', caption: 'Henna Inspired Design' },
-  { id: 128, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779164/WhatsApp_Image_2026-06-18_at_4.02.41_PM_cvnufq.jpg',    category: 'arts', caption: 'Lotus Eye Design' },
-  { id: 129, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779164/WhatsApp_Image_2026-06-18_at_4.02.38_PM_z9jni8.jpg',    category: 'arts', caption: 'Tribal Cheek Art' },
-  { id: 130, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779165/WhatsApp_Image_2026-06-18_at_4.02.37_PM_nvy09n.jpg',    category: 'arts', caption: 'Glitter Swirl Design' },
-  { id: 131, src: 'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779179/WhatsApp_Image_2026-06-18_at_4.02.38_PM_1_ykpgu8.jpg',  category: 'arts', caption: 'Sparkling Bloom Art' },
+  { id: 117, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781810979/WhatsApp_Image_2026-06-18_at_6.08.21_PM_2_uckpwc.jpg',  category: 'arts', caption: 'Floral Face Art' },
+  { id: 118, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781810978/WhatsApp_Image_2026-06-18_at_6.08.21_PM_6_cafst9.jpg',  category: 'arts', caption: 'Festival Cheek Design' },
+  { id: 119, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781810980/WhatsApp_Image_2026-06-18_at_6.08.21_PM_jp5gnu.jpg',    category: 'arts', caption: 'Butterfly Art' },
+  { id: 120, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781810978/WhatsApp_Image_2026-06-18_at_6.08.21_PM_4_mypyus.jpg',  category: 'arts', caption: 'Petal Cheek Painting' },
+  { id: 121, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781810978/WhatsApp_Image_2026-06-18_at_6.08.21_PM_5_j7zcsc.jpg',  category: 'arts', caption: 'Bloom & Vine Design' },
+  { id: 122, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781810978/WhatsApp_Image_2026-06-18_at_6.08.21_PM_3_dlojsf.jpg',  category: 'arts', caption: 'Glitter Swirl Art' },
+  { id: 123, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781810981/WhatsApp_Image_2026-06-18_at_6.08.20_PM_mjsfet.jpg',    category: 'arts', caption: 'Creative Face Design' },
+  { id: 132, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781784946/WhatsApp_Image_2026-06-18_at_5.32.51_PM_1_ccrv0f.jpg', category: 'arts', caption: 'Canvas Painting' },
+  { id: 133, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781784946/WhatsApp_Image_2026-06-18_at_5.33.42_PM_mfy5tq.jpg',  category: 'arts', caption: 'Canvas Art' },
+  { id: 134, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781784946/WhatsApp_Image_2026-06-18_at_5.29.08_PM_2_edbe6m.jpg', category: 'arts', caption: 'Artisan Canvas Work' },
+  { id: 135, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781784946/WhatsApp_Image_2026-06-18_at_5.32.51_PM_c872zl.jpg',  category: 'arts', caption: 'Canvas Creation' },
+  { id: 136, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781784955/WhatsApp_Image_2026-06-18_at_5.29.08_PM_1_t5zimg.jpg', category: 'arts', caption: 'Traditional Painting' },
+  { id: 137, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781784956/WhatsApp_Image_2026-06-18_at_5.29.08_PM_cchcfe.jpg',  category: 'arts', caption: 'Original Canvas Art' },
+  { id: 138, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812600/WhatsApp_Image_2026-06-18_at_5.58.15_PM_22_huedrg.jpg', category: 'arts', caption: 'Terracotta Bead Necklace' },
+  { id: 139, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812600/WhatsApp_Image_2026-06-18_at_5.58.15_PM_21_hxhpgo.jpg', category: 'arts', caption: 'Handmade Jhumka Earrings' },
+  { id: 140, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812602/WhatsApp_Image_2026-06-18_at_5.58.15_PM_20_irxvay.jpg', category: 'arts', caption: 'Kundan Choker Set' },
+  { id: 141, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812603/WhatsApp_Image_2026-06-18_at_5.58.15_PM_19_ai3go9.jpg', category: 'arts', caption: 'Thread Work Bangles' },
+  { id: 142, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812603/WhatsApp_Image_2026-06-18_at_5.58.15_PM_18_xybyot.jpg', category: 'arts', caption: 'Mirror Work Necklace' },
+  { id: 143, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812604/WhatsApp_Image_2026-06-18_at_5.58.15_PM_17_tjt3ag.jpg', category: 'arts', caption: 'Pearl Drop Earrings' },
+  { id: 144, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812605/WhatsApp_Image_2026-06-18_at_5.58.15_PM_16_q9834k.jpg', category: 'arts', caption: 'Meenakari Ring Set' },
+  { id: 145, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812606/WhatsApp_Image_2026-06-18_at_5.58.15_PM_15_gfhjid.jpg', category: 'arts', caption: 'Antique Gold Bangles' },
+  { id: 146, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812607/WhatsApp_Image_2026-06-18_at_5.58.15_PM_14_xyzf55.jpg', category: 'arts', caption: 'Oxidised Silver Necklace' },
+  { id: 147, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812608/WhatsApp_Image_2026-06-18_at_5.58.15_PM_13_csmprq.jpg', category: 'arts', caption: 'Beaded Anklet' },
+  { id: 148, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812649/WhatsApp_Image_2026-06-18_at_5.58.15_PM_12_gzijby.jpg', category: 'arts', caption: 'Handcrafted Bracelet' },
+  { id: 149, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812652/WhatsApp_Image_2026-06-18_at_5.58.15_PM_11_cq8upa.jpg', category: 'arts', caption: 'Festival Earrings' },
+  { id: 150, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812653/WhatsApp_Image_2026-06-18_at_5.58.15_PM_10_dnyfmj.jpg', category: 'arts', caption: 'Stone Pendant Necklace' },
+  { id: 151, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812654/WhatsApp_Image_2026-06-18_at_5.58.15_PM_9_ysy6aw.jpg',  category: 'arts', caption: 'Tribal Necklace' },
+  { id: 152, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812655/WhatsApp_Image_2026-06-18_at_5.58.15_PM_8_xtligu.jpg',  category: 'arts', caption: 'Gold Thread Earrings' },
+  { id: 153, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812656/WhatsApp_Image_2026-06-18_at_5.58.15_PM_7_jkz8uo.jpg',  category: 'arts', caption: 'Kundan Maang Tikka' },
+  { id: 154, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812657/WhatsApp_Image_2026-06-18_at_5.58.15_PM_6_sdkv5z.jpg',  category: 'arts', caption: 'Pearl Stud Earrings' },
+  { id: 155, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812658/WhatsApp_Image_2026-06-18_at_5.58.15_PM_5_nzta8o.jpg',  category: 'arts', caption: 'Fabric Bangle Set' },
+  { id: 156, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812659/WhatsApp_Image_2026-06-18_at_5.58.15_PM_4_aowfb7.jpg',  category: 'arts', caption: 'Resin Statement Ring' },
+  { id: 157, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812660/WhatsApp_Image_2026-06-18_at_5.58.15_PM_3_x8rt4m.jpg',  category: 'arts', caption: 'Macramé Bracelet' },
+  { id: 158, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812661/WhatsApp_Image_2026-06-18_at_5.58.15_PM_2_fuehvs.jpg',  category: 'arts', caption: 'Boho Layered Necklace' },
+  { id: 159, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812665/WhatsApp_Image_2026-06-18_at_5.58.13_PM_jkwvb4.jpg',   category: 'arts', caption: 'Handpainted Earrings' },
 ]
 
 function Home() {
@@ -300,18 +320,36 @@ function Home() {
 
   const servicesPanels = [
     {
-      id: 'jewellery', num: '01', name: 'Handmade Jewellery',
+      id: 'painting', num: '01', name: 'Face Painting',
+      tagline: 'Art that wears the crowd',
+      desc: 'Whimsical, safe, and event-ready designs for every age and festive occasion — bringing joy and vibrant colour to every face at your celebration.',
+      features: ['Suitable for all age groups', 'Only certified skin-safe colours', 'Book for parties, schools & festivals'],
+      images: [
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781810979/WhatsApp_Image_2026-06-18_at_6.08.21_PM_2_uckpwc.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781810978/WhatsApp_Image_2026-06-18_at_6.08.21_PM_6_cafst9.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781810980/WhatsApp_Image_2026-06-18_at_6.08.21_PM_jp5gnu.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781810978/WhatsApp_Image_2026-06-18_at_6.08.21_PM_4_mypyus.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781810978/WhatsApp_Image_2026-06-18_at_6.08.21_PM_5_j7zcsc.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781810978/WhatsApp_Image_2026-06-18_at_6.08.21_PM_3_dlojsf.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781810981/WhatsApp_Image_2026-06-18_at_6.08.20_PM_mjsfet.jpg',
+      ],
+    },
+    {
+      id: 'jewellery', num: '02', name: 'Handmade Jewellery',
       tagline: 'Worn with pride, crafted with soul',
       desc: 'Elegant, masterfully crafted organic and stone accessories designed to turn heads at every occasion — from intimate celebrations to grand events.',
       features: ['Fully custom designs to order', 'Organic & semi-precious stones', 'Available in bulk for weddings & events'],
       images: [
-        'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=900',
-        'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&q=80&w=900',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781812600/WhatsApp_Image_2026-06-18_at_5.58.15_PM_22_huedrg.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781812600/WhatsApp_Image_2026-06-18_at_5.58.15_PM_21_hxhpgo.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781812602/WhatsApp_Image_2026-06-18_at_5.58.15_PM_20_irxvay.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781812603/WhatsApp_Image_2026-06-18_at_5.58.15_PM_19_ai3go9.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781812603/WhatsApp_Image_2026-06-18_at_5.58.15_PM_18_xybyot.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781812604/WhatsApp_Image_2026-06-18_at_5.58.15_PM_17_tjt3ag.jpg',
       ],
     },
     {
-      id: 'gifts', num: '02', name: 'Return Gifts',
+      id: 'gifts', num: '03', name: 'Return Gifts',
       tagline: 'Memories wrapped in craftsmanship',
       desc: 'Curated, handcrafted keepsakes that turn your celebrations into lifetime memories. Each piece is designed with intention — a lasting token of gratitude for every guest.',
       features: ['Fully personalised per theme', 'Minimum 10 pieces per order', 'Gift-wrapped & ready to give'],
@@ -319,17 +357,6 @@ function Home() {
         'https://res.cloudinary.com/diancfp03/image/upload/v1781703432/WhatsApp_Image_2026-06-15_at_11.44.38_PM_rrjcsk.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781703460/WhatsApp_Image_2026-06-15_at_11.44.39_PM_17_jtud4w.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781703464/WhatsApp_Image_2026-06-15_at_11.44.39_PM_16_zxyqct.jpg',
-      ],
-    },
-    {
-      id: 'painting', num: '03', name: 'Face Painting',
-      tagline: 'Art that wears the crowd',
-      desc: 'Whimsical, safe, and event-ready designs for every age and festive occasion — bringing joy and vibrant colour to every face at your celebration.',
-      features: ['Suitable for all age groups', 'Only certified skin-safe colours', 'Book for parties, schools & festivals'],
-      images: [
-        'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779151/WhatsApp_Image_2026-06-18_at_4.02.38_PM_3_npjwar.jpg',
-        'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779150/WhatsApp_Image_2026-06-18_at_4.02.38_PM_5_v1ks8l.jpg',
-        'https://res.cloudinary.com/diancfp03/image/upload/e_improve/e_blur_region:700,g_faces/v1781779150/WhatsApp_Image_2026-06-18_at_4.02.38_PM_4_wyokds.jpg',
       ],
     },
   ]
@@ -379,10 +406,15 @@ function Home() {
       title: 'Canvas Painting', tag: 'CANVAS PAINTING',
       images: [
         'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_7_ufudhj.jpg',
-        'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_5_uyvsuo.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_3_z8s1hx.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_6_eenwsu.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_4_zjzej4.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781784946/WhatsApp_Image_2026-06-18_at_5.32.51_PM_1_ccrv0f.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781784946/WhatsApp_Image_2026-06-18_at_5.33.42_PM_mfy5tq.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781784946/WhatsApp_Image_2026-06-18_at_5.29.08_PM_2_edbe6m.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781784946/WhatsApp_Image_2026-06-18_at_5.32.51_PM_c872zl.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781784955/WhatsApp_Image_2026-06-18_at_5.29.08_PM_1_t5zimg.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781784956/WhatsApp_Image_2026-06-18_at_5.29.08_PM_cchcfe.jpg',
       ],
       desc: 'Premium traditional paintings on high-quality stretched canvas, capturing cultural scenes, geometric alignments, and original artisan compositions in rich, lasting colour.',
       spanClass: 'col-span-1 sm:col-span-2 md:col-span-2',
@@ -391,7 +423,7 @@ function Home() {
     {
       title: 'Mehandi', tag: 'MEHANDI',
       images: [
-        'https://res.cloudinary.com/diancfp03/image/upload/v1781777393/WhatsApp_Image_2026-06-15_at_10.15.52_PM_3_bpnfpb.jpg',
+        'https://res.cloudinary.com/diancfp03/image/upload/a_90/v1781777393/WhatsApp_Image_2026-06-15_at_10.15.52_PM_3_bpnfpb.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781777394/WhatsApp_Image_2026-06-15_at_10.15.51_PM_1_usmkjb.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781777394/WhatsApp_Image_2026-06-15_at_10.15.52_PM_4_emyu8w.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781777394/WhatsApp_Image_2026-06-15_at_10.15.52_PM_2_obcty6.jpg',
@@ -407,6 +439,7 @@ function Home() {
     {
       title: 'Wood & Pot Painting', tag: 'WOOD & POT',
       images: [
+        'https://res.cloudinary.com/diancfp03/image/upload/v1781755002/WhatsApp_Image_2026-06-17_at_6.23.43_PM_5_uyvsuo.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781755003/WhatsApp_Image_2026-06-17_at_6.23.50_PM_1_uqjbrr.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781755004/WhatsApp_Image_2026-06-17_at_6.23.50_PM_e2roes.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781755003/WhatsApp_Image_2026-06-17_at_6.23.50_PM_2_ph99qn.jpg',
@@ -787,8 +820,8 @@ function Home() {
           {/* Collage Item 1: Face Painting */}
           <div className="relative h-full w-full overflow-hidden group select-none">
             <img 
-              src="https://res.cloudinary.com/diancfp03/image/upload/v1781779165/WhatsApp_Image_2026-06-18_at_4.02.37_PM_nvy09n.jpg"
-              alt="Colorful Celebrations" 
+              src="https://res.cloudinary.com/diancfp03/image/upload/v1781810979/WhatsApp_Image_2026-06-18_at_6.08.21_PM_1_h15anf.jpg"
+              alt="Colorful Celebrations"
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-500" />
@@ -1831,7 +1864,7 @@ function Home() {
                   <span className="w-1.5 h-1.5 rounded-full bg-white opacity-90 animate-pulse shrink-0" />
                   WhatsApp Us
                 </a>
-                <a href="https://www.instagram.com/jewelryhivebycraftnest/?hl=en" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.instagram.com/prasanthisandeep?igsh=MTNkd2xmZm0yeHNpcQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-white px-5 py-2.5 rounded-full font-sans text-[10px] font-bold tracking-[0.15em] uppercase transition-all hover:scale-105 active:scale-95 cursor-pointer"
                   style={{ background: 'linear-gradient(135deg, #833ab4 0%, #E1306C 50%, #F77737 100%)', boxShadow: '0 4px 18px rgba(225,48,108,0.22)' }}>
                   <svg className="w-3.5 h-3.5 fill-current shrink-0" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
@@ -2165,7 +2198,7 @@ function Home() {
                   Want to see more? Follow us on Instagram for daily updates.
                 </p>
                 <a
-                  href="https://www.instagram.com/jewelryhivebycraftnest/?hl=en"
+                  href="https://www.instagram.com/prasanthisandeep?igsh=MTNkd2xmZm0yeHNpcQ%3D%3D&utm_source=qr"
                   target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-2.5 text-white px-7 py-3.5 rounded-full font-sans text-[10px] font-bold tracking-[0.18em] uppercase transition-all hover:scale-105 active:scale-95 cursor-pointer"
                   style={{ background: 'linear-gradient(135deg, #833ab4 0%, #E1306C 50%, #F77737 100%)', boxShadow: '0 4px 18px rgba(225,48,108,0.25)' }}
@@ -2530,7 +2563,7 @@ function Home() {
             </p>
             <div className="flex items-center gap-4">
               <a href="https://wa.me/14704527988" target="_blank" rel="noopener noreferrer" className="font-sans text-[9px] font-bold tracking-wider uppercase transition-colors" style={{ color: 'rgba(37,211,102,0.5)' }} onMouseEnter={e => (e.currentTarget.style.color = '#25D366')} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(37,211,102,0.5)')}>WhatsApp</a>
-              <a href="https://www.instagram.com/jewelryhivebycraftnest/?hl=en" target="_blank" rel="noopener noreferrer" className="font-sans text-[9px] font-bold tracking-wider uppercase transition-colors" style={{ color: 'rgba(225,48,108,0.45)' }} onMouseEnter={e => (e.currentTarget.style.color = '#E1306C')} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(225,48,108,0.45)')}>Instagram</a>
+              <a href="https://www.instagram.com/prasanthisandeep?igsh=MTNkd2xmZm0yeHNpcQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="font-sans text-[9px] font-bold tracking-wider uppercase transition-colors" style={{ color: 'rgba(225,48,108,0.45)' }} onMouseEnter={e => (e.currentTarget.style.color = '#E1306C')} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(225,48,108,0.45)')}>Instagram</a>
             </div>
           </div>
         </div>
