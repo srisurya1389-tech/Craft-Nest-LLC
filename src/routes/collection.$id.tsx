@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { Heart } from 'lucide-react'
+import { getProducts } from '../data/adminStore'
 
 export const Route = createFileRoute('/collection/$id')({
   component: CollectionPage,
@@ -134,10 +135,16 @@ const badgeColors: Record<string, string> = {
 
 function CollectionPage() {
   const { id } = Route.useParams()
-  const data = collectionData[id] || collectionData.jewellery
+  const meta = collectionData[id] || collectionData.jewellery
+  const catKey = (id === 'jewellery' || id === 'gifts' || id === 'painting') ? id : 'jewellery'
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeFilter, setActiveFilter] = useState('All')
   const [wishlist, setWishlist] = useState<string[]>([])
+  const [liveProducts, setLiveProducts] = useState(() => getProducts(catKey))
+
+  useEffect(() => { setLiveProducts(getProducts(catKey)) }, [catKey])
+
+  const data = { ...meta, products: liveProducts }
 
   const toggleWishlist = (t: string) =>
     setWishlist(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t])
