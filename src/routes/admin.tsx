@@ -15,7 +15,12 @@ export const Route = createFileRoute('/admin')({
   component: AdminPanel,
 })
 
-const ADMIN_PASSWORD = 'CraftNest@2024'
+const ADMIN_USERS = [
+  { email: 'srisurya1389@gmail.com', password: 'AP39DY1437', name: 'Owner' },
+  // Second person — add credentials below when ready:
+  // { email: 'secondperson@example.com', password: 'TheirPassword', name: 'Manager' },
+]
+
 const SESSION_KEY = 'craftnest_admin_auth'
 
 type Tab = 'dashboard' | 'jewellery' | 'gifts' | 'painting' | 'gallery' | 'settings'
@@ -370,21 +375,30 @@ function DeleteConfirm({ label, onConfirm, onCancel }: { label: string; onConfir
 
 // ── Login Screen ─────────────────────────────────────────────────────────────
 
-function LoginScreen({ onLogin }: { onLogin: () => void }) {
+function LoginScreen({ onLogin }: { onLogin: (name: string) => void }) {
+  const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
-  const [showPw, setShowPw] = useState(false)
-  const [error, setError] = useState(false)
-  const [shaking, setShaking] = useState(false)
+  const [showPw, setShowPw]     = useState(false)
+  const [error, setError]       = useState('')
+  const [shaking, setShaking]   = useState(false)
+
+  const shake = () => {
+    setShaking(true)
+    setTimeout(() => setShaking(false), 500)
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (password === ADMIN_PASSWORD) {
-      sessionStorage.setItem(SESSION_KEY, '1')
-      onLogin()
+    const user = ADMIN_USERS.find(
+      u => u.email.toLowerCase() === email.trim().toLowerCase() && u.password === password
+    )
+    if (user) {
+      sessionStorage.setItem(SESSION_KEY, user.name)
+      onLogin(user.name)
     } else {
-      setError(true)
-      setShaking(true)
-      setTimeout(() => setShaking(false), 500)
+      const emailMatch = ADMIN_USERS.find(u => u.email.toLowerCase() === email.trim().toLowerCase())
+      setError(emailMatch ? 'Incorrect password. Try again.' : 'Email not recognised.')
+      shake()
       setPassword('')
     }
   }
@@ -394,12 +408,11 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
       className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden"
       style={{ background: 'radial-gradient(ellipse at 30% 40%, #0A2E1A 0%, #04140E 60%, #020C08 100%)' }}
     >
-      {/* Decorative circles */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-5" style={{ background: 'radial-gradient(circle, #C9A84C, transparent)' }} />
       <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full opacity-5" style={{ background: 'radial-gradient(circle, #C9A84C, transparent)' }} />
 
       <div
-        className={`relative w-full max-w-md rounded-3xl border border-[#C9A84C]/15 shadow-[0_40px_80px_rgba(0,0,0,0.5)] transition-transform ${shaking ? 'animate-[shake_0.4s_ease]' : ''}`}
+        className={`relative w-full max-w-md rounded-3xl border border-[#C9A84C]/15 shadow-[0_40px_80px_rgba(0,0,0,0.5)] ${shaking ? 'animate-[shake_0.4s_ease]' : ''}`}
         style={{ background: 'linear-gradient(160deg, #061A0F 0%, #091E13 50%, #0A2318 100%)' }}
       >
         <div className="p-10">
@@ -419,16 +432,33 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
             <p className="text-[10px] tracking-[0.3em] text-[#C9A84C]/60 uppercase font-bold">Admin Control Panel</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email */}
+            <div>
+              <label className="block text-[10px] tracking-[0.2em] text-[#C9A84C]/60 uppercase font-bold mb-2.5">Email Address</label>
+              <input
+                type="email"
+                value={email}
+                onChange={e => { setEmail(e.target.value); setError('') }}
+                placeholder="your@email.com"
+                autoFocus
+                required
+                className={`w-full bg-white/5 border rounded-xl px-4 py-3.5 text-white/90 text-sm placeholder-white/15 focus:outline-none transition-colors ${
+                  error ? 'border-red-500/60 focus:border-red-500' : 'border-[#C9A84C]/15 focus:border-[#C9A84C]/50'
+                }`}
+              />
+            </div>
+
+            {/* Password */}
             <div>
               <label className="block text-[10px] tracking-[0.2em] text-[#C9A84C]/60 uppercase font-bold mb-2.5">Password</label>
               <div className="relative">
                 <input
                   type={showPw ? 'text' : 'password'}
                   value={password}
-                  onChange={e => { setPassword(e.target.value); setError(false) }}
-                  placeholder="Enter admin password"
-                  autoFocus
+                  onChange={e => { setPassword(e.target.value); setError('') }}
+                  placeholder="Enter your password"
+                  required
                   className={`w-full bg-white/5 border rounded-xl px-4 pr-12 py-3.5 text-white/90 text-sm placeholder-white/15 focus:outline-none transition-colors ${
                     error ? 'border-red-500/60 focus:border-red-500' : 'border-[#C9A84C]/15 focus:border-[#C9A84C]/50'
                   }`}
@@ -443,21 +473,21 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
               </div>
               {error && (
                 <p className="mt-2 text-xs text-red-400/80 flex items-center gap-1.5">
-                  <AlertCircle className="w-3 h-3" /> Incorrect password. Try again.
+                  <AlertCircle className="w-3 h-3" /> {error}
                 </p>
               )}
             </div>
 
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[11px] tracking-[0.25em] uppercase py-4 rounded-full transition-all hover:scale-[1.02] cursor-pointer shadow-[0_4px_24px_rgba(201,168,76,0.35)]"
+              className="w-full flex items-center justify-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[11px] tracking-[0.25em] uppercase py-4 rounded-full transition-all hover:scale-[1.02] cursor-pointer shadow-[0_4px_24px_rgba(201,168,76,0.35)] mt-2"
             >
               <ShieldCheck className="w-4 h-4" /> Enter Admin Panel
             </button>
           </form>
 
           <p className="text-center text-[10px] text-white/15 mt-8 tracking-[0.1em]">
-            This panel is for the CraftNest owner only
+            Authorised access only · Craft Nest
           </p>
         </div>
       </div>
@@ -802,7 +832,9 @@ function SettingsTab({ show }: { show: (msg: string, t?: 'success' | 'error') =>
 // ── Main Admin Panel ─────────────────────────────────────────────────────────
 
 function AdminPanel() {
-  const [authed, setAuthed] = useState(() => sessionStorage.getItem(SESSION_KEY) === '1')
+  const storedName = sessionStorage.getItem(SESSION_KEY)
+  const [authed, setAuthed] = useState(() => !!storedName)
+  const [userName, setUserName] = useState(() => storedName ?? '')
   const [tab, setTab] = useState<Tab>('dashboard')
   const [data, setData] = useState<AdminData>(() => getAdminData())
   const [productModal, setProductModal] = useState<{ open: boolean; product: Product | null; category: Category }>({
@@ -818,6 +850,7 @@ function AdminPanel() {
   const handleLogout = () => {
     sessionStorage.removeItem(SESSION_KEY)
     setAuthed(false)
+    setUserName('')
   }
 
   // Product CRUD
@@ -855,7 +888,7 @@ function AdminPanel() {
     show('Photo added to gallery')
   }
 
-  if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />
+  if (!authed) return <LoginScreen onLogin={(name) => { setUserName(name); setAuthed(true) }} />
 
   const NAV: { id: Tab; label: string; icon: React.ElementType; sub?: string }[] = [
     { id: 'dashboard',  label: 'Dashboard',      icon: LayoutDashboard },
@@ -958,7 +991,7 @@ function AdminPanel() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] text-white/20 hidden sm:block">Logged in as owner</span>
+            <span className="text-[10px] text-white/20 hidden sm:block">Logged in as {userName}</span>
             <div className="w-7 h-7 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 flex items-center justify-center">
               <ShieldCheck className="w-3.5 h-3.5 text-[#C9A84C]" />
             </div>
