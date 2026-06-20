@@ -247,156 +247,207 @@ function CraftNestChat() {
       </span>
     ))
 
+  /* ── Logo SVG shared across header avatar & background watermark ── */
+  const LogoSVG = ({ className, stroke, sw }: { className?: string; stroke: string; sw?: string }) => (
+    <svg viewBox="0 0 100 80" className={className} fill="none" stroke={stroke} strokeWidth={sw ?? '2'} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M 52 35 C 55 18, 38 12, 24 16 C 10 20, 8 38, 12 50 C 16 62, 30 70, 42 66 C 46 64, 48 58, 45 54 C 42 50, 48 44, 52 35 Z"/>
+      <circle cx="37" cy="51" r="5.5"/><circle cx="23" cy="49" r="3.2"/>
+      <circle cx="20" cy="40" r="3.2"/><circle cx="22" cy="31" r="3.2"/>
+      <circle cx="28" cy="23" r="3.2"/><circle cx="36" cy="23" r="3.2"/>
+      <circle cx="43" cy="27" r="3.2"/><circle cx="46" cy="35" r="3.2"/>
+      <rect x="57.5" y="32" width="3" height="40" rx="1.5"/>
+      <path d="M 57.5 32 L 56.5 29 L 57.5 24 H 60.5 L 61.5 29 L 60.5 32 Z"/>
+      <path d="M 57.5 24 C 54.5 19, 54.5 13, 59 7 C 62.5 11, 62.5 19, 60.5 24 Z"/>
+    </svg>
+  )
+
   return (
     <>
-      {/* Chat Panel */}
+      {/* ── Chat Panel ───────────────────────────────────────────────────── */}
       {open && (
         <div
-          className="fixed bottom-24 right-5 z-[998] w-[calc(100vw-40px)] sm:w-[380px] rounded-2xl border border-[#C9A84C]/20 overflow-hidden flex flex-col shadow-2xl"
-          style={{ height:'min(540px,calc(100dvh - 140px))', background:'linear-gradient(180deg,#061A0F 0%,#04140E 100%)' }}
+          className="fixed bottom-[88px] right-4 z-[998] w-[calc(100vw-32px)] sm:w-[430px] rounded-3xl overflow-hidden flex flex-col"
+          style={{
+            height: 'min(660px,calc(100dvh - 116px))',
+            background: 'linear-gradient(160deg,#071D10 0%,#040F08 60%,#061508 100%)',
+            boxShadow: '0 8px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,168,76,0.18), 0 0 60px rgba(201,168,76,0.04)',
+          }}
         >
-          {/* Header */}
-          <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[#C9A84C]/10 shrink-0"
-            style={{ background:'rgba(6,26,15,0.98)' }}>
-            <div className="w-8 h-8 rounded-full border border-[#C9A84C]/30 flex items-center justify-center shrink-0"
-              style={{ background:'rgba(201,168,76,0.1)' }}>
-              <svg viewBox="0 0 100 80" className="w-5 h-4" fill="none" stroke="#C9A84C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M 52 35 C 55 18, 38 12, 24 16 C 10 20, 8 38, 12 50 C 16 62, 30 70, 42 66 C 46 64, 48 58, 45 54 C 42 50, 48 44, 52 35 Z"/>
-                <circle cx="37" cy="51" r="5.5"/><circle cx="23" cy="49" r="3.2"/>
-                <rect x="57.5" y="32" width="3.0" height="40" rx="1.5"/>
-                <path d="M 57.5 32 L 56.5 29 L 57.5 24 H 60.5 L 61.5 29 L 60.5 32 Z"/>
-                <path d="M 57.5 24 C 54.5 19, 54.5 13, 59 7 C 62.5 11, 62.5 19, 60.5 24 Z"/>
-              </svg>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[11px] font-bold text-[#E8C96B] leading-tight">CraftNest Assistant</p>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0"/>
-                <p className="text-[9px] text-white/35">Online · Usually replies instantly</p>
+          {/* ── Header ─────────────────────────────────────────────────── */}
+          <div className="relative shrink-0 overflow-hidden" style={{ background:'linear-gradient(135deg,#0D2A18 0%,#0A2014 50%,#071A10 100%)' }}>
+            {/* Decorative corner glow */}
+            <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-20 pointer-events-none"
+              style={{ background:'radial-gradient(circle,#C9A84C,transparent 70%)' }}/>
+            <div className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full opacity-10 pointer-events-none"
+              style={{ background:'radial-gradient(circle,#C9A84C,transparent 70%)' }}/>
+
+            <div className="relative flex items-center gap-3.5 px-5 py-4">
+              {/* Avatar with full logo */}
+              <div className="relative w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
+                style={{ background:'linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.05))', boxShadow:'0 0 0 1px rgba(201,168,76,0.25), 0 4px 12px rgba(0,0,0,0.4)' }}>
+                <LogoSVG className="w-7 h-6" stroke="#C9A84C" sw="2.2"/>
               </div>
+
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-bold tracking-wide" style={{ color:'#E8C96B', fontFamily:'Georgia,serif' }}>CraftNest</p>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full border"
+                    style={{ color:'#C9A84C', borderColor:'rgba(201,168,76,0.3)', background:'rgba(201,168,76,0.08)', letterSpacing:'0.05em' }}>AI Assistant</span>
+                </div>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0"/>
+                  <p className="text-[10px] text-white/40 tracking-wide">Online · Replies instantly</p>
+                </div>
+              </div>
+
+              <button onClick={toggle}
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-white/25 hover:text-white/70 hover:bg-white/5 transition-all cursor-pointer shrink-0">
+                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
             </div>
-            <button onClick={toggle} className="text-white/30 hover:text-white cursor-pointer p-1 rounded-lg hover:bg-white/5 shrink-0">
-              <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
-            </button>
+
+            {/* Gold divider line */}
+            <div className="h-px mx-5" style={{ background:'linear-gradient(90deg,transparent,rgba(201,168,76,0.4),rgba(201,168,76,0.15),transparent)' }}/>
           </div>
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3 min-h-0">
-            {msgs.map(msg => (
-              <div key={msg.id} className={`flex ${msg.role==='user'?'justify-end':'justify-start'}`}>
-                {msg.role==='bot' && (
-                  <div className="w-6 h-6 rounded-full border border-[#C9A84C]/25 flex items-center justify-center shrink-0 mt-1 mr-1.5"
-                    style={{ background:'rgba(201,168,76,0.08)' }}>
-                    <svg viewBox="0 0 24 24" className="w-3 h-3" fill="none" stroke="#C9A84C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                    </svg>
-                  </div>
-                )}
-                <div className={`max-w-[82%] space-y-2 ${msg.role==='user'?'items-end':'items-start'} flex flex-col`}>
-                  <div className={`px-3.5 py-2.5 rounded-2xl text-[12px] leading-relaxed
-                    ${msg.role==='user'
-                      ? 'bg-[#C9A84C] text-[#04140E] font-medium rounded-br-sm'
-                      : 'text-white/80 rounded-bl-sm border border-[#C9A84C]/10'}`}
-                    style={msg.role==='bot' ? { background:'rgba(10,35,24,0.95)' } : {}}>
-                    {fmtText(msg.text)}
-                  </div>
+          {/* ── Messages ────────────────────────────────────────────────── */}
+          <div className="relative flex-1 overflow-y-auto min-h-0">
+            {/* Logo watermark centred in messages area */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none" style={{ zIndex:0 }}>
+              <div className="flex flex-col items-center gap-1 opacity-[0.04]">
+                <LogoSVG className="w-52 h-44" stroke="#C9A84C" sw="1.5"/>
+                <p className="text-[22px] font-bold tracking-[0.25em] uppercase" style={{ color:'#C9A84C', fontFamily:'Georgia,serif' }}>CraftNest</p>
+              </div>
+            </div>
 
-                  {/* Links */}
-                  {msg.links && msg.links.length > 0 && (
-                    <div className="flex flex-col gap-1.5 w-full">
-                      {msg.links.map((l, i) => (
-                        <a key={i} href={l.href} target="_blank" rel="noopener noreferrer"
-                          className={`flex items-center justify-center gap-2 py-2 px-4 rounded-full text-[11px] font-bold transition-all hover:scale-[1.02]
-                            ${l.style==='wa' ? 'text-white shadow-[0_2px_10px_rgba(37,211,102,0.3)]' :
-                              l.style==='ig' ? 'text-white shadow-[0_2px_10px_rgba(225,48,108,0.3)]' :
-                              'bg-[#C9A84C] text-[#04140E] shadow-[0_2px_10px_rgba(201,168,76,0.3)]'}`}
-                          style={l.style==='wa' ? { background:'#25D366' } : l.style==='ig' ? { background:'linear-gradient(135deg,#833AB4,#C13584,#E1306C,#F77737)' } : {}}
-                        >
-                          {l.label}
-                        </a>
-                      ))}
+            <div className="relative z-10 px-4 py-4 space-y-4">
+              {msgs.map(msg => (
+                <div key={msg.id} className={`flex ${msg.role==='user'?'justify-end':'justify-start'}`}>
+                  {/* Bot avatar bubble */}
+                  {msg.role==='bot' && (
+                    <div className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0 mt-0.5 mr-2"
+                      style={{ background:'linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.05))', boxShadow:'0 0 0 1px rgba(201,168,76,0.2)' }}>
+                      <LogoSVG className="w-4 h-3.5" stroke="#C9A84C" sw="2.5"/>
                     </div>
                   )}
 
-                  {/* Quick replies */}
-                  {msg.quick && msg.quick.length > 0 && msg.id === msgs[msgs.length-1].id && !typing && (
-                    <div className="flex flex-wrap gap-1.5">
-                      {msg.quick.map((q, i) => (
-                        <button key={i} onClick={() => send(q)}
-                          className="text-[10px] font-bold px-2.5 py-1 rounded-full border border-[#C9A84C]/25 text-[#C9A84C]/70 hover:text-[#C9A84C] hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 transition-all cursor-pointer">
-                          {q}
-                        </button>
-                      ))}
+                  <div className={`max-w-[80%] space-y-2 flex flex-col ${msg.role==='user'?'items-end':'items-start'}`}>
+                    {/* Bubble */}
+                    <div className={`px-4 py-3 text-[12.5px] leading-relaxed
+                      ${msg.role==='user'
+                        ? 'text-[#04140E] font-semibold rounded-2xl rounded-br-sm'
+                        : 'text-white/85 rounded-2xl rounded-bl-sm'}`}
+                      style={msg.role==='user'
+                        ? { background:'linear-gradient(135deg,#D4A843,#C9A84C)', boxShadow:'0 4px 16px rgba(201,168,76,0.35)' }
+                        : { background:'rgba(13,42,24,0.92)', boxShadow:'0 2px 12px rgba(0,0,0,0.4)', border:'1px solid rgba(201,168,76,0.1)' }}>
+                      {fmtText(msg.text)}
                     </div>
-                  )}
-                </div>
-              </div>
-            ))}
 
-            {/* Typing indicator */}
-            {typing && (
-              <div className="flex justify-start">
-                <div className="w-6 h-6 rounded-full border border-[#C9A84C]/25 flex items-center justify-center shrink-0 mr-1.5 mt-1"
-                  style={{ background:'rgba(201,168,76,0.08)' }}>
-                  <svg viewBox="0 0 24 24" className="w-3 h-3" fill="none" stroke="#C9A84C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                  </svg>
+                    {/* Links */}
+                    {msg.links && msg.links.length > 0 && (
+                      <div className="flex flex-col gap-2 w-full">
+                        {msg.links.map((l, i) => (
+                          <a key={i} href={l.href} target="_blank" rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2 py-2.5 px-5 rounded-2xl text-[11.5px] font-bold transition-all hover:scale-[1.02] hover:brightness-110 text-white"
+                            style={l.style==='wa'
+                              ? { background:'linear-gradient(135deg,#25D366,#128C7E)', boxShadow:'0 4px_14px rgba(37,211,102,0.35)' }
+                              : l.style==='ig'
+                              ? { background:'linear-gradient(135deg,#833AB4,#C13584,#E1306C,#F77737)', boxShadow:'0 4px 14px rgba(225,48,108,0.35)' }
+                              : { background:'linear-gradient(135deg,#D4A843,#C9A84C)', boxShadow:'0 4px 14px rgba(201,168,76,0.35)', color:'#04140E' }}>
+                            {l.label}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Quick reply chips */}
+                    {msg.quick && msg.quick.length > 0 && msg.id === msgs[msgs.length-1].id && !typing && (
+                      <div className="flex flex-wrap gap-1.5 mt-0.5">
+                        {msg.quick.map((q, i) => (
+                          <button key={i} onClick={() => send(q)}
+                            className="text-[10.5px] font-semibold px-3 py-1 rounded-full transition-all cursor-pointer"
+                            style={{ border:'1px solid rgba(201,168,76,0.25)', color:'rgba(201,168,76,0.75)', background:'rgba(201,168,76,0.04)' }}
+                            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background='rgba(201,168,76,0.12)'; (e.currentTarget as HTMLButtonElement).style.color='#C9A84C'; (e.currentTarget as HTMLButtonElement).style.borderColor='rgba(201,168,76,0.5)' }}
+                            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background='rgba(201,168,76,0.04)'; (e.currentTarget as HTMLButtonElement).style.color='rgba(201,168,76,0.75)'; (e.currentTarget as HTMLButtonElement).style.borderColor='rgba(201,168,76,0.25)' }}>
+                            {q}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="px-4 py-3 rounded-2xl rounded-bl-sm border border-[#C9A84C]/10 flex items-center gap-1"
-                  style={{ background:'rgba(10,35,24,0.95)' }}>
-                  {[0,1,2].map(i => (
-                    <span key={i} className="w-1.5 h-1.5 rounded-full bg-[#C9A84C]/50 animate-bounce"
-                      style={{ animationDelay:`${i*0.15}s` }}/>
-                  ))}
+              ))}
+
+              {/* Typing indicator */}
+              {typing && (
+                <div className="flex justify-start">
+                  <div className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0 mr-2 mt-0.5"
+                    style={{ background:'linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.05))', boxShadow:'0 0 0 1px rgba(201,168,76,0.2)' }}>
+                    <LogoSVG className="w-4 h-3.5" stroke="#C9A84C" sw="2.5"/>
+                  </div>
+                  <div className="px-5 py-3.5 rounded-2xl rounded-bl-sm flex items-center gap-1.5"
+                    style={{ background:'rgba(13,42,24,0.92)', border:'1px solid rgba(201,168,76,0.1)' }}>
+                    {[0,1,2].map(i => (
+                      <span key={i} className="w-2 h-2 rounded-full animate-bounce"
+                        style={{ background:'#C9A84C', opacity:0.6, animationDelay:`${i*0.18}s` }}/>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-            <div ref={bottomRef}/>
+              )}
+              <div ref={bottomRef}/>
+            </div>
           </div>
 
-          {/* Input */}
-          <div className="px-3 py-3 border-t border-[#C9A84C]/10 shrink-0" style={{ background:'rgba(6,26,15,0.98)' }}>
-            <form onSubmit={e => { e.preventDefault(); send(input) }} className="flex items-center gap-2">
+          {/* ── Input ───────────────────────────────────────────────────── */}
+          <div className="shrink-0 px-4 py-3.5" style={{ background:'rgba(7,26,14,0.97)', boxShadow:'0 -1px 0 rgba(201,168,76,0.1)' }}>
+            <form onSubmit={e => { e.preventDefault(); send(input) }} className="flex items-center gap-2.5">
               <input ref={inputRef}
                 value={input} onChange={e => setInput(e.target.value)}
-                placeholder="Ask me anything…"
-                className="flex-1 min-w-0 bg-white/5 border border-[#C9A84C]/15 rounded-full px-4 py-2.5 text-white/90 text-sm placeholder-white/20 focus:outline-none focus:border-[#C9A84C]/50 transition-colors"
+                placeholder="Type your question…"
+                className="flex-1 min-w-0 rounded-2xl px-4 py-3 text-[13px] text-white/90 placeholder-white/20 focus:outline-none transition-all"
+                style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgba(201,168,76,0.15)', boxShadow:'inset 0 1px 3px rgba(0,0,0,0.3)' }}
+                onFocus={e => { (e.target as HTMLInputElement).style.borderColor='rgba(201,168,76,0.45)'; (e.target as HTMLInputElement).style.boxShadow='inset 0 1px 3px rgba(0,0,0,0.3),0 0 0 3px rgba(201,168,76,0.06)' }}
+                onBlur={e  => { (e.target as HTMLInputElement).style.borderColor='rgba(201,168,76,0.15)'; (e.target as HTMLInputElement).style.boxShadow='inset 0 1px 3px rgba(0,0,0,0.3)' }}
               />
               <button type="submit" disabled={!input.trim() || typing}
-                className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all cursor-pointer disabled:opacity-30"
-                style={{ background:'#C9A84C' }}>
+                className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 transition-all cursor-pointer disabled:opacity-30 hover:brightness-110"
+                style={{ background:'linear-gradient(135deg,#D4A843,#C9A84C)', boxShadow:'0 4px 14px rgba(201,168,76,0.4)' }}>
                 <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="#04140E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/>
                 </svg>
               </button>
             </form>
-            <p className="text-[9px] text-white/15 text-center mt-1.5">CraftNest AI · Powered by your schedule & knowledge base</p>
+            <div className="flex items-center justify-center gap-1.5 mt-2">
+              <LogoSVG className="w-3 h-2.5 opacity-30" stroke="#C9A84C" sw="2.5"/>
+              <p className="text-[9px] tracking-widest uppercase" style={{ color:'rgba(201,168,76,0.3)', letterSpacing:'0.12em' }}>CraftNest · Handcrafted with ♥</p>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Floating buttons row */}
-      <div className="fixed bottom-6 right-5 z-[999] flex flex-col items-center gap-3">
-        {/* Chatbot toggle */}
+      {/* ── Floating trigger buttons ─────────────────────────────────────── */}
+      <div className="fixed bottom-6 right-4 z-[999] flex flex-col items-center gap-3">
+        {/* Chat toggle */}
         <button onClick={toggle} title="Chat with CraftNest"
-          className="relative w-12 h-12 rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.4)] border border-[#C9A84C]/30 transition-all hover:scale-110 cursor-pointer"
-          style={{ background: open ? '#C9A84C' : 'linear-gradient(135deg,#0A2318,#061A0F)' }}>
+          className="relative w-13 h-13 rounded-2xl flex items-center justify-center cursor-pointer transition-all hover:scale-110 active:scale-95"
+          style={{
+            width: '52px', height: '52px',
+            background: open ? 'linear-gradient(135deg,#D4A843,#C9A84C)' : 'linear-gradient(135deg,#0D2A18,#071A10)',
+            boxShadow: open
+              ? '0 4px 24px rgba(201,168,76,0.5), 0 0 0 1px rgba(201,168,76,0.4)'
+              : '0 4px 20px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.2)',
+          }}>
           {!open ? (
-            <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="#C9A84C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              <circle cx="9" cy="10" r="0.8" fill="#C9A84C" stroke="none"/>
-              <circle cx="12" cy="10" r="0.8" fill="#C9A84C" stroke="none"/>
-              <circle cx="15" cy="10" r="0.8" fill="#C9A84C" stroke="none"/>
-            </svg>
+            <LogoSVG className="w-7 h-6" stroke="#C9A84C" sw="2.2"/>
           ) : (
             <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#04140E" strokeWidth="2.5" strokeLinecap="round">
               <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
           )}
           {unread > 0 && !open && (
-            <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 border-2 border-[#04140E] flex items-center justify-center text-[9px] font-bold text-white">
+            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 border-2 border-[#04140E] flex items-center justify-center text-[9px] font-bold text-white">
               {unread}
             </span>
           )}
@@ -405,8 +456,8 @@ function CraftNestChat() {
         {/* WhatsApp */}
         <a href={`https://wa.me/${getWA()}?text=${encodeURIComponent('Hi CraftNest! I have a question.')}`}
           target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp"
-          className="w-14 h-14 rounded-full flex items-center justify-center shadow-[0_4px_24px_rgba(37,211,102,0.4)] hover:scale-110 transition-all"
-          style={{ background: '#25D366' }}>
+          className="w-14 h-14 rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all"
+          style={{ background:'linear-gradient(135deg,#25D366,#128C7E)', boxShadow:'0 4px 24px rgba(37,211,102,0.45)' }}>
           <svg viewBox="0 0 24 24" className="w-7 h-7" fill="white">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
           </svg>
