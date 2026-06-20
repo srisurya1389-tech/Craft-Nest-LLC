@@ -1554,6 +1554,56 @@ const GUIDE_SECTIONS: GuideSection[] = [
       { label: 'Log out when done',            detail: 'Always log out after your admin session, especially if using a shared computer. Your session stays active in the browser until you log out or close it.' },
     ],
   },
+  {
+    id: 'knowme',
+    icon: Info,
+    color: '#FF6B9D',
+    title: 'No More About Me 😄 — The Whole Shebang Explained',
+    badge: 'KNOW ME',
+    intro: 'A completely unhinged, 100% honest, slightly chaotic breakdown of what this website actually IS and what this admin panel actually DOES. Written by someone who clearly has too much coffee. ☕😂',
+    steps: [
+      {
+        label: '🌐 THE WEBSITE — What Even Is This Place? 😅',
+        detail: 'OK so. craftnestshop.com is a gorgeous handcrafted arts & crafts website for CraftNest — a business in Georgia, USA that sells jewellery, return gifts, and face painting 🎨💎🎁. The homepage hits you with a full-screen HERO CAROUSEL (fancy slideshow, very dramatic, very "look at us") followed by a live ANNOUNCEMENT BANNER that scrolls across like breaking news — except the news is beautiful handmade stuff, not catastrophe (refreshing, honestly 😌). Below that? Three glorious product collections — Jewellery, Return Gifts, and Face Painting — each with their own dedicated pages. Customers can browse, fall in love, add to cart, and then... WhatsApp opens 😂 because that\'s how we roll. No complicated checkout. No OTP drama. Just "Hi I want this" and boom, done. The website also has a full GALLERY page (basically Instagram but make it ours), a STAR CURSOR TRAIL that makes your mouse feel like a wizard wand ✨, and a floating chatbot in the corner that actually knows stuff about the business. It\'s basically a whole vibe.',
+      },
+      {
+        label: '🤖 THE CHATBOT — Our Tiny AI Employee 😂',
+        detail: 'There\'s a little chat button floating in the bottom-right corner of the website. Click it and BAM — meet the CraftNest AI Assistant 🤖✨. This little dude knows EVERYTHING. Ask it about jewellery? It responds like a jewellery professor. Ask about face painting? It\'s suddenly a professional event planner. Ask if we\'re free on July 4th? It literally checks the Schedule Manager (which YOU set in admin) and tells the customer in real time — "Sorry bestie, we\'re BOOKED 📅" or "YES come in we are FREE 🎉". It also has a WhatsApp button that pre-fills a message so the customer doesn\'t even have to type. That\'s the kind of lazy-friendly innovation this world needs 😄. There\'s also a big green WhatsApp button floating right below it for people who just want to skip straight to the chat. We stan efficiency.',
+      },
+      {
+        label: '🛒 THE CART — Drama in Three Clicks 😭',
+        detail: 'Customers browse, they see something they love (obviously, because have you SEEN our products?), they click "Add to Cart" 🛒, and a drawer slides in from the right like a very polished salesman. They can add multiple items, remove things, change their mind seventeen times (we don\'t judge 😅), and when they\'re ready, they hit "Order via WhatsApp" — which opens WhatsApp with a beautifully formatted message listing every item they picked. The owner (that\'s you!) reads it, confirms, and the deal is done. No payment gateway fees, no integration nightmares, no "your card has been declined" trauma. Simple. Elegant. Effective. Chef\'s kiss 🤌.',
+      },
+      {
+        label: '🧑‍💼 THE ADMIN PANEL — Your Secret Headquarters 🏛️😄',
+        detail: 'Now THIS is where the magic happens behind the curtain. Log in at craftnestshop.com/admin with your email and password (only you and approved staff know it, obviously 🔐). You\'re greeted with a DASHBOARD — your bird\'s eye view of everything. How many products? How many gallery items? Any announcement running? Quick links to every section? It\'s basically the cockpit of a plane, except the plane is your business and you\'re the pilot and co-pilot simultaneously 😂✈️. The sidebar has tabs for Jewellery, Return Gifts, Face Painting, Gallery, Hero Carousel, Image Converter, Schedule, Settings, and this very Starter Guide you\'re reading right now. Meta? Very. 🤯',
+      },
+      {
+        label: '💎🎁🎨 PRODUCTS — Add, Edit, Hide, Reorder, Feature, Repeat 😅',
+        detail: 'Each of the three product categories (Jewellery, Return Gifts, Face Painting) has its own tab. Inside each tab you can ADD a new product (give it a title, price, description, badge like "NEW" or "BESTSELLER", stock status, and an image uploaded to Cloudinary ☁️). You can EDIT any product at any time. You can HIDE products temporarily instead of deleting them (perfect for "sold out but coming back" situations 👻). You can FEATURE your star products — they get a gold crown badge and appear at the top for customers 👑. You can DRAG to reorder them however you like. You can even mark stock as "Low Stock" or "Out of Stock" and it shows as a badge on the website. Basically you are the God of this product universe 😂🌍.',
+      },
+      {
+        label: '🖼️ GALLERY & HERO CAROUSEL — The Pretty Stuff Department 📸',
+        detail: 'The GALLERY tab lets you upload beautiful photos of your work. Each photo gets a title and optional category tag. They appear on the public gallery page in a masonry grid that makes everything look like a Pinterest board. Very aesthetic 😍. The HERO CAROUSEL tab manages the big dramatic slideshow images on the homepage. Add images, rearrange them by dragging, remove old ones. Pro tip: put your most jaw-dropping photo at position #1. First impressions and all that 💅. Both upload to Cloudinary so your images are served fast from the cloud — no slow loading, just vibes.',
+      },
+      {
+        label: '🔄 IMAGE CONVERTER — Secretly Extremely Useful 😂',
+        detail: 'You know how you take a photo on your phone and it\'s 8MB and uploads like it\'s crawling through mud? The Image Converter tab fixes that. Drop any image in, set the quality and target format (WebP, JPEG, PNG), and download a compressed version ready for web upload. It runs entirely in your browser — no account, no upload, no waiting. It\'s that unassuming quiet person in the group who actually does the most work 😄.',
+      },
+      {
+        label: '📅 SCHEDULE MANAGER — "Are We Free?" Answered Instantly 🗓️',
+        detail: 'The Schedule tab has a beautiful compact calendar. Click any date and a panel slides in letting you mark it as: ✅ Free (come get us!), ⚡ Limited Slots (hurry!), 🔴 Busy (sorry bestie), or 📅 Fully Booked (absolutely not 😂). You can add a note ("Birthday party 10am–4pm, jewellery orders still OK") and tick which services are available that day. SAVE it, and immediately — without any extra steps — the chatbot on the website can answer customer questions like "Are you free on December 25th?" with accurate, real-time information from THIS calendar. It\'s like having a receptionist who never sleeps and never asks for a raise 😄🤖.',
+      },
+      {
+        label: '⚙️ SETTINGS — The Control Room 🎛️',
+        detail: 'Only the OWNER account can see Settings (staff gets locked out — trust issues 😅). Here you can update: WhatsApp number (the one customers message when they click any WhatsApp button), Instagram URL (links all over the site), Announcement Banner text (the scrolling message on the homepage), Cloudinary cloud name and upload preset (for image uploads), and website tagline. Change the WhatsApp number and EVERY button on the site updates instantly. No code needed. Just type and save. It\'s basically a remote control for the whole website 🎮.',
+      },
+      {
+        label: '👥 WHO GETS TO LOG IN? — The Role System 🔐😄',
+        detail: 'CraftNest admin supports two roles: OWNER (that\'s you — full access to everything, including Settings and the ability to delete products and reset data 💪) and STAFF (trusted helpers who can add/edit products and gallery photos but can\'t touch Settings or delete things 🙅). When logged in, your name shows in the top-right corner of the admin sidebar — a small reminder that yes, you ARE in charge and yes, you DO have power. Use it wisely 😂👑. Your session is remembered until you log out, so you don\'t have to type the password every single time.',
+      },
+    ],
+  },
 ]
 
 function GuideSection({ section, expanded, onToggle }: { section: GuideSection; expanded: boolean; onToggle: () => void }) {
@@ -1977,6 +2027,52 @@ function SectionVisual({ id }: { id: string }) {
           ))}
           <div className="w-full text-center text-[5px] font-bold py-0.5 rounded-full bg-[#C9A84C] text-[#04140E]">Save Schedule</div>
         </div>
+      </div>
+    </VisualDiagram>
+  )
+
+  if (id === 'knowme') return (
+    <VisualDiagram title="CraftNest — Know Me 😄">
+      <div className="flex-1 min-w-[220px] flex flex-col gap-2">
+        {/* Smiley wallpaper strip */}
+        <div className="relative rounded-xl overflow-hidden p-2" style={{ background:'rgba(255,107,157,0.06)', border:'1px solid rgba(255,107,157,0.15)' }}>
+          <div className="absolute inset-0 flex flex-wrap gap-1 p-1 opacity-10 pointer-events-none select-none overflow-hidden">
+            {Array.from({length:40}).map((_,i)=>(
+              <span key={i} className="text-[10px]">{['😄','😂','🤣','😅','😜','🥳','🎉','✨','😎','🤩'][i%10]}</span>
+            ))}
+          </div>
+          <div className="relative z-10 text-center py-1">
+            <p className="text-[8px] font-bold tracking-widest uppercase" style={{color:'#FF6B9D'}}>⭐⭐⭐⭐⭐ &nbsp;CUSTOMER RATING</p>
+            <p className="text-[6px] text-white/50 mt-0.5">craftnestshop.com · The Website 🌐</p>
+          </div>
+        </div>
+        {/* Website rating card */}
+        <div className="rounded-xl p-2 space-y-1" style={{background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,107,157,0.12)'}}>
+          <p className="text-[6.5px] font-bold text-white/70">🌐 The Website</p>
+          {[['Hero + Carousel','#C9A84C','100%'],['Collections (3)','#5DBEA3','100%'],['Gallery','#8BA4F8','100%'],['Chatbot + WhatsApp','#25D366','100%'],['Star Cursor Trail ✨','#E8C96B','Priceless 😂']].map(([l,c,v])=>(
+            <div key={l as string} className="flex items-center gap-1.5">
+              <p className="text-[5.5px] text-white/40 w-20 shrink-0">{l}</p>
+              <div className="flex-1 h-1 rounded-full overflow-hidden" style={{background:'rgba(255,255,255,0.06)'}}>
+                <div className="h-full rounded-full" style={{width: v==='Priceless 😂'?'100%':v, background:c as string}}/>
+              </div>
+              <p className="text-[5px] font-bold shrink-0" style={{color:c as string}}>{v}</p>
+            </div>
+          ))}
+        </div>
+        {/* Admin rating card */}
+        <div className="rounded-xl p-2 space-y-1" style={{background:'rgba(255,255,255,0.03)', border:'1px solid rgba(201,168,76,0.15)'}}>
+          <p className="text-[6.5px] font-bold" style={{color:'#C9A84C'}}>🧑‍💼 The Admin Panel</p>
+          {[['Dashboard','#C9A84C','100%'],['Products (3 cats)','#5DBEA3','100%'],['Gallery + Hero','#8BA4F8','100%'],['Schedule Manager','#FF6B9D','100%'],['Image Converter','#F5A623','100%'],['Settings 🔐','#9B8EFF','Owner Only 😅']].map(([l,c,v])=>(
+            <div key={l as string} className="flex items-center gap-1.5">
+              <p className="text-[5.5px] text-white/40 w-20 shrink-0">{l}</p>
+              <div className="flex-1 h-1 rounded-full overflow-hidden" style={{background:'rgba(255,255,255,0.06)'}}>
+                <div className="h-full rounded-full" style={{width:'100%', background:c as string}}/>
+              </div>
+              <p className="text-[5px] font-bold shrink-0" style={{color:c as string}}>{v}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-center text-[6px] text-white/20">Built with ♥ · No bugs (probably 😂) · 100% handcrafted</p>
       </div>
     </VisualDiagram>
   )
