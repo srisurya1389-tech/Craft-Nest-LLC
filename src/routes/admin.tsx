@@ -6,7 +6,7 @@ import {
   CheckCircle2, AlertCircle, RefreshCw, Search,
   Star, EyeOff as HideIcon, Download, Upload, GripVertical, Home,
   MessageCircle, Megaphone, Link, Camera, Menu,
-  BookOpen, ChevronRight, Info, Lightbulb,
+  BookOpen, ChevronRight, Info, Lightbulb, Copy, Zap, Image as ImageIcon2,
 } from 'lucide-react'
 import {
   getAdminData, saveSettings, addProduct, updateProduct, deleteProduct,
@@ -27,7 +27,7 @@ const ADMIN_USERS: { email: string; password: string; name: string; role: Role }
 ]
 const SESSION_KEY = 'craftnest_admin_auth'
 
-type Tab = 'dashboard' | 'jewellery' | 'gifts' | 'painting' | 'gallery' | 'hero' | 'settings' | 'guide'
+type Tab = 'dashboard' | 'jewellery' | 'gifts' | 'painting' | 'gallery' | 'hero' | 'media' | 'settings' | 'guide'
 
 const BADGES = ['Bestseller','Popular','New','Custom','Bridal','Festival','Traditional','Adults','Kids','Limited']
 const GALLERY_CATS = ['events','arts','other'] as const
@@ -766,6 +766,211 @@ function HeroTab({ data, onAdd, onRemove, onReorder }: { data: AdminData; onAdd:
   )
 }
 
+// ── Media / Image Converter Tab ───────────────────────────────────────────────
+
+type UploadedItem = { file: File; previewUrl: string; cloudUrl: string | null; status: 'idle' | 'uploading' | 'done' | 'error'; err: string }
+
+function MediaTab({ onGoSettings }: { onGoSettings: () => void }) {
+  const [items, setItems]       = useState<UploadedItem[]>([])
+  const [dragging, setDragging] = useState(false)
+  const [copied, setCopied]     = useState<string | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  const addFiles = (files: FileList | null) => {
+    if (!files) return
+    const newItems: UploadedItem[] = Array.from(files)
+      .filter(f => f.type.startsWith('image/'))
+      .map(f => ({ file:f, previewUrl:URL.createObjectURL(f), cloudUrl:null, status:'idle', err:'' }))
+    setItems(prev => [...newItems, ...prev])
+  }
+
+  const onDrop = (e: React.DragEvent) => {
+    e.preventDefault(); setDragging(false)
+    addFiles(e.dataTransfer.files)
+  }
+
+  const convertOne = async (idx: number) => {
+    setItems(prev => prev.map((it, i) => i===idx ? { ...it, status:'uploading', err:'' } : it))
+    try {
+      const url = await uploadToCloudinary(items[idx].file)
+      setItems(prev => prev.map((it, i) => i===idx ? { ...it, cloudUrl:url, status:'done' } : it))
+    } catch (ex) {
+      setItems(prev => prev.map((it, i) => i===idx ? { ...it, status:'error', err:(ex as Error).message } : it))
+    }
+  }
+
+  const convertAll = async () => {
+    const pending = items.map((it, i) => ({ it, i })).filter(x => x.it.status === 'idle' || x.it.status === 'error')
+    for (const { i } of pending) await convertOne(i)
+  }
+
+  const copyUrl = (url: string) => {
+    navigator.clipboard.writeText(url).catch(() => {})
+    setCopied(url); setTimeout(() => setCopied(null), 2000)
+  }
+
+  const remove = (idx: number) => {
+    URL.revokeObjectURL(items[idx].previewUrl)
+    setItems(prev => prev.filter((_, i) => i !== idx))
+  }
+
+  const hasPending = items.some(it => it.status === 'idle' || it.status === 'error')
+  const settings   = (() => { try { return JSON.parse(localStorage.getItem('craftnest_admin_data') || '{}')?.settings } catch { return null } })()
+  const presetOk   = !!(settings?.cloudinaryPreset)
+
+  return (
+    <div className="space-y-5 w-full max-w-3xl">
+      <div>
+        <h2 className="font-serif text-xl sm:text-2xl text-white mb-0.5">Image Converter</h2>
+        <p className="text-xs text-white/35">Drop or pick images → Convert to a link → Copy and paste into any image field.</p>
+      </div>
+
+      {/* Setup warning */}
+      {!presetOk && (
+        <div className="flex items-start gap-3 p-4 rounded-2xl border border-amber-500/25" style={{ background:'rgba(30,20,5,0.85)' }}>
+          <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5"/>
+          <div className="min-w-0">
+            <p className="text-xs font-bold text-amber-300 mb-1">One-time setup required</p>
+            <p className="text-[11px] text-amber-200/60 leading-relaxed">
+              To convert images you need a Cloudinary Upload Preset. Go to <strong className="text-amber-300">Settings → Image Upload</strong> and enter your Cloud Name + Preset. See the Starter Guide for step-by-step instructions.
+            </p>
+            <button onClick={onGoSettings} className="mt-2.5 flex items-center gap-1.5 text-[10px] font-bold tracking-[0.12em] uppercase text-amber-300 hover:text-amber-100 cursor-pointer">
+              <Settings className="w-3 h-3"/> Go to Settings →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Drop zone */}
+      <div
+        onDragOver={e => { e.preventDefault(); setDragging(true) }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={onDrop}
+        onClick={() => fileRef.current?.click()}
+        className={`relative flex flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed transition-all duration-200 cursor-pointer min-h-[180px] sm:min-h-[220px] ${dragging ? 'border-[#C9A84C] bg-[#C9A84C]/8 scale-[1.01]' : 'border-[#C9A84C]/20 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5'}`}
+        style={{ background: dragging ? 'rgba(201,168,76,0.06)' : 'rgba(10,35,24,0.6)' }}
+      >
+        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border transition-all ${dragging ? 'border-[#C9A84C]/60 bg-[#C9A84C]/15' : 'border-[#C9A84C]/20 bg-[#C9A84C]/5'}`}>
+          {dragging
+            ? <Zap className="w-7 h-7 text-[#C9A84C]"/>
+            : <ImageIcon2 className="w-7 h-7 text-[#C9A84C]/50"/>
+          }
+        </div>
+        <div className="text-center px-4">
+          <p className="text-sm font-bold text-white/70 mb-1">{dragging ? 'Drop to add images' : 'Drag & Drop images here'}</p>
+          <p className="text-[11px] text-white/30">or <span className="text-[#C9A84C]/70 underline underline-offset-2">click to browse files</span> from your device</p>
+          <p className="text-[10px] text-white/20 mt-1">Supports JPG · PNG · WEBP · GIF</p>
+        </div>
+        <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={e => addFiles(e.target.files)}/>
+      </div>
+
+      {/* Convert All button */}
+      {items.length > 0 && (
+        <div className="flex items-center gap-3 flex-wrap">
+          <button
+            onClick={convertAll}
+            disabled={!hasPending || !presetOk}
+            className="flex items-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] disabled:opacity-40 text-[#04140E] font-bold text-[10px] tracking-[0.2em] uppercase px-6 py-3 rounded-full transition-all hover:scale-105 cursor-pointer shadow-[0_4px_16px_rgba(201,168,76,0.3)]"
+          >
+            <Zap className="w-3.5 h-3.5"/>
+            Convert All to Links
+          </button>
+          <button onClick={() => setItems([])} className="text-[10px] font-bold tracking-[0.12em] uppercase text-white/25 hover:text-white/50 cursor-pointer">Clear All</button>
+          <span className="text-[10px] text-white/25 ml-auto">{items.filter(i=>i.status==='done').length}/{items.length} converted</span>
+        </div>
+      )}
+
+      {/* Item list */}
+      {items.length > 0 && (
+        <div className="space-y-2">
+          {items.map((item, idx) => (
+            <div key={idx} className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${item.status==='done' ? 'border-emerald-600/20 bg-emerald-950/20' : item.status==='error' ? 'border-red-500/20 bg-red-950/20' : 'border-[#C9A84C]/10'}`}
+              style={item.status!=='done' && item.status!=='error' ? { background:'rgba(10,35,24,0.8)' } : {}}>
+              {/* Preview */}
+              <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-white/10">
+                <img src={item.previewUrl} alt="" className="w-full h-full object-cover"/>
+              </div>
+
+              {/* Info */}
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] font-bold text-white/70 truncate mb-1">{item.file.name}</p>
+                <p className="text-[10px] text-white/25">{(item.file.size / 1024).toFixed(0)} KB</p>
+
+                {item.status === 'done' && item.cloudUrl && (
+                  <div className="mt-1.5 flex items-center gap-2 min-w-0">
+                    <input
+                      readOnly value={item.cloudUrl}
+                      className="flex-1 min-w-0 text-[10px] bg-white/5 border border-emerald-600/20 rounded-lg px-2.5 py-1.5 text-emerald-300/80 focus:outline-none font-mono truncate cursor-text"
+                      onClick={e => (e.target as HTMLInputElement).select()}
+                    />
+                    <button
+                      onClick={() => copyUrl(item.cloudUrl!)}
+                      className={`shrink-0 flex items-center gap-1 text-[9px] font-bold tracking-[0.1em] uppercase px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${copied===item.cloudUrl ? 'bg-emerald-600 border-emerald-600 text-white' : 'border-emerald-600/30 text-emerald-400 hover:bg-emerald-600/15'}`}
+                    >
+                      <Copy className="w-3 h-3"/> {copied===item.cloudUrl ? 'Copied!' : 'Copy'}
+                    </button>
+                  </div>
+                )}
+
+                {item.status === 'error' && (
+                  <p className="text-[10px] text-red-400 mt-1">{item.err || 'Upload failed'}</p>
+                )}
+              </div>
+
+              {/* Action */}
+              <div className="flex flex-col gap-1.5 items-end shrink-0">
+                {item.status === 'idle' && (
+                  <button onClick={() => convertOne(idx)} disabled={!presetOk}
+                    className="flex items-center gap-1 text-[9px] font-bold tracking-[0.1em] uppercase px-3 py-1.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C]/25 cursor-pointer disabled:opacity-40 whitespace-nowrap">
+                    <Zap className="w-3 h-3"/> Convert
+                  </button>
+                )}
+                {item.status === 'uploading' && (
+                  <span className="flex items-center gap-1 text-[9px] text-white/40 uppercase font-bold">
+                    <RefreshCw className="w-3 h-3 animate-spin"/> Uploading…
+                  </span>
+                )}
+                {item.status === 'done' && (
+                  <span className="flex items-center gap-1 text-[9px] text-emerald-400 font-bold"><CheckCircle2 className="w-3 h-3"/> Done</span>
+                )}
+                {item.status === 'error' && (
+                  <button onClick={() => convertOne(idx)} className="flex items-center gap-1 text-[9px] font-bold text-red-400 hover:text-red-300 cursor-pointer uppercase">
+                    <RefreshCw className="w-3 h-3"/> Retry
+                  </button>
+                )}
+                <button onClick={() => remove(idx)} className="text-white/20 hover:text-white/50 cursor-pointer p-0.5"><X className="w-3.5 h-3.5"/></button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {items.length === 0 && (
+        <div className="rounded-2xl border border-[#C9A84C]/8 p-4" style={{ background:'rgba(10,35,24,0.5)' }}>
+          <p className="text-[10px] tracking-[0.2em] text-[#C9A84C]/40 uppercase font-bold mb-3">How it works</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { num:'1', icon:ImageIcon2, color:'#C9A84C', label:'Pick or Drop',    detail:'Drag images from your computer onto the drop zone, or click it to open your file explorer.' },
+              { num:'2', icon:Zap,        color:'#5DBEA3', label:'Convert to Link', detail:'Click "Convert" on each image or "Convert All" to upload everything to the cloud at once.' },
+              { num:'3', icon:Copy,       color:'#8BA4F8', label:'Copy & Paste',    detail:'Copy the generated URL and paste it into any image field in your products, gallery, or hero.' },
+            ].map(({ num, icon:Icon, color, label, detail }) => (
+              <div key={num} className="flex flex-col items-center text-center gap-2 p-4 rounded-xl" style={{ background:'rgba(255,255,255,0.02)' }}>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center border" style={{ background:`${color}12`, borderColor:`${color}25` }}>
+                  <Icon className="w-5 h-5" style={{ color }}/>
+                </div>
+                <div>
+                  <p className="text-[11px] font-bold text-white/70 mb-0.5"><span style={{ color }} className="mr-1">{num}.</span>{label}</p>
+                  <p className="text-[10px] text-white/30 leading-relaxed">{detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Settings Tab ──────────────────────────────────────────────────────────────
 
 function SettingsTab({ data, show }: { data: AdminData; show: (msg:string, t?: 'success'|'error') => void }) {
@@ -1148,67 +1353,215 @@ function GuideSection({ section, expanded, onToggle }: { section: GuideSection; 
   )
 }
 
-function GuideTab() {
+// ── Visual diagram helpers ────────────────────────────────────────────────────
+
+function MockSidebar() {
+  return (
+    <div className="rounded-xl overflow-hidden border border-white/10 w-28 shrink-0" style={{ background:'#061A0F' }}>
+      <div className="px-2.5 py-2 border-b border-white/10"><div className="flex items-center gap-1.5"><div className="w-4 h-4 rounded bg-[#C9A84C]/20 border border-[#C9A84C]/30"/><p className="text-[8px] font-bold text-[#E8C96B]">CRAFT NEST</p></div></div>
+      {['Dashboard','Jewellery','Return Gifts','Gallery','Settings','Guide'].map((l,i) => (
+        <div key={l} className={`flex items-center gap-1.5 px-2.5 py-1.5 ${i===0?'bg-[#C9A84C]/10 border-l-2 border-[#C9A84C]':''}`}>
+          <div className={`w-2.5 h-2.5 rounded shrink-0 ${i===0?'bg-[#C9A84C]/60':'bg-white/10'}`}/>
+          <p className={`text-[7px] font-bold truncate ${i===0?'text-[#E8C96B]':'text-white/30'}`}>{l}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function MockProductCard({ featured, hidden, badge }: { featured?: boolean; hidden?: boolean; badge?: string }) {
+  return (
+    <div className={`rounded-xl overflow-hidden border w-32 shrink-0 ${hidden ? 'opacity-40 border-white/10' : 'border-[#C9A84C]/20'}`} style={{ background:'rgba(10,35,24,0.9)' }}>
+      <div className="relative h-16 bg-gradient-to-br from-[#0A3020] to-[#061A0F] flex items-center justify-center">
+        <ImageIcon className="w-5 h-5 text-white/10"/>
+        {badge && <span className="absolute top-1 left-1 text-[6px] font-bold px-1.5 py-0.5 rounded-full bg-[#C9A84C] text-[#04140E]">{badge}</span>}
+        {featured && <span className="absolute top-1 right-1 text-[7px]">⭐</span>}
+        {hidden && <div className="absolute inset-0 flex items-center justify-center"><EyeOff className="w-4 h-4 text-white/30"/></div>}
+      </div>
+      <div className="p-2">
+        <div className="h-1.5 w-3/4 rounded bg-white/15 mb-1"/>
+        <div className="h-1 w-1/2 rounded bg-white/8"/>
+        <div className="mt-2 flex justify-around border-t border-white/5 pt-1.5">
+          <Eye className="w-3 h-3 text-emerald-400/60"/><Star className="w-3 h-3 text-[#C9A84C]/40"/><Pencil className="w-3 h-3 text-white/20"/><Trash2 className="w-3 h-3 text-red-400/30"/>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function MockDropZone({ active }: { active?: boolean }) {
+  return (
+    <div className={`rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-1.5 p-4 transition-all ${active ? 'border-[#C9A84C] bg-[#C9A84C]/8' : 'border-white/15'}`} style={{ minHeight:90 }}>
+      <ImageIcon2 className={`w-5 h-5 ${active ? 'text-[#C9A84C]' : 'text-white/20'}`}/>
+      <p className="text-[7px] text-white/30 text-center">Drag & Drop or Click</p>
+      {active && <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#C9A84C] cursor-pointer"><Zap className="w-2.5 h-2.5 text-[#04140E]"/><span className="text-[7px] font-bold text-[#04140E]">Convert</span></div>}
+    </div>
+  )
+}
+
+function VisualDiagram({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-xl border border-[#C9A84C]/10 overflow-hidden" style={{ background:'rgba(5,15,10,0.8)' }}>
+      <div className="px-3 py-2 border-b border-white/5 flex items-center gap-2">
+        <div className="flex gap-1"><div className="w-2 h-2 rounded-full bg-red-500/50"/><div className="w-2 h-2 rounded-full bg-amber-500/50"/><div className="w-2 h-2 rounded-full bg-emerald-500/50"/></div>
+        <p className="text-[8px] text-white/25 font-mono">{title}</p>
+      </div>
+      <div className="p-3 flex gap-3 overflow-x-auto">{children}</div>
+    </div>
+  )
+}
+
+// ── Guide Tab ─────────────────────────────────────────────────────────────────
+
+function GuideTab({ onGoMedia, onGoSettings }: { onGoMedia: () => void; onGoSettings: () => void }) {
   const [expandedId, setExpandedId] = useState<string | null>('overview')
 
   return (
     <div className="space-y-5 w-full max-w-3xl">
       {/* Header */}
-      <div className="rounded-2xl border border-[#C9A84C]/20 p-5 sm:p-6 flex flex-col sm:flex-row items-start gap-4" style={{ background:'linear-gradient(135deg,rgba(10,35,24,0.95),rgba(15,50,30,0.9))' }}>
-        <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border border-[#C9A84C]/25" style={{ background:'rgba(201,168,76,0.1)' }}>
-          <BookOpen className="w-6 h-6 text-[#C9A84C]"/>
+      <div className="rounded-2xl border border-[#C9A84C]/20 p-5 flex flex-col sm:flex-row items-start gap-4" style={{ background:'linear-gradient(135deg,rgba(10,35,24,0.95),rgba(15,50,30,0.9))' }}>
+        <div className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border border-[#C9A84C]/25" style={{ background:'rgba(201,168,76,0.1)' }}>
+          <BookOpen className="w-5 h-5 text-[#C9A84C]"/>
         </div>
         <div className="min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1">
             <h2 className="font-serif text-xl sm:text-2xl text-white">Starter Guide</h2>
-            <span className="text-[9px] font-bold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 text-[#C9A84C]">Admin Handbook</span>
+            <span className="text-[9px] font-bold tracking-[0.12em] uppercase px-2 py-0.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 text-[#C9A84C]">Handbook</span>
           </div>
-          <p className="text-xs text-white/40 leading-relaxed">
-            Everything you need to know to run your CraftNest store. Click any section below to expand it. Read from top to bottom your first time, then use it as a reference later.
-          </p>
+          <p className="text-xs text-white/40 leading-relaxed">Visual step-by-step guide for every feature. Click a section to expand it.</p>
         </div>
       </div>
 
-      {/* Quick reference chips */}
+      {/* Quick jump chips */}
       <div>
-        <p className="text-[9px] tracking-[0.25em] text-[#C9A84C]/40 uppercase font-bold mb-2">Jump to a topic</p>
-        <div className="flex flex-wrap gap-2">
+        <p className="text-[9px] tracking-[0.2em] text-[#C9A84C]/40 uppercase font-bold mb-2">Jump to topic</p>
+        <div className="flex flex-wrap gap-1.5">
           {GUIDE_SECTIONS.map(s => (
-            <button
-              key={s.id}
-              onClick={() => setExpandedId(expandedId === s.id ? null : s.id)}
-              className={`flex items-center gap-1.5 text-[9px] font-bold tracking-[0.1em] uppercase px-3 py-1.5 rounded-full border transition-all cursor-pointer ${expandedId === s.id ? 'border-transparent text-[#04140E]' : 'border-white/10 text-white/35 hover:text-white/60 hover:border-white/20'}`}
-              style={expandedId === s.id ? { background: s.color, borderColor: s.color } : {}}
-            >
-              <s.icon className="w-3 h-3"/>
-              <span className="hidden sm:inline">{s.title.split(' — ')[0].split(' · ')[0]}</span>
-              <span className="sm:hidden">{s.id.charAt(0).toUpperCase() + s.id.slice(1)}</span>
+            <button key={s.id} onClick={() => setExpandedId(expandedId === s.id ? null : s.id)}
+              className={`flex items-center gap-1 text-[9px] font-bold tracking-[0.08em] uppercase px-2.5 py-1 rounded-full border transition-all cursor-pointer ${expandedId===s.id ? 'border-transparent text-[#04140E]' : 'border-white/10 text-white/30 hover:text-white/60 hover:border-white/20'}`}
+              style={expandedId===s.id ? { background:s.color } : {}}>
+              <s.icon className="w-2.5 h-2.5"/>
+              <span className="hidden sm:inline">{s.title.split(' — ')[0].split(' · ')[0].split(' (')[0]}</span>
+              <span className="sm:hidden capitalize">{s.id}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Sections */}
+      {/* ── Visual Quick-Start Flow ── */}
+      <div className="rounded-2xl border border-[#C9A84C]/15 p-4 space-y-3" style={{ background:'rgba(10,35,24,0.7)' }}>
+        <p className="text-[10px] tracking-[0.2em] text-[#C9A84C]/60 uppercase font-bold">Visual Walkthrough — How the admin panel works</p>
+
+        {/* Step 1 — Sidebar navigation */}
+        <div className="space-y-2">
+          <p className="text-[11px] font-bold text-white/60 flex items-center gap-2"><span className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-[#04140E] shrink-0" style={{ background:'#C9A84C' }}>1</span>Use the sidebar to navigate between sections</p>
+          <VisualDiagram title="craftnestshop.com/admin — Sidebar">
+            <MockSidebar/>
+            <div className="flex flex-col justify-center gap-2 min-w-[130px]">
+              {[['Dashboard','See your store at a glance'],['Jewellery','Manage jewellery products'],['Gallery','Add/remove photos'],['Settings','WhatsApp, banner, upload']].map(([k,v])=>(
+                <div key={k} className="flex items-start gap-1.5">
+                  <ChevronRight className="w-3 h-3 text-[#C9A84C]/50 shrink-0 mt-0.5"/>
+                  <div><p className="text-[8px] font-bold text-white/60">{k}</p><p className="text-[7px] text-white/25">{v}</p></div>
+                </div>
+              ))}
+            </div>
+          </VisualDiagram>
+        </div>
+
+        {/* Step 2 — Product cards */}
+        <div className="space-y-2">
+          <p className="text-[11px] font-bold text-white/60 flex items-center gap-2"><span className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-[#04140E] shrink-0" style={{ background:'#C9A84C' }}>2</span>Add and manage products — use the card action icons</p>
+          <VisualDiagram title="Products Tab — Card Actions">
+            <MockProductCard badge="Bestseller" featured/>
+            <MockProductCard badge="Bridal" hidden/>
+            <div className="flex flex-col justify-center gap-2.5 min-w-[150px]">
+              {[
+                [Eye,'w-3 h-3 text-emerald-400','👁 Visible — click to hide'],
+                [Star,'w-3 h-3 text-[#E8C96B]','⭐ Featured — shows on top'],
+                [Pencil,'w-3 h-3 text-white/40','✏️ Edit product details'],
+                [Trash2,'w-3 h-3 text-red-400/50','🗑 Delete (Owner only)'],
+              ].map(([Icon, cls, label],i) => (
+                <div key={i} className="flex items-center gap-2">
+                  {/* @ts-ignore */}
+                  <Icon className={cls as string}/>
+                  <p className="text-[8px] text-white/40">{label as string}</p>
+                </div>
+              ))}
+            </div>
+          </VisualDiagram>
+        </div>
+
+        {/* Step 3 — Image Converter */}
+        <div className="space-y-2">
+          <p className="text-[11px] font-bold text-white/60 flex items-center gap-2"><span className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-[#04140E] shrink-0" style={{ background:'#C9A84C' }}>3</span>Upload images → get a URL → paste into any image field</p>
+          <VisualDiagram title="Image Converter Tab — How to get a link">
+            <div className="flex flex-col gap-2 flex-1 min-w-[200px]">
+              <div className="flex items-center gap-2">
+                <MockDropZone/>
+                <div className="flex flex-col items-center gap-0.5">
+                  <div className="w-px h-6 bg-white/10"/>
+                  <ChevronRight className="w-3 h-3 text-white/20"/>
+                </div>
+                <div className="flex-1 rounded-xl border border-emerald-600/20 p-2" style={{ background:'rgba(5,30,15,0.8)' }}>
+                  <p className="text-[7px] text-white/30 mb-1">Your image link:</p>
+                  <div className="flex items-center gap-1">
+                    <div className="flex-1 h-3 rounded bg-emerald-900/40 border border-emerald-600/20"/>
+                    <div className="flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-emerald-600 cursor-pointer">
+                      <Copy className="w-2 h-2 text-white"/><span className="text-[6px] font-bold text-white">Copy</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 text-[7px] text-white/25">
+                <span className="shrink-0">Then paste this link into</span>
+                <div className="flex-1 h-3 rounded border border-[#C9A84C]/15 bg-white/5 px-1.5 flex items-center"><span className="text-[6px] text-white/20">Image URL field in product form</span></div>
+              </div>
+            </div>
+          </VisualDiagram>
+          <button onClick={onGoMedia} className="flex items-center gap-1.5 text-[10px] font-bold tracking-[0.12em] uppercase text-[#C9A84C]/70 hover:text-[#C9A84C] cursor-pointer transition-colors">
+            <ImageIcon2 className="w-3 h-3"/> Open Image Converter →
+          </button>
+        </div>
+
+        {/* Step 4 — Settings */}
+        <div className="space-y-2">
+          <p className="text-[11px] font-bold text-white/60 flex items-center gap-2"><span className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-[#04140E] shrink-0" style={{ background:'#C9A84C' }}>4</span>Control global site options from Settings (Owner only)</p>
+          <VisualDiagram title="Settings Tab — Key controls">
+            <div className="grid grid-cols-2 gap-2 flex-1">
+              {[
+                { icon:Megaphone, color:'#F5A623', label:'Announcement Banner', detail:'Toggle ON/OFF — shows a bar at top of website' },
+                { icon:MessageCircle, color:'#25D366', label:'WhatsApp Number', detail:'Changes all enquiry buttons across the site' },
+                { icon:Upload, color:'#5DBEA3', label:'Cloudinary Preset', detail:'Required for file upload in all image fields' },
+                { icon:Link, color:'#8BA4F8', label:'Social Links', detail:'Instagram & Facebook shown in footer' },
+              ].map(({ icon:Icon, color, label, detail }) => (
+                <div key={label} className="flex items-start gap-1.5 p-2 rounded-lg" style={{ background:'rgba(255,255,255,0.03)' }}>
+                  <div className="w-5 h-5 rounded flex items-center justify-center shrink-0 mt-0.5" style={{ background:`${color}15` }}>
+                    <Icon className="w-2.5 h-2.5" style={{ color }}/>
+                  </div>
+                  <div><p className="text-[7px] font-bold text-white/60">{label}</p><p className="text-[6px] text-white/25 leading-relaxed">{detail}</p></div>
+                </div>
+              ))}
+            </div>
+          </VisualDiagram>
+          <button onClick={onGoSettings} className="flex items-center gap-1.5 text-[10px] font-bold tracking-[0.12em] uppercase text-[#C9A84C]/70 hover:text-[#C9A84C] cursor-pointer transition-colors">
+            <Settings className="w-3 h-3"/> Open Settings →
+          </button>
+        </div>
+      </div>
+
+      {/* Text sections */}
       <div className="space-y-2">
         {GUIDE_SECTIONS.map(section => (
-          <GuideSection
-            key={section.id}
-            section={section}
-            expanded={expandedId === section.id}
-            onToggle={() => setExpandedId(expandedId === section.id ? null : section.id)}
-          />
+          <GuideSection key={section.id} section={section} expanded={expandedId===section.id}
+            onToggle={() => setExpandedId(expandedId===section.id ? null : section.id)}/>
         ))}
       </div>
 
-      {/* Footer card */}
       <div className="rounded-2xl border border-white/5 p-4 flex items-start gap-3" style={{ background:'rgba(255,255,255,0.02)' }}>
-        <Info className="w-4 h-4 text-white/25 shrink-0 mt-0.5"/>
-        <div className="min-w-0">
-          <p className="text-[11px] text-white/30 leading-relaxed">
-            This guide is always available from the sidebar. For technical changes (adding a new user, customising colours, connecting a payment system) contact your developer at{' '}
-            <span className="text-[#C9A84C]/60">craftnestshop.com</span>.
-          </p>
-        </div>
+        <Info className="w-4 h-4 text-white/20 shrink-0 mt-0.5"/>
+        <p className="text-[11px] text-white/25 leading-relaxed min-w-0">
+          This guide lives in the sidebar — always accessible. For technical changes (new users, colours, payments) contact your developer at <span className="text-[#C9A84C]/50">craftnestshop.com</span>.
+        </p>
       </div>
     </div>
   )
@@ -1263,26 +1616,27 @@ function AdminPanel() {
     { id:'jewellery' as Tab, label:'Jewellery',     icon:Gem,       sub:`${data.products.jewellery.length} items` },
     { id:'gifts'     as Tab, label:'Return Gifts',  icon:Gift,      sub:`${data.products.gifts.length} items` },
     { id:'painting'  as Tab, label:'Face Painting', icon:Palette,   sub:`${data.products.painting.length} items` },
-    { id:'gallery'   as Tab, label:'Gallery',       icon:ImageIcon, sub:`${data.gallery.length} photos` },
-    { id:'hero'      as Tab, label:'Hero Carousel', icon:Home,      sub:`${data.heroImages.length} images` },
-    { id:'settings'  as Tab, label:'Settings',      icon:Settings,  ownerOnly:true },
-    { id:'guide'     as Tab, label:'Starter Guide', icon:BookOpen },
+    { id:'gallery'   as Tab, label:'Gallery',        icon:ImageIcon, sub:`${data.gallery.length} photos` },
+    { id:'hero'      as Tab, label:'Hero Carousel',  icon:Home,      sub:`${data.heroImages.length} images` },
+    { id:'media'     as Tab, label:'Image Converter',icon:ImageIcon2 },
+    { id:'settings'  as Tab, label:'Settings',       icon:Settings,  ownerOnly:true },
+    { id:'guide'     as Tab, label:'Starter Guide',  icon:BookOpen },
   ] as NavItem[]).filter(n => !n.ownerOnly || userRole === 'owner')
 
   return (
-    <div className="min-h-screen flex overflow-hidden" style={{ background:'#03100A' }}>
+    <div className="min-h-screen" style={{ background:'#03100A' }}>
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 bg-black/60 lg:hidden" onClick={() => setSidebarOpen(false)}/>
       )}
 
-      {/* ── Sidebar ── */}
+      {/* ── Sidebar — always fixed, never scrolls ── */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 flex flex-col w-56 sm:w-60 border-r border-[#C9A84C]/10 transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col w-56 sm:w-60 border-r border-[#C9A84C]/10 transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
         style={{ background:'linear-gradient(180deg,#061A0F 0%,#04140E 100%)' }}
       >
         {/* Logo */}
-        <div className="flex items-center gap-3 px-4 py-5 border-b border-[#C9A84C]/10 shrink-0">
+        <div className="flex items-center gap-2.5 px-4 py-4 border-b border-[#C9A84C]/10 shrink-0">
           <div className="w-8 h-8 rounded-xl border border-[#C9A84C]/25 flex items-center justify-center shrink-0" style={{ background:'rgba(201,168,76,0.08)' }}>
             <svg viewBox="0 0 100 80" className="w-5 h-4" fill="none" stroke="#C9A84C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M 52 35 C 55 18, 38 12, 24 16 C 10 20, 8 38, 12 50 C 16 62, 30 70, 42 66 C 46 64, 48 58, 45 54 C 42 50, 48 44, 52 35 Z"/>
@@ -1300,27 +1654,27 @@ function AdminPanel() {
         </div>
 
         {/* User badge */}
-        <div className="px-3 py-3 border-b border-[#C9A84C]/8 shrink-0">
-          <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl" style={{ background:'rgba(201,168,76,0.05)' }}>
-            <div className="w-7 h-7 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#C9A84C]"/>
+        <div className="px-3 py-2.5 border-b border-[#C9A84C]/8 shrink-0">
+          <div className="flex items-center gap-2 px-2.5 py-2 rounded-xl" style={{ background:'rgba(201,168,76,0.05)' }}>
+            <div className="w-6 h-6 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-3 h-3 text-[#C9A84C]"/>
             </div>
             <div className="min-w-0">
-              <p className="text-[11px] font-bold text-white/80 truncate">{userName}</p>
-              <p className="text-[9px] text-white/25 capitalize">{userRole}</p>
+              <p className="text-[10px] font-bold text-white/80 truncate">{userName}</p>
+              <p className="text-[8px] text-white/25 capitalize">{userRole}</p>
             </div>
           </div>
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 px-2 py-3 space-y-0.5 overflow-y-auto overflow-x-hidden">
+        {/* Nav — no scroll, all items visible */}
+        <nav className="flex-1 px-2 py-2 space-y-0.5 overflow-hidden">
           {NAV.map(({ id, label, icon:Icon, sub }) => (
             <button key={id} onClick={() => { setTab(id); setSidebarOpen(false) }}
-              className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left transition-all group cursor-pointer border min-w-0 ${tab===id ? 'bg-[#C9A84C]/10 border-[#C9A84C]/20 text-[#E8C96B]' : 'text-white/40 hover:text-white/70 hover:bg-white/3 border-transparent'}`}>
-              <Icon className={`w-4 h-4 shrink-0 ${tab===id ? 'text-[#C9A84C]' : 'text-white/30 group-hover:text-white/50'}`}/>
+              className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition-all group cursor-pointer border min-w-0 ${tab===id ? 'bg-[#C9A84C]/10 border-[#C9A84C]/20 text-[#E8C96B]' : 'text-white/40 hover:text-white/70 hover:bg-white/[0.03] border-transparent'}`}>
+              <Icon className={`w-3.5 h-3.5 shrink-0 ${tab===id ? 'text-[#C9A84C]' : 'text-white/30 group-hover:text-white/50'}`}/>
               <div className="flex-1 min-w-0">
-                <p className="text-[11px] font-bold tracking-[0.06em] truncate">{label}</p>
-                {sub && <p className="text-[9px] text-white/20 mt-0.5">{sub}</p>}
+                <p className="text-[10px] font-bold tracking-[0.04em] truncate leading-tight">{label}</p>
+                {sub && <p className="text-[8px] text-white/20 leading-tight">{sub}</p>}
               </div>
               {tab===id && <div className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] shrink-0"/>}
             </button>
@@ -1328,21 +1682,21 @@ function AdminPanel() {
         </nav>
 
         {/* Footer links */}
-        <div className="px-2 py-3 border-t border-[#C9A84C]/10 space-y-0.5 shrink-0">
+        <div className="px-2 py-2 border-t border-[#C9A84C]/10 space-y-0.5 shrink-0">
           <a href="/" target="_blank" rel="noopener noreferrer"
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-white/35 hover:text-white/60 hover:bg-white/3 text-[11px] font-bold tracking-[0.06em] transition-all">
-            <Eye className="w-4 h-4 shrink-0"/> View Website
+            className="w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-white/30 hover:text-white/60 hover:bg-white/[0.03] text-[10px] font-bold tracking-[0.04em] transition-all">
+            <Eye className="w-3.5 h-3.5 shrink-0"/> View Website
           </a>
           <button onClick={handleLogout}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-red-400/50 hover:text-red-400 hover:bg-red-500/5 text-[11px] font-bold tracking-[0.06em] transition-all cursor-pointer">
-            <LogOut className="w-4 h-4 shrink-0"/> Logout
+            className="w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-red-400/50 hover:text-red-400 hover:bg-red-500/5 text-[10px] font-bold tracking-[0.04em] transition-all cursor-pointer">
+            <LogOut className="w-3.5 h-3.5 shrink-0"/> Logout
           </button>
         </div>
       </aside>
 
-      {/* ── Main Content ── */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen lg:ml-0">
-        {/* Top bar */}
+      {/* ── Main Content — offset by sidebar width on desktop ── */}
+      <div className="flex flex-col min-h-screen lg:ml-60">
+        {/* Top bar — sticky inside scrolling column */}
         <header
           className="flex items-center gap-3 px-4 sm:px-6 py-3.5 border-b border-[#C9A84C]/10 sticky top-0 z-30 shrink-0"
           style={{ background:'rgba(3,16,10,0.97)', backdropFilter:'blur(12px)' }}
@@ -1362,8 +1716,8 @@ function AdminPanel() {
           </div>
         </header>
 
-        {/* Page content */}
-        <main className="flex-1 p-4 sm:p-6 overflow-x-hidden overflow-y-auto">
+        {/* Page content — only this scrolls */}
+        <main className="flex-1 p-4 sm:p-6 overflow-x-hidden">
           {tab === 'dashboard' && <Dashboard data={data} onNavigate={setTab} role={userRole}/>}
 
           {(tab === 'jewellery' || tab === 'gifts' || tab === 'painting') && (
@@ -1393,9 +1747,11 @@ function AdminPanel() {
             />
           )}
 
+          {tab === 'media' && <MediaTab onGoSettings={() => setTab('settings')}/>}
+
           {tab === 'settings' && userRole === 'owner' && <SettingsTab data={data} show={show}/>}
 
-          {tab === 'guide' && <GuideTab/>}
+          {tab === 'guide' && <GuideTab onGoMedia={() => setTab('media')} onGoSettings={() => setTab('settings')}/>}
         </main>
       </div>
 
