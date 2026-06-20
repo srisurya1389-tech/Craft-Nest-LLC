@@ -6,14 +6,17 @@ import {
   CheckCircle2, AlertCircle, RefreshCw, Search,
   Star, EyeOff as HideIcon, Download, Upload, GripVertical, Home,
   MessageCircle, Megaphone, Link, Camera, Menu,
-  BookOpen, ChevronRight, Info, Lightbulb, Copy, Zap, Image as ImageIcon2,
+  BookOpen, ChevronRight, ChevronLeft, Info, Lightbulb, Copy, Zap, Image as ImageIcon2,
+  CalendarDays, Bot,
 } from 'lucide-react'
 import {
   getAdminData, saveSettings, addProduct, updateProduct, deleteProduct,
   reorderProducts, addGalleryItem, deleteGalleryItem,
   addHeroImage, removeHeroImage, reorderHeroImages,
   exportProductsCSV, uploadToCloudinary, resetToDefaults,
+  setScheduleEntry, removeScheduleEntry,
   type Product, type GalleryItem, type AdminData, type SiteSettings, type Category,
+  type ScheduleStatus,
 } from '../data/adminStore'
 
 export const Route = createFileRoute('/admin')({ component: AdminPanel })
@@ -27,7 +30,7 @@ const ADMIN_USERS: { email: string; password: string; name: string; role: Role }
 ]
 const SESSION_KEY = 'craftnest_admin_auth'
 
-type Tab = 'dashboard' | 'jewellery' | 'gifts' | 'painting' | 'gallery' | 'hero' | 'media' | 'settings' | 'guide'
+type Tab = 'dashboard' | 'jewellery' | 'gifts' | 'painting' | 'gallery' | 'hero' | 'media' | 'schedule' | 'settings' | 'guide'
 
 const BADGES = ['Bestseller','Popular','New','Custom','Bridal','Festival','Traditional','Adults','Kids','Limited']
 const GALLERY_CATS = ['events','arts','other'] as const
@@ -971,6 +974,260 @@ function MediaTab({ onGoSettings }: { onGoSettings: () => void }) {
   )
 }
 
+// ── Schedule Tab ──────────────────────────────────────────────────────────────
+
+const SCHED_STATUS: Record<ScheduleStatus, { label: string; dot: string; pill: string; glow: string }> = {
+  free:    { label: '✅ Free / Available',  dot: 'bg-emerald-400', pill: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300',  glow: 'shadow-[0_0_8px_rgba(52,211,153,0.4)]' },
+  limited: { label: '⚡ Limited Slots',      dot: 'bg-amber-400',   pill: 'border-amber-500/40  bg-amber-500/10  text-amber-300',    glow: 'shadow-[0_0_8px_rgba(245,158,11,0.4)]'  },
+  busy:    { label: '🔴 Busy / Occupied',    dot: 'bg-red-400',     pill: 'border-red-500/40    bg-red-500/10    text-red-300',      glow: 'shadow-[0_0_8px_rgba(239,68,68,0.4)]'   },
+  booked:  { label: '📅 Fully Booked',       dot: 'bg-purple-400',  pill: 'border-purple-500/40 bg-purple-500/10 text-purple-300',   glow: 'shadow-[0_0_8px_rgba(168,85,247,0.4)]'  },
+}
+
+const CN_SERVICES = ['Face Painting', 'Handmade Jewellery', 'Return Gifts']
+const CAL_MONTHS  = ['January','February','March','April','May','June','July','August','September','October','November','December']
+const CAL_DAYS    = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+
+function ScheduleTab({ data, show, onRefresh }: { data: AdminData; show: (msg:string, t?:'success'|'error') => void; onRefresh: () => void }) {
+  const today    = new Date()
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`
+
+  const [viewYear,  setViewYear]  = useState(today.getFullYear())
+  const [viewMonth, setViewMonth] = useState(today.getMonth())
+  const [selDate,   setSelDate]   = useState<string | null>(null)
+  const [form, setForm] = useState<{ status: ScheduleStatus; note: string; services: string[] }>({
+    status: 'free', note: '', services: [...CN_SERVICES],
+  })
+
+  const schedule    = data.schedule ?? {}
+  const fmtDate     = (y: number, m: number, d: number) => `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`
+  const firstDay    = new Date(viewYear, viewMonth, 1).getDay()
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
+
+  const prevMonth = () => { if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y-1) } else setViewMonth(m => m-1) }
+  const nextMonth = () => { if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y+1) } else setViewMonth(m => m+1) }
+
+  const selectDate = (dateStr: string) => {
+    setSelDate(dateStr)
+    const ex = schedule[dateStr]
+    setForm(ex ? { status: ex.status, note: ex.note, services: ex.services ?? [...CN_SERVICES] }
+               : { status: 'free', note: '', services: [...CN_SERVICES] })
+  }
+
+  const handleSave = () => {
+    if (!selDate) return
+    const [y,m,d] = selDate.split('-').map(Number)
+    const label = new Date(y, m-1, d).toLocaleDateString('en-US', { month:'long', day:'numeric' })
+    setScheduleEntry({ date: selDate, status: form.status, note: form.note, services: form.services })
+    onRefresh()
+    show(`Schedule saved for ${label}`)
+  }
+
+  const handleClear = () => {
+    if (!selDate) return
+    removeScheduleEntry(selDate)
+    onRefresh()
+    show('Schedule entry removed')
+    setSelDate(null)
+  }
+
+  const toggleService = (s: string) =>
+    setForm(f => ({ ...f, services: f.services.includes(s) ? f.services.filter(x => x !== s) : [...f.services, s] }))
+
+  const selEntry = selDate ? schedule[selDate] : null
+  const selDisplay = selDate
+    ? (() => { const [y,m,d] = selDate.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}) })()
+    : ''
+
+  const freeCount  = Object.values(schedule).filter(e => e.status === 'free').length
+  const busyCount  = Object.values(schedule).filter(e => e.status === 'busy').length
+  const bookedCount= Object.values(schedule).filter(e => e.status === 'booked' || e.status === 'limited').length
+
+  return (
+    <div className="space-y-5 w-full">
+      {/* Header */}
+      <div>
+        <h2 className="font-serif text-xl sm:text-2xl text-white mb-0.5">Schedule Manager</h2>
+        <p className="text-xs text-white/35">Set your availability. The chatbot uses this to answer customer booking queries in real time.</p>
+      </div>
+
+      {/* Stats + Legend */}
+      <div className="flex flex-wrap items-center gap-4">
+        {/* Status legend */}
+        <div className="flex flex-wrap gap-3">
+          {(Object.entries(SCHED_STATUS) as [ScheduleStatus, typeof SCHED_STATUS[ScheduleStatus]][]).map(([key, val]) => (
+            <div key={key} className="flex items-center gap-1.5">
+              <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${val.dot}`}/>
+              <span className="text-[10px] text-white/50">{val.label}</span>
+            </div>
+          ))}
+        </div>
+        {/* Counts */}
+        <div className="ml-auto flex gap-3 shrink-0">
+          {[{label:'Free',v:freeCount,c:'text-emerald-400'},{label:'Busy',v:busyCount,c:'text-red-400'},{label:'Booked',v:bookedCount,c:'text-purple-400'}].map(({label,v,c}) => (
+            <div key={label} className="text-center">
+              <p className={`text-sm font-bold ${c}`}>{v}</p>
+              <p className="text-[9px] text-white/25">{label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Calendar + Panel grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-4 items-start">
+
+        {/* ── Calendar ── */}
+        <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5" style={{ background:'rgba(10,35,24,0.8)' }}>
+          {/* Month nav */}
+          <div className="flex items-center justify-between mb-5">
+            <button onClick={prevMonth}
+              className="w-9 h-9 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-[#C9A84C]/30 transition-all cursor-pointer">
+              <ChevronLeft className="w-4 h-4"/>
+            </button>
+            <div className="text-center">
+              <p className="text-base font-serif text-white">{CAL_MONTHS[viewMonth]}</p>
+              <p className="text-[10px] text-white/30">{viewYear}</p>
+            </div>
+            <button onClick={nextMonth}
+              className="w-9 h-9 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-[#C9A84C]/30 transition-all cursor-pointer">
+              <ChevronRight className="w-4 h-4"/>
+            </button>
+          </div>
+
+          {/* Day headers */}
+          <div className="grid grid-cols-7 mb-2">
+            {CAL_DAYS.map(d => (
+              <div key={d} className="text-center text-[9px] font-bold text-white/25 tracking-[0.08em]">{d}</div>
+            ))}
+          </div>
+
+          {/* Date grid */}
+          <div className="grid grid-cols-7 gap-0.5">
+            {Array.from({ length: firstDay }).map((_, i) => <div key={`pad${i}`}/>)}
+            {Array.from({ length: daysInMonth }).map((_, i) => {
+              const d       = i + 1
+              const dateStr = fmtDate(viewYear, viewMonth, d)
+              const entry   = schedule[dateStr]
+              const isToday = dateStr === todayStr
+              const isSel   = selDate === dateStr
+              const isPast  = new Date(viewYear, viewMonth, d) < new Date(today.getFullYear(), today.getMonth(), today.getDate())
+              return (
+                <button key={d} onClick={() => selectDate(dateStr)}
+                  className={`relative flex flex-col items-center justify-center aspect-square rounded-xl text-[11px] font-bold transition-all cursor-pointer border
+                    ${isSel ? 'bg-[#C9A84C] border-[#C9A84C] text-[#04140E] ' + (entry ? SCHED_STATUS[entry.status].glow : '') :
+                      isToday ? 'border-[#C9A84C]/40 text-[#E8C96B] bg-[#C9A84C]/10' :
+                      isPast ? 'border-transparent text-white/20 hover:text-white/40' :
+                      entry ? 'border-white/10 text-white/80 hover:border-[#C9A84C]/30 hover:bg-white/[0.04]' :
+                      'border-transparent text-white/50 hover:text-white/80 hover:bg-white/[0.03]'}`}>
+                  <span className="leading-none">{d}</span>
+                  {entry && !isSel && (
+                    <div className={`w-1.5 h-1.5 rounded-full mt-0.5 ${SCHED_STATUS[entry.status].dot}`}/>
+                  )}
+                  {entry && isSel && (
+                    <div className="w-1.5 h-1.5 rounded-full mt-0.5 bg-[#04140E]/50"/>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Chatbot info banner */}
+          <div className="mt-4 flex items-start gap-2.5 p-3 rounded-xl border border-[#C9A84C]/10" style={{ background:'rgba(201,168,76,0.04)' }}>
+            <Bot className="w-3.5 h-3.5 text-[#C9A84C] shrink-0 mt-0.5"/>
+            <p className="text-[10px] text-white/35 leading-relaxed">
+              The chatbot on your website checks this schedule in real time. When customers ask "Are you free on [date]?", it reads your entries here and replies instantly.
+            </p>
+          </div>
+        </div>
+
+        {/* ── Day Panel ── */}
+        {selDate ? (
+          <div className="rounded-2xl border border-[#C9A84C]/15 p-4 sm:p-5 space-y-4 sticky top-20" style={{ background:'rgba(10,35,24,0.95)' }}>
+            {/* Date header */}
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-[9px] tracking-[0.2em] text-[#C9A84C]/50 uppercase font-bold mb-0.5">Selected Date</p>
+                <p className="text-sm font-bold text-white leading-snug">{selDisplay}</p>
+                {selEntry && (
+                  <span className={`inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full border mt-1 ${SCHED_STATUS[selEntry.status].pill}`}>
+                    {SCHED_STATUS[selEntry.status].label}
+                  </span>
+                )}
+              </div>
+              <button onClick={() => setSelDate(null)} className="shrink-0 p-1.5 rounded-lg text-white/25 hover:text-white cursor-pointer">
+                <X className="w-4 h-4"/>
+              </button>
+            </div>
+
+            {/* Status picker */}
+            <div>
+              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold mb-2">Set Status</label>
+              <div className="grid grid-cols-2 gap-1.5">
+                {(Object.entries(SCHED_STATUS) as [ScheduleStatus, typeof SCHED_STATUS[ScheduleStatus]][]).map(([key, val]) => (
+                  <button key={key} type="button" onClick={() => setForm(f => ({ ...f, status: key }))}
+                    className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[10px] font-bold transition-all cursor-pointer ${form.status === key ? val.pill + ' ' + val.glow : 'border-white/8 text-white/30 hover:text-white/60 hover:border-white/15'}`}>
+                    <div className={`w-2 h-2 rounded-full shrink-0 ${val.dot} ${form.status !== key ? 'opacity-40' : ''}`}/>
+                    <span className="truncate">{val.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Note */}
+            <div>
+              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold mb-1.5">
+                Notes <span className="text-white/20 normal-case tracking-normal font-normal">(optional — shown in chatbot)</span>
+              </label>
+              <textarea
+                value={form.note}
+                onChange={e => setForm(f => ({ ...f, note: e.target.value }))}
+                rows={3}
+                placeholder="e.g. Birthday party booking (10am–4pm) · Still open for jewellery orders"
+                className="w-full bg-white/5 border border-[#C9A84C]/15 rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/20 focus:outline-none focus:border-[#C9A84C]/50 resize-none transition-colors"
+              />
+            </div>
+
+            {/* Services */}
+            <div>
+              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold mb-2">Services Available</label>
+              <div className="space-y-2">
+                {CN_SERVICES.map(s => (
+                  <button key={s} type="button" onClick={() => toggleService(s)}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border text-sm transition-all cursor-pointer text-left ${form.services.includes(s) ? 'border-emerald-600/30 bg-emerald-600/8 text-white/80' : 'border-white/8 text-white/30 hover:border-white/15'}`}>
+                    <div className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-all ${form.services.includes(s) ? 'bg-emerald-500 border-emerald-500' : 'border-white/20'}`}>
+                      {form.services.includes(s) && <CheckCircle2 className="w-3 h-3 text-white"/>}
+                    </div>
+                    <span className="font-medium text-[11px]">{s}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex gap-2 pt-1">
+              <button onClick={handleSave}
+                className="flex-1 flex items-center justify-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.18em] uppercase py-3 rounded-full transition-all hover:scale-[1.02] cursor-pointer shadow-[0_4px_16px_rgba(201,168,76,0.3)]">
+                <CheckCircle2 className="w-4 h-4"/> Save Schedule
+              </button>
+              {selEntry && (
+                <button onClick={handleClear}
+                  className="px-5 py-3 rounded-full border border-red-500/25 text-red-400/70 hover:text-red-400 hover:border-red-500/50 text-[10px] font-bold tracking-[0.18em] uppercase transition-all cursor-pointer shrink-0">
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="rounded-2xl border-2 border-dashed border-[#C9A84C]/12 flex flex-col items-center justify-center gap-3 p-10 text-center">
+            <CalendarDays className="w-8 h-8 text-[#C9A84C]/25"/>
+            <p className="text-sm font-serif text-white/30">Click any date on the calendar</p>
+            <p className="text-[11px] text-white/20 max-w-[200px] leading-relaxed">Set it as Free, Busy, Limited, or Fully Booked so the chatbot knows your availability.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ── Settings Tab ──────────────────────────────────────────────────────────────
 
 function SettingsTab({ data, show }: { data: AdminData; show: (msg:string, t?: 'success'|'error') => void }) {
@@ -1258,6 +1515,27 @@ const GUIDE_SECTIONS: GuideSection[] = [
       'Write WhatsApp messages in the language your customers prefer.',
       'For made-to-order products, include details like: "Please share your event date and quantity so we can advise on delivery time."',
     ],
+  },
+  {
+    id: 'schedule',
+    icon: CalendarDays,
+    color: '#5DBEA3',
+    title: 'Schedule Manager — Set Your Availability',
+    intro: 'The Schedule tab lets you mark each date as Free, Busy, Limited, or Fully Booked. The website chatbot reads this in real time — so when customers ask "Are you free on July 4th?" they get an instant, accurate answer.',
+    steps: [
+      { label: 'Open Schedule tab', detail: 'Click "Schedule" in the sidebar. You will see a full monthly calendar on the left side.' },
+      { label: 'Click any date',    detail: 'Tap a date on the calendar. A settings panel slides in on the right with options for that day.' },
+      { label: 'Pick a status',     detail: '✅ Free = available for all bookings. ⚡ Limited = only a few slots left. 🔴 Busy = occupied but can still take other enquiries. 📅 Fully Booked = nothing more that day.' },
+      { label: 'Add a note (optional)', detail: 'Describe why the day is busy, e.g. "Birthday party in Marietta 10am–4pm". This note appears in the chatbot reply to customers.' },
+      { label: 'Choose services',   detail: 'Tick which services are available on that day — Face Painting, Handmade Jewellery, and/or Return Gifts.' },
+      { label: 'Save',             detail: 'Click "Save Schedule". The dot on the calendar updates immediately. Next time a customer asks the chatbot about that date, it will read your setting and reply in real time.' },
+    ],
+    tips: [
+      'Set upcoming weekend dates every Monday morning — it takes less than 2 minutes and keeps the chatbot accurate all week.',
+      'Use the note field to tell customers exactly what you\'re doing: "Fully booked for a wedding — available after 5pm for small orders."',
+      'If a date is not set, the chatbot tells customers to confirm on WhatsApp — so it\'s safe to leave unknown dates blank.',
+    ],
+    warning: 'The chatbot reads the schedule directly from your admin data. If you don\'t set a date, it will say "not yet scheduled" and prompt the customer to WhatsApp you. This is safe — but setting dates gives a much better customer experience.',
   },
   {
     id: 'tips',
@@ -1651,6 +1929,58 @@ function SectionVisual({ id }: { id: string }) {
     </VisualDiagram>
   )
 
+  if (id === 'schedule') return (
+    <VisualDiagram title="Schedule Manager — calendar + day panel">
+      <div className="flex gap-2 flex-1 min-w-[240px]">
+        {/* Mini calendar */}
+        <div className="rounded-xl border border-[#C9A84C]/15 p-2 flex-1" style={{background:'rgba(5,20,10,0.8)'}}>
+          <div className="flex items-center justify-between mb-1.5">
+            <ChevronLeft className="w-2.5 h-2.5 text-white/30"/>
+            <p className="text-[7px] font-bold text-white/60">June 2025</p>
+            <ChevronRight className="w-2.5 h-2.5 text-white/30"/>
+          </div>
+          <div className="grid grid-cols-7 gap-0.5 mb-0.5">
+            {['S','M','T','W','T','F','S'].map((d,i)=>(
+              <p key={i} className="text-center text-[5px] text-white/20 font-bold">{d}</p>
+            ))}
+          </div>
+          <div className="grid grid-cols-7 gap-0.5">
+            {[...Array(6).fill(null),1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30].map((d,i)=>(
+              <div key={i} className={`flex flex-col items-center justify-center aspect-square rounded text-[6px] font-bold relative
+                ${d===15?'bg-[#C9A84C] text-[#04140E]':d?'text-white/40 hover:text-white/70':''}`}>
+                {d && <span>{d}</span>}
+                {d===7  && <div className="w-1 h-1 rounded-full bg-emerald-400 absolute bottom-0"/>}
+                {d===12 && <div className="w-1 h-1 rounded-full bg-red-400 absolute bottom-0"/>}
+                {d===20 && <div className="w-1 h-1 rounded-full bg-amber-400 absolute bottom-0"/>}
+                {d===25 && <div className="w-1 h-1 rounded-full bg-purple-400 absolute bottom-0"/>}
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Mini day panel */}
+        <div className="rounded-xl border border-[#C9A84C]/15 p-2 w-28 space-y-1.5" style={{background:'rgba(5,20,10,0.8)'}}>
+          <p className="text-[6px] font-bold text-[#C9A84C]/60 uppercase tracking-[0.1em]">June 15</p>
+          <div className="grid grid-cols-2 gap-0.5">
+            {[{l:'✅ Free',c:'border-emerald-500/40 bg-emerald-500/10 text-emerald-300'},{l:'⚡ Limited',c:'border-amber-500/20 text-amber-400/40 border'},{l:'🔴 Busy',c:'border-red-500/20 text-red-400/40 border'},{l:'📅 Booked',c:'border-purple-500/20 text-purple-400/40 border'}].map(({l,c})=>(
+              <div key={l} className={`text-[4.5px] font-bold px-1 py-0.5 rounded border text-center ${c}`}>{l}</div>
+            ))}
+          </div>
+          <div className="h-6 rounded bg-white/5 border border-white/8"/>
+          <p className="text-[5px] text-white/30 font-bold">Services:</p>
+          {['Face Painting','Jewellery','Gifts'].map(s=>(
+            <div key={s} className="flex items-center gap-1">
+              <div className="w-2 h-2 rounded bg-emerald-500 flex items-center justify-center shrink-0">
+                <CheckCircle2 className="w-1.5 h-1.5 text-white"/>
+              </div>
+              <p className="text-[5px] text-white/40">{s}</p>
+            </div>
+          ))}
+          <div className="w-full text-center text-[5px] font-bold py-0.5 rounded-full bg-[#C9A84C] text-[#04140E]">Save Schedule</div>
+        </div>
+      </div>
+    </VisualDiagram>
+  )
+
   if (id === 'tips') return (
     <VisualDiagram title="Pro Tips — quick reference card">
       <div className="flex-1 grid grid-cols-2 gap-1.5 min-w-[220px]">
@@ -1899,6 +2229,7 @@ function AdminPanel() {
     { id:'gallery'   as Tab, label:'Gallery',        icon:ImageIcon, sub:`${data.gallery.length} photos` },
     { id:'hero'      as Tab, label:'Hero Carousel',  icon:Home,      sub:`${data.heroImages.length} images` },
     { id:'media'     as Tab, label:'Image Converter',icon:ImageIcon2 },
+    { id:'schedule'  as Tab, label:'Schedule',        icon:CalendarDays },
     { id:'settings'  as Tab, label:'Settings',       icon:Settings,  ownerOnly:true },
     { id:'guide'     as Tab, label:'Starter Guide',  icon:BookOpen },
   ] as NavItem[]).filter(n => !n.ownerOnly || userRole === 'owner')
@@ -2028,6 +2359,8 @@ function AdminPanel() {
           )}
 
           {tab === 'media' && <MediaTab onGoSettings={() => setTab('settings')}/>}
+
+          {tab === 'schedule' && <ScheduleTab data={data} show={show} onRefresh={refresh}/>}
 
           {tab === 'settings' && userRole === 'owner' && <SettingsTab data={data} show={show}/>}
 

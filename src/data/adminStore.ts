@@ -1,9 +1,10 @@
 import {
   defaultProducts, defaultGallery, defaultHeroImages, defaultSettings,
   type AdminData, type Product, type GalleryItem, type SiteSettings,
+  type ScheduleEntry, type ScheduleStatus,
 } from './defaultData'
 
-export type { AdminData, Product, GalleryItem, SiteSettings }
+export type { AdminData, Product, GalleryItem, SiteSettings, ScheduleEntry, ScheduleStatus }
 
 const KEY = 'craftnest_admin_data'
 
@@ -24,10 +25,11 @@ export function getAdminData(): AdminData {
       }
       if (!parsed.heroImages) parsed.heroImages = defaultHeroImages
       if (!parsed.settings)   parsed.settings   = defaultSettings
+      if (!parsed.schedule)   parsed.schedule   = {}
       return parsed
     }
   } catch {}
-  return { products: defaultProducts, gallery: defaultGallery, heroImages: defaultHeroImages, settings: defaultSettings }
+  return { products: defaultProducts, gallery: defaultGallery, heroImages: defaultHeroImages, settings: defaultSettings, schedule: {} }
 }
 
 export function saveAdminData(data: AdminData): void {
@@ -145,6 +147,26 @@ export function exportProductsCSV(): void {
   a.href = url; a.download = `craftnest-products-${new Date().toISOString().slice(0,10)}.csv`
   a.click()
   URL.revokeObjectURL(url)
+}
+
+// ── Schedule ──────────────────────────────────────────────────────────────────
+
+export function getSchedule(): Record<string, ScheduleEntry> {
+  return getAdminData().schedule ?? {}
+}
+
+export function setScheduleEntry(entry: ScheduleEntry): void {
+  const data = getAdminData()
+  if (!data.schedule) data.schedule = {}
+  data.schedule[entry.date] = entry
+  saveAdminData(data)
+}
+
+export function removeScheduleEntry(date: string): void {
+  const data = getAdminData()
+  if (!data.schedule) return
+  delete data.schedule[date]
+  saveAdminData(data)
 }
 
 // ── Reset ─────────────────────────────────────────────────────────────────────

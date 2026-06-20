@@ -29,6 +29,14 @@ export type SiteSettings = {
   cloudinaryCloud: string
 }
 
+export type ScheduleStatus = 'free' | 'busy' | 'limited' | 'booked'
+export type ScheduleEntry = {
+  date: string       // YYYY-MM-DD
+  status: ScheduleStatus
+  note: string
+  services: string[] // which CraftNest services are available on this day
+}
+
 export type AdminData = {
   products: {
     jewellery: Product[]
@@ -38,6 +46,7 @@ export type AdminData = {
   gallery: GalleryItem[]
   heroImages: string[]
   settings: SiteSettings
+  schedule: Record<string, ScheduleEntry>
 }
 
 export const defaultSettings: SiteSettings = {
