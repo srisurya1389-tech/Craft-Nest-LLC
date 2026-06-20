@@ -6,6 +6,7 @@ import {
   CheckCircle2, AlertCircle, RefreshCw, Search,
   Star, EyeOff as HideIcon, Download, Upload, GripVertical, Home,
   MessageCircle, Megaphone, Link, Camera, Menu,
+  BookOpen, ChevronRight, Info, Lightbulb,
 } from 'lucide-react'
 import {
   getAdminData, saveSettings, addProduct, updateProduct, deleteProduct,
@@ -26,7 +27,7 @@ const ADMIN_USERS: { email: string; password: string; name: string; role: Role }
 ]
 const SESSION_KEY = 'craftnest_admin_auth'
 
-type Tab = 'dashboard' | 'jewellery' | 'gifts' | 'painting' | 'gallery' | 'hero' | 'settings'
+type Tab = 'dashboard' | 'jewellery' | 'gifts' | 'painting' | 'gallery' | 'hero' | 'settings' | 'guide'
 
 const BADGES = ['Bestseller','Popular','New','Custom','Bridal','Festival','Traditional','Adults','Kids','Limited']
 const GALLERY_CATS = ['events','arts','other'] as const
@@ -888,6 +889,331 @@ function SettingsTab({ data, show }: { data: AdminData; show: (msg:string, t?: '
   )
 }
 
+// ── Starter Guide Tab ─────────────────────────────────────────────────────────
+
+type GuideSection = {
+  id: string
+  icon: React.ElementType
+  color: string
+  title: string
+  badge?: string
+  intro: string
+  steps?: { label: string; detail: string }[]
+  tips?: string[]
+  warning?: string
+}
+
+const GUIDE_SECTIONS: GuideSection[] = [
+  {
+    id: 'overview',
+    icon: LayoutDashboard,
+    color: '#C9A84C',
+    title: 'Dashboard — Your Home Base',
+    intro: 'The Dashboard is the first screen you see after logging in. It gives you a bird\'s eye view of your entire store at a glance.',
+    steps: [
+      { label: 'Stat cards (top row)',       detail: 'Shows how many products are in each category and how many are currently visible to customers.' },
+      { label: 'Summary row',                detail: 'Total products, how many are live on the site, and how many are marked as "featured".' },
+      { label: 'Announcement banner status', detail: 'If your announcement banner is turned ON you will see it here with a green "LIVE" badge.' },
+      { label: 'Quick Actions',              detail: 'Shortcut buttons to jump directly to any section — saves time instead of using the sidebar.' },
+    ],
+    tips: ['Check the dashboard each time you log in to quickly see if anything looks wrong before customers do.'],
+  },
+  {
+    id: 'products',
+    icon: Gem,
+    color: '#C9A84C',
+    title: 'Managing Products (Jewellery · Return Gifts · Face Painting)',
+    intro: 'These three tabs work identically. Each one manages products in that category. You can add, edit, hide, feature, reorder, and delete products.',
+    steps: [
+      { label: '① Add a Product',   detail: 'Click the gold "Add" button (top right). A form slides up. Fill in: Title (required), Image (required), Price, Description, Badge, Stock status, and optionally a custom WhatsApp message. Click "Add Product" when done.' },
+      { label: '② Edit a Product',  detail: 'Click the pencil ✏️ icon on any product card. The same form opens pre-filled with existing data. Change anything and click "Save Changes".' },
+      { label: '③ Hide / Show',     detail: 'Click the eye 👁 icon. When a product is hidden it turns faded on this page and completely disappears from the customer-facing website. Perfect for temporarily removing a sold-out or seasonal item without deleting it.' },
+      { label: '④ Feature a Product', detail: 'Click the star ⭐ icon. Featured products move to the TOP of the collection page so customers see them first. Use this for your best sellers or new arrivals.' },
+      { label: '⑤ Drag to Reorder', detail: 'Hover over a card — a grip handle (⠿) appears top-right. Click and drag the card to a new position. The order here is exactly the order customers see on the website.' },
+      { label: '⑥ Delete',         detail: 'Owner-only. Click the red trash 🗑 icon. A confirmation screen appears — you must confirm before it deletes. Deleted products cannot be recovered.' },
+    ],
+    tips: [
+      'You can filter the view to show only "visible", "hidden" or "featured" products using the pill buttons at the top.',
+      'Use the Search bar to quickly find a product by name or badge.',
+      'Click "CSV" to download all products as a spreadsheet — great for record keeping or printing a catalogue.',
+    ],
+    warning: 'Deleting a product is permanent. If you just want to stop showing it to customers, use Hide instead of Delete.',
+  },
+  {
+    id: 'badges',
+    icon: Star,
+    color: '#E8C96B',
+    title: 'Badges & Stock Status — What They Mean',
+    intro: 'Every product has two label systems: a Badge (visual category label) and a Stock Status (availability indicator).',
+    steps: [
+      { label: 'Badges',            detail: 'Bestseller · Popular · New · Custom · Bridal · Festival · Traditional · Adults · Kids · Limited. These are coloured pills shown on the product image. Choose the one that best describes the product\'s appeal.' },
+      { label: '✅ Available',       detail: 'Product is ready to order — shows a green pill and WhatsApp button is fully active.' },
+      { label: '⚡ Limited Stock',   detail: 'Only a few remaining — shows an amber warning pill. Customers can still enquire.' },
+      { label: '🛠 Made to Order',   detail: 'Not pre-made; custom-crafted when ordered. Customers can still enquire via WhatsApp.' },
+      { label: '🔴 Out of Stock',    detail: 'Completely unavailable. The WhatsApp enquiry button is greyed out on the customer page so customers know not to enquire.' },
+    ],
+    tips: ['Change stock status any time — it updates the live website instantly without reloading the page.'],
+  },
+  {
+    id: 'gallery',
+    icon: ImageIcon,
+    color: '#8BA4F8',
+    title: 'Gallery — Showcase Your Work',
+    intro: 'The Gallery tab manages the photo grid shown on the main website. These are event photos, art samples, and behind-the-scenes shots — not product listings.',
+    steps: [
+      { label: 'Add a photo',    detail: 'Click "Add". Paste a Cloudinary URL or click the camera icon to upload directly from your device. Add a caption (optional) and choose a category: Events, Arts, or Other. Click "Add Photo".' },
+      { label: 'Filter by type', detail: 'Use the All / Events / Arts / Other pills to filter the gallery view so you can find photos quickly.' },
+      { label: 'Remove a photo', detail: 'Hover over any photo — a red "Remove" button slides up. Click it (Owner only). Confirmation is not required for gallery items.' },
+    ],
+    tips: ['Add event photos after every booking to keep the gallery fresh. Customers trust businesses with active, real galleries.'],
+  },
+  {
+    id: 'hero',
+    icon: Home,
+    color: '#F5A623',
+    title: 'Hero Carousel — The Homepage Slideshow',
+    intro: 'These are the large rotating images customers see the moment they land on craftnestshop.com. First impression matters — keep these beautiful and up to date.',
+    steps: [
+      { label: 'Add an image',     detail: 'Paste a Cloudinary image URL in the box and click "Add", OR click the Upload button to pick a file from your device (requires Cloudinary preset configured in Settings).' },
+      { label: 'Reorder images',   detail: 'Drag any image card to change its position. The first image (#1) is shown first when the page loads. Put your most impressive photo first.' },
+      { label: 'Remove an image',  detail: 'Hover over a card and click the red "Remove" button. The carousel will adjust automatically.' },
+    ],
+    tips: [
+      'Use landscape (wide) photos — they look best in a full-width carousel.',
+      'Keep 4–8 images for a good pace. Too few looks empty; too many slows the site.',
+    ],
+    warning: 'If the Cloudinary Upload Preset is not configured in Settings, direct file upload will show an error. You can always use copy-paste URL instead.',
+  },
+  {
+    id: 'settings',
+    icon: Settings,
+    color: '#9B8EFF',
+    title: 'Site Settings — Control the Whole Website',
+    badge: 'Owner Only',
+    intro: 'Settings lets you change global things that affect the entire website — not just one product. Only the Owner role can access this tab.',
+    steps: [
+      { label: 'Announcement Banner', detail: 'Toggle ON to show a coloured announcement bar at the top of the website (e.g. "🎉 Free gifting on orders above ₹1000"). Toggle OFF to hide it. Edit the text in the box below the toggle. Click "Save All Settings" to apply.' },
+      { label: 'WhatsApp Number',     detail: 'This number is used on ALL "Enquire on WhatsApp" buttons across the site. Enter digits only — no + sign (e.g. 14704527988 for US, 919876543210 for India).' },
+      { label: 'Social Links',        detail: 'Paste the full URL for your Instagram and Facebook pages. These appear in the website footer.' },
+      { label: 'Cloudinary Config',   detail: 'Cloud Name is your Cloudinary account name (e.g. diancfp03). Upload Preset is a name you create in Cloudinary for unsigned uploads. Both are required for the "Upload" button in product/gallery/hero forms to work.' },
+      { label: 'Save Button',         detail: 'Always click "Save All Settings" after making changes. Nothing is saved until you click this button.' },
+      { label: 'Reset Everything',    detail: 'DANGER: This deletes all your custom products, gallery photos, and settings and restores the original demo data. Only use this if you want to start completely fresh.' },
+    ],
+    tips: [
+      'After saving settings, refresh the main website to see changes like the announcement banner.',
+      'If you change the WhatsApp number, test one product enquiry button to confirm it goes to the right number.',
+    ],
+    warning: 'Reset Everything cannot be undone. All products and gallery photos you added will be permanently lost.',
+  },
+  {
+    id: 'upload',
+    icon: Upload,
+    color: '#5DBEA3',
+    title: 'Uploading Images — Step-by-Step Setup',
+    intro: 'To use the "Upload from device" button in product, gallery, and hero forms you need a free Cloudinary account and one-time setup. Here is the exact process.',
+    steps: [
+      { label: 'Step 1 — Go to cloudinary.com', detail: 'Sign up for a free account if you don\'t have one. Log in and note your Cloud Name (shown on the dashboard).' },
+      { label: 'Step 2 — Create Upload Preset', detail: 'In Cloudinary dashboard → click Settings (gear icon) → Upload → scroll to "Upload presets" → click "Add upload preset". Set "Signing mode" to Unsigned. Give it a name like "craftnest_upload". Click Save.' },
+      { label: 'Step 3 — Enter in Admin Settings', detail: 'In this admin panel go to Settings tab. Enter your Cloud Name and the Upload Preset name you just created. Click "Save All Settings".' },
+      { label: 'Step 4 — Test it',    detail: 'Go to any product → Edit → click the camera/upload button → pick a photo from your device. It should upload and show a preview URL. Done!' },
+    ],
+    tips: [
+      'Free Cloudinary accounts allow 25 GB storage and 25 GB bandwidth per month — more than enough for a craft store.',
+      'You only do this setup once. After that, the Upload button works everywhere in the admin panel.',
+    ],
+  },
+  {
+    id: 'roles',
+    icon: ShieldCheck,
+    color: '#E87D7D',
+    title: 'User Roles — Owner vs Staff',
+    intro: 'The admin panel supports two types of users with different levels of access. This protects important settings from accidental changes by helpers.',
+    steps: [
+      { label: '👑 Owner (Full Access)',  detail: 'Can do everything: add/edit/delete products, manage gallery, manage hero images, access Site Settings, reset all data, and export CSVs.' },
+      { label: '🧑‍💼 Staff (Limited Access)', detail: 'Can add and edit products, toggle visibility and featured status, and manage gallery — but CANNOT delete products, CANNOT access Site Settings, and CANNOT reset data.' },
+    ],
+    tips: [
+      'When you give someone staff access, they can help keep products updated but cannot break anything critical.',
+      'To add a second user, the developer needs to add their email and password to the ADMIN_USERS list in admin.tsx.',
+    ],
+    warning: 'Never share your Owner credentials. Create a Staff account for anyone who needs limited access.',
+  },
+  {
+    id: 'whatsapp',
+    icon: MessageCircle,
+    color: '#25D366',
+    title: 'WhatsApp Messages — Custom Enquiry Text',
+    intro: 'Every product on the website has an "Enquire on WhatsApp" button. When a customer taps it, a pre-filled message opens in WhatsApp. You can customise this message per product.',
+    steps: [
+      { label: 'Default message',       detail: 'If you leave the "Custom WhatsApp Message" field blank, the button uses the default: "Hi CraftNest! I\'m interested in the [Product Name]. Please share more details."' },
+      { label: 'Custom message',        detail: 'In the product edit form, fill in the "WhatsApp Message" field with exactly what you want customers to send. For example: "Hi! I want to order 50 Kundan sets for a wedding. Please share bulk pricing."' },
+      { label: 'Out-of-stock products', detail: 'When stock is set to "Out of Stock", the WhatsApp button is greyed out and disabled — customers cannot enquire. Change stock status to re-enable it.' },
+    ],
+    tips: [
+      'Write WhatsApp messages in the language your customers prefer.',
+      'For made-to-order products, include details like: "Please share your event date and quantity so we can advise on delivery time."',
+    ],
+  },
+  {
+    id: 'tips',
+    icon: Lightbulb,
+    color: '#F5A623',
+    title: 'Pro Tips — Get the Most Out of Your Admin Panel',
+    intro: 'Practical advice from working with the admin panel every day.',
+    steps: [
+      { label: 'Use Featured smartly',        detail: 'Feature your 2–4 best products in each category. These appear first on the collection page. Rotate them seasonally — feature festival items before Diwali, bridal sets before wedding season.' },
+      { label: 'Keep gallery fresh',           detail: 'Add at least 2–3 new photos every month. Recent photos build customer confidence that the business is active.' },
+      { label: 'Update hero before events',    detail: 'Before a big festival or event, add a dramatic photo to the hero carousel and put it at position #1 so it\'s the first thing customers see.' },
+      { label: 'Hide instead of Delete',       detail: 'When a product is temporarily unavailable, hide it rather than delete it. You can make it visible again in one click.' },
+      { label: 'Reorder by popularity',        detail: 'Drag your best-selling products to the top of each category. Customers rarely scroll past the first 6–8 cards.' },
+      { label: 'Export CSV monthly',           detail: 'Download your product CSV every month and save it. It\'s your product backup and useful for creating printed catalogues or price lists.' },
+      { label: 'Test on your phone',           detail: 'After making changes, open craftnestshop.com on your phone and check how the products look. Mobile traffic is likely your biggest audience.' },
+      { label: 'Log out when done',            detail: 'Always log out after your admin session, especially if using a shared computer. Your session stays active in the browser until you log out or close it.' },
+    ],
+  },
+]
+
+function GuideSection({ section, expanded, onToggle }: { section: GuideSection; expanded: boolean; onToggle: () => void }) {
+  const Icon = section.icon
+  return (
+    <div
+      className={`rounded-2xl border transition-all duration-200 overflow-hidden ${expanded ? 'border-[#C9A84C]/30' : 'border-white/5 hover:border-white/10'}`}
+      style={{ background: expanded ? 'rgba(10,35,24,0.95)' : 'rgba(10,35,24,0.5)' }}
+    >
+      {/* Header */}
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-4 text-left cursor-pointer group"
+      >
+        <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border transition-all"
+          style={{ background: `${section.color}12`, borderColor: `${section.color}30` }}>
+          <Icon className="w-4 h-4" style={{ color: section.color }}/>
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-sm font-bold text-white group-hover:text-[#E8C96B] transition-colors truncate">{section.title}</span>
+            {section.badge && (
+              <span className="shrink-0 text-[8px] font-bold tracking-[0.15em] uppercase px-2 py-0.5 rounded-full border border-[#9B8EFF]/30 text-[#9B8EFF] bg-[#9B8EFF]/10">
+                {section.badge}
+              </span>
+            )}
+          </div>
+          {!expanded && <p className="text-[10px] text-white/30 mt-0.5 line-clamp-1">{section.intro}</p>}
+        </div>
+        <ChevronRight className={`w-4 h-4 shrink-0 text-white/25 transition-transform duration-200 ${expanded ? 'rotate-90 text-[#C9A84C]' : 'group-hover:translate-x-0.5'}`}/>
+      </button>
+
+      {/* Body */}
+      {expanded && (
+        <div className="px-4 sm:px-5 pb-5 space-y-4 border-t border-white/5 pt-4">
+          <p className="text-xs sm:text-sm text-white/55 leading-relaxed">{section.intro}</p>
+
+          {section.steps && section.steps.length > 0 && (
+            <div className="space-y-2">
+              {section.steps.map((step, i) => (
+                <div key={i} className="flex gap-3 p-3 rounded-xl" style={{ background:'rgba(255,255,255,0.03)' }}>
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                    style={{ background:`${section.color}18`, border:`1px solid ${section.color}30` }}>
+                    <span className="text-[8px] font-bold" style={{ color: section.color }}>{i + 1}</span>
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-bold text-white/80 mb-0.5">{step.label}</p>
+                    <p className="text-[11px] text-white/40 leading-relaxed">{step.detail}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {section.tips && section.tips.length > 0 && (
+            <div className="space-y-2">
+              {section.tips.map((tip, i) => (
+                <div key={i} className="flex gap-2.5 p-3 rounded-xl border border-[#C9A84C]/10" style={{ background:'rgba(201,168,76,0.05)' }}>
+                  <Lightbulb className="w-3.5 h-3.5 text-[#C9A84C] shrink-0 mt-0.5"/>
+                  <p className="text-[11px] text-[#E8C96B]/70 leading-relaxed min-w-0">{tip}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {section.warning && (
+            <div className="flex gap-2.5 p-3 rounded-xl border border-red-500/20" style={{ background:'rgba(180,40,40,0.08)' }}>
+              <AlertCircle className="w-3.5 h-3.5 text-red-400 shrink-0 mt-0.5"/>
+              <p className="text-[11px] text-red-300/70 leading-relaxed min-w-0"><strong className="text-red-400">Warning:</strong> {section.warning}</p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function GuideTab() {
+  const [expandedId, setExpandedId] = useState<string | null>('overview')
+
+  return (
+    <div className="space-y-5 w-full max-w-3xl">
+      {/* Header */}
+      <div className="rounded-2xl border border-[#C9A84C]/20 p-5 sm:p-6 flex flex-col sm:flex-row items-start gap-4" style={{ background:'linear-gradient(135deg,rgba(10,35,24,0.95),rgba(15,50,30,0.9))' }}>
+        <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border border-[#C9A84C]/25" style={{ background:'rgba(201,168,76,0.1)' }}>
+          <BookOpen className="w-6 h-6 text-[#C9A84C]"/>
+        </div>
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 flex-wrap mb-1">
+            <h2 className="font-serif text-xl sm:text-2xl text-white">Starter Guide</h2>
+            <span className="text-[9px] font-bold tracking-[0.15em] uppercase px-2.5 py-1 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 text-[#C9A84C]">Admin Handbook</span>
+          </div>
+          <p className="text-xs text-white/40 leading-relaxed">
+            Everything you need to know to run your CraftNest store. Click any section below to expand it. Read from top to bottom your first time, then use it as a reference later.
+          </p>
+        </div>
+      </div>
+
+      {/* Quick reference chips */}
+      <div>
+        <p className="text-[9px] tracking-[0.25em] text-[#C9A84C]/40 uppercase font-bold mb-2">Jump to a topic</p>
+        <div className="flex flex-wrap gap-2">
+          {GUIDE_SECTIONS.map(s => (
+            <button
+              key={s.id}
+              onClick={() => setExpandedId(expandedId === s.id ? null : s.id)}
+              className={`flex items-center gap-1.5 text-[9px] font-bold tracking-[0.1em] uppercase px-3 py-1.5 rounded-full border transition-all cursor-pointer ${expandedId === s.id ? 'border-transparent text-[#04140E]' : 'border-white/10 text-white/35 hover:text-white/60 hover:border-white/20'}`}
+              style={expandedId === s.id ? { background: s.color, borderColor: s.color } : {}}
+            >
+              <s.icon className="w-3 h-3"/>
+              <span className="hidden sm:inline">{s.title.split(' — ')[0].split(' · ')[0]}</span>
+              <span className="sm:hidden">{s.id.charAt(0).toUpperCase() + s.id.slice(1)}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Sections */}
+      <div className="space-y-2">
+        {GUIDE_SECTIONS.map(section => (
+          <GuideSection
+            key={section.id}
+            section={section}
+            expanded={expandedId === section.id}
+            onToggle={() => setExpandedId(expandedId === section.id ? null : section.id)}
+          />
+        ))}
+      </div>
+
+      {/* Footer card */}
+      <div className="rounded-2xl border border-white/5 p-4 flex items-start gap-3" style={{ background:'rgba(255,255,255,0.02)' }}>
+        <Info className="w-4 h-4 text-white/25 shrink-0 mt-0.5"/>
+        <div className="min-w-0">
+          <p className="text-[11px] text-white/30 leading-relaxed">
+            This guide is always available from the sidebar. For technical changes (adding a new user, customising colours, connecting a payment system) contact your developer at{' '}
+            <span className="text-[#C9A84C]/60">craftnestshop.com</span>.
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ── Main Admin Panel ──────────────────────────────────────────────────────────
 
 function AdminPanel() {
@@ -940,6 +1266,7 @@ function AdminPanel() {
     { id:'gallery'   as Tab, label:'Gallery',       icon:ImageIcon, sub:`${data.gallery.length} photos` },
     { id:'hero'      as Tab, label:'Hero Carousel', icon:Home,      sub:`${data.heroImages.length} images` },
     { id:'settings'  as Tab, label:'Settings',      icon:Settings,  ownerOnly:true },
+    { id:'guide'     as Tab, label:'Starter Guide', icon:BookOpen },
   ] as NavItem[]).filter(n => !n.ownerOnly || userRole === 'owner')
 
   return (
@@ -1067,6 +1394,8 @@ function AdminPanel() {
           )}
 
           {tab === 'settings' && userRole === 'owner' && <SettingsTab data={data} show={show}/>}
+
+          {tab === 'guide' && <GuideTab/>}
         </main>
       </div>
 
