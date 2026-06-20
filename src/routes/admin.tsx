@@ -819,7 +819,7 @@ function MediaTab({ onGoSettings }: { onGoSettings: () => void }) {
   const presetOk   = !!(settings?.cloudinaryPreset)
 
   return (
-    <div className="space-y-5 w-full max-w-3xl">
+    <div className="space-y-5 w-full">
       <div>
         <h2 className="font-serif text-xl sm:text-2xl text-white mb-0.5">Image Converter</h2>
         <p className="text-xs text-white/35">Drop or pick images → Convert to a link → Copy and paste into any image field.</p>
@@ -982,7 +982,7 @@ function SettingsTab({ data, show }: { data: AdminData; show: (msg:string, t?: '
   const handleReset = () => { resetToDefaults(); setConfirmReset(false); show('Data reset — please reload.') }
 
   return (
-    <div className="space-y-5 w-full max-w-2xl">
+    <div className="space-y-5 w-full">
       <div>
         <h2 className="font-serif text-xl sm:text-2xl text-white mb-0.5">Site Settings</h2>
         <p className="text-xs text-white/35">Control global site options.</p>
@@ -1313,6 +1313,8 @@ function GuideSection({ section, expanded, onToggle }: { section: GuideSection; 
         <div className="px-4 sm:px-5 pb-5 space-y-4 border-t border-white/5 pt-4">
           <p className="text-xs sm:text-sm text-white/55 leading-relaxed">{section.intro}</p>
 
+          <SectionVisual id={section.id}/>
+
           {section.steps && section.steps.length > 0 && (
             <div className="space-y-2">
               {section.steps.map((step, i) => (
@@ -1411,13 +1413,278 @@ function VisualDiagram({ title, children }: { title: string; children: React.Rea
   )
 }
 
+// ── Per-section visual diagrams ───────────────────────────────────────────────
+
+function SectionVisual({ id }: { id: string }) {
+  if (id === 'overview') return (
+    <VisualDiagram title="Dashboard — your store at a glance">
+      <div className="flex-1 space-y-1.5 min-w-[200px]">
+        <div className="grid grid-cols-4 gap-1">
+          {([['Jewellery','#C9A84C'],['Gifts','#5DBEA3'],['Painting','#E87D7D'],['Gallery','#8BA4F8']] as [string,string][]).map(([l,c])=>(
+            <div key={l} className="rounded-lg p-1.5" style={{background:'rgba(255,255,255,0.04)'}}>
+              <p className="text-[6px] font-bold truncate" style={{color:c}}>{l}</p>
+              <p className="text-[11px] font-bold text-white/60">3</p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-3 gap-1">
+          {([['Total Products','#C9A84C','12'],['Live / Visible','#5DBEA3','10'],['Featured','#E8C96B','4']] as [string,string,string][]).map(([l,c,v])=>(
+            <div key={l} className="rounded-lg p-1.5 text-center" style={{background:'rgba(255,255,255,0.04)'}}>
+              <p className="text-[5px] font-bold leading-tight" style={{color:c}}>{l}</p>
+              <p className="text-base font-bold text-white/60">{v}</p>
+            </div>
+          ))}
+        </div>
+        <div className="flex items-center gap-1.5 rounded-lg p-1.5 border border-amber-500/15" style={{background:'rgba(30,20,5,0.6)'}}>
+          <Megaphone className="w-2.5 h-2.5 text-amber-400 shrink-0"/>
+          <p className="text-[6px] text-amber-200/40 flex-1 truncate">🎉 Free gifting on orders above ₹1000!</p>
+          <span className="text-[6px] font-bold text-emerald-400 shrink-0">LIVE</span>
+        </div>
+        <div className="grid grid-cols-2 gap-1">
+          {['Jewellery →','Return Gifts →','Gallery →','Settings →'].map(l=>(
+            <div key={l} className="flex items-center gap-1.5 p-1.5 rounded-lg" style={{background:'rgba(255,255,255,0.02)'}}>
+              <div className="w-3 h-3 rounded shrink-0" style={{background:'rgba(201,168,76,0.1)',border:'1px solid rgba(201,168,76,0.15)'}}/>
+              <p className="text-[6px] text-white/25">{l}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </VisualDiagram>
+  )
+
+  if (id === 'products') return (
+    <VisualDiagram title="Products Tab — card actions explained">
+      <MockProductCard badge="Bestseller" featured/>
+      <MockProductCard badge="Bridal" hidden/>
+      <div className="flex flex-col justify-center gap-2 min-w-[150px]">
+        <p className="text-[7px] text-white/25 font-bold uppercase tracking-[0.1em]">Icons on every card:</p>
+        {[
+          { Ic: Eye,          cls: 'text-emerald-400',  label: '👁 Eye — show / hide product' },
+          { Ic: Star,         cls: 'text-[#E8C96B]',    label: '⭐ Star — feature (shows on top)' },
+          { Ic: Pencil,       cls: 'text-white/40',     label: '✏️ Pencil — edit all details' },
+          { Ic: Trash2,       cls: 'text-red-400/40',   label: '🗑 Trash — delete (Owner only)' },
+          { Ic: GripVertical, cls: 'text-white/25',     label: '⠿ Grip — drag to reorder' },
+        ].map(({ Ic, cls, label }, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <Ic className={`w-3 h-3 ${cls} shrink-0`}/>
+            <p className="text-[7px] text-white/35">{label}</p>
+          </div>
+        ))}
+      </div>
+    </VisualDiagram>
+  )
+
+  if (id === 'badges') return (
+    <VisualDiagram title="Badges & Stock Status — visual reference">
+      <div className="flex-1 space-y-2.5 min-w-[220px]">
+        <div>
+          <p className="text-[7px] text-white/30 font-bold mb-1.5 tracking-[0.1em] uppercase">Badge labels — pick one per product</p>
+          <div className="flex flex-wrap gap-1">
+            {(['Bestseller','Popular','New','Bridal','Festival','Custom','Limited','Adults','Kids','Traditional'] as const).map(b=>(
+              <span key={b} className={`text-[6px] font-bold px-1.5 py-0.5 rounded-full ${BADGE_COLORS[b]??'bg-[#C9A84C] text-[#04140E]'}`}>{b}</span>
+            ))}
+          </div>
+        </div>
+        <div className="h-px bg-white/5"/>
+        <div>
+          <p className="text-[7px] text-white/30 font-bold mb-1.5 tracking-[0.1em] uppercase">Stock status — controls WhatsApp button</p>
+          <div className="grid grid-cols-2 gap-1">
+            {STOCK_OPTIONS.map(s=>(
+              <div key={s.value} className={`text-[6px] font-bold px-2 py-1 rounded-lg border ${s.color}`}>{s.label}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </VisualDiagram>
+  )
+
+  if (id === 'gallery') return (
+    <VisualDiagram title="Gallery Tab — photo grid">
+      <div className="flex-1 space-y-2 min-w-[200px]">
+        <div className="flex items-center gap-1 flex-wrap">
+          {(['All','Events','Arts','Other'] as const).map((c,i)=>(
+            <span key={c} className={`text-[6px] font-bold px-2 py-0.5 rounded-full ${i===0?'bg-[#C9A84C] text-[#04140E]':'border border-white/10 text-white/30'}`}>{c}</span>
+          ))}
+          <div className="ml-auto flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#C9A84C]/10 border border-[#C9A84C]/20">
+            <Plus className="w-2 h-2 text-[#C9A84C]"/><p className="text-[6px] font-bold text-[#C9A84C]">Add Photo</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-4 gap-1">
+          {(['events','arts','arts','other','events','arts','other','events'] as const).map((cat,i)=>(
+            <div key={i} className="aspect-square rounded-lg bg-gradient-to-br from-[#0A3020] to-[#061A0F] flex items-center justify-center relative overflow-hidden border border-[#C9A84C]/10">
+              <ImageIcon className="w-2.5 h-2.5 text-white/10"/>
+              <span className="absolute bottom-0 left-0 right-0 text-[4px] text-center text-white/25 bg-black/30 capitalize py-0.5">{cat}</span>
+            </div>
+          ))}
+        </div>
+        <p className="text-[6px] text-white/20">Hover any photo → red Remove button slides up from the bottom</p>
+      </div>
+    </VisualDiagram>
+  )
+
+  if (id === 'hero') return (
+    <VisualDiagram title="Hero Carousel — homepage slideshow">
+      <div className="flex-1 space-y-2 min-w-[200px]">
+        <div className="flex items-center gap-1.5">
+          <div className="flex-1 h-6 rounded-lg border border-[#C9A84C]/15 bg-white/5 px-2 flex items-center min-w-0">
+            <p className="text-[6px] text-white/20 truncate">Paste image URL or upload a file →</p>
+          </div>
+          <div className="flex items-center gap-0.5 px-1.5 py-1 rounded-lg border border-[#C9A84C]/25 shrink-0">
+            <Upload className="w-2 h-2 text-[#C9A84C]"/><p className="text-[5px] font-bold text-[#C9A84C]">Upload</p>
+          </div>
+          <div className="flex items-center px-2 py-1 rounded-lg bg-[#C9A84C] shrink-0">
+            <p className="text-[6px] font-bold text-[#04140E]">+Add</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-4 gap-1">
+          {[1,2,3,4].map(n=>(
+            <div key={n} className={`aspect-square rounded-lg bg-gradient-to-br from-[#0A3020] to-[#061A0F] relative flex items-center justify-center border ${n===1?'border-[#C9A84C]/30':'border-white/5'}`}>
+              <Home className="w-3 h-3 text-white/10"/>
+              <span className="absolute top-0.5 right-0.5 text-[5px] font-bold text-white/30">#{n}</span>
+              <GripVertical className="absolute top-0.5 left-0.5 w-2 h-2 text-white/20"/>
+              {n===1 && <span className="absolute bottom-0 left-0 right-0 text-center text-[4px] bg-[#C9A84C]/20 text-[#E8C96B]/60 py-0.5">Shows first</span>}
+            </div>
+          ))}
+        </div>
+        <p className="text-[6px] text-white/20">Drag images to reorder · Image #1 appears first when customers open the website</p>
+      </div>
+    </VisualDiagram>
+  )
+
+  if (id === 'settings') return (
+    <VisualDiagram title="Settings Tab — global site controls (Owner only)">
+      <div className="flex-1 grid grid-cols-2 gap-1.5 min-w-[240px]">
+        {[
+          { Ic: Megaphone,    color: '#F5A623', title: 'Announcement Banner', detail: 'Toggle ON → bar at top of website' },
+          { Ic: MessageCircle,color: '#25D366', title: 'WhatsApp Number',     detail: 'One number controls all enquiry buttons' },
+          { Ic: Link,         color: '#8BA4F8', title: 'Social Links',        detail: 'Instagram & Facebook appear in footer' },
+          { Ic: Upload,       color: '#5DBEA3', title: 'Cloudinary Upload',   detail: 'Cloud Name + Preset for image upload' },
+          { Ic: CheckCircle2, color: '#C9A84C', title: 'Save All Settings',   detail: 'Must click — nothing saves until you do' },
+          { Ic: RefreshCw,    color: '#E87D7D', title: 'Reset Everything',    detail: '⚠️ Deletes all data — cannot be undone' },
+        ].map(({ Ic, color, title, detail }) => (
+          <div key={title} className="flex items-start gap-1.5 p-1.5 rounded-lg" style={{background:'rgba(255,255,255,0.03)'}}>
+            <div className="w-4 h-4 rounded flex items-center justify-center shrink-0 mt-0.5" style={{background:`${color}15`}}>
+              <Ic className="w-2.5 h-2.5" style={{color}}/>
+            </div>
+            <div className="min-w-0">
+              <p className="text-[6px] font-bold text-white/60 leading-tight">{title}</p>
+              <p className="text-[5px] text-white/25 leading-relaxed">{detail}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </VisualDiagram>
+  )
+
+  if (id === 'upload') return (
+    <VisualDiagram title="Cloudinary Setup — one-time, 4 steps">
+      <div className="flex-1 space-y-1.5 min-w-[220px]">
+        {[
+          { n:'1', text:'Go to cloudinary.com → create a free account (no credit card needed)' },
+          { n:'2', text:'Cloudinary dashboard → Settings → Upload → "Add upload preset" → set Signing Mode to Unsigned → Save' },
+          { n:'3', text:'In this admin: Settings tab → enter Cloud Name + Preset name → click Save All Settings' },
+          { n:'4', text:'Test it: edit any product → click camera icon → pick a photo — if it shows a preview URL, you\'re done! ✅' },
+        ].map(({ n, text }) => (
+          <div key={n} className="flex items-start gap-2 p-1.5 rounded-xl" style={{background:'rgba(255,255,255,0.03)'}}>
+            <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{background:'rgba(93,190,163,0.15)',border:'1px solid rgba(93,190,163,0.3)'}}>
+              <span className="text-[8px] font-bold text-[#5DBEA3]">{n}</span>
+            </div>
+            <p className="text-[6px] text-white/40 leading-relaxed">{text}</p>
+          </div>
+        ))}
+        <div className="flex items-center gap-1.5 p-1.5 rounded-xl border border-[#5DBEA3]/15 mt-1" style={{background:'rgba(93,190,163,0.05)'}}>
+          <CheckCircle2 className="w-3 h-3 text-[#5DBEA3] shrink-0"/>
+          <p className="text-[6px] text-[#5DBEA3]/70">After setup: Upload button works everywhere — products, gallery, hero carousel, image converter</p>
+        </div>
+      </div>
+    </VisualDiagram>
+  )
+
+  if (id === 'roles') return (
+    <VisualDiagram title="Owner vs Staff — access levels side by side">
+      <div className="flex gap-2 flex-1 min-w-[210px]">
+        <div className="flex-1 rounded-xl border border-[#C9A84C]/20 p-2 space-y-0.5" style={{background:'rgba(201,168,76,0.05)'}}>
+          <p className="text-[8px] font-bold text-[#E8C96B] mb-1.5">👑 Owner</p>
+          {['Add & edit products','Delete products','Manage gallery','Hero carousel','Site Settings','CSV Export','Reset data'].map(a=>(
+            <div key={a} className="flex items-center gap-1">
+              <CheckCircle2 className="w-2 h-2 text-emerald-400 shrink-0"/>
+              <p className="text-[6px] text-white/45">{a}</p>
+            </div>
+          ))}
+        </div>
+        <div className="flex-1 rounded-xl border border-white/10 p-2 space-y-0.5" style={{background:'rgba(255,255,255,0.02)'}}>
+          <p className="text-[8px] font-bold text-white/40 mb-1.5">🧑 Staff</p>
+          {([['Add & edit products',true],['Delete products',false],['Manage gallery',true],['Hero carousel',true],['Site Settings',false],['CSV Export',false],['Reset data',false]] as [string,boolean][]).map(([a,ok])=>(
+            <div key={a} className="flex items-center gap-1">
+              {ok ? <CheckCircle2 className="w-2 h-2 text-emerald-400 shrink-0"/> : <X className="w-2 h-2 text-red-400/40 shrink-0"/>}
+              <p className={`text-[6px] ${ok?'text-white/40':'text-white/20'}`}>{a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </VisualDiagram>
+  )
+
+  if (id === 'whatsapp') return (
+    <VisualDiagram title="WhatsApp enquiry flow — from button to customer">
+      <div className="flex-1 space-y-2 min-w-[200px]">
+        <div className="flex items-start gap-2">
+          <div className="w-5 h-5 rounded-full bg-[#25D366]/15 flex items-center justify-center shrink-0 mt-0.5">
+            <MessageCircle className="w-3 h-3 text-[#25D366]"/>
+          </div>
+          <div className="rounded-2xl rounded-tl-sm p-2" style={{background:'rgba(37,211,102,0.1)',border:'1px solid rgba(37,211,102,0.15)'}}>
+            <p className="text-[6px] text-white/50 leading-relaxed">Hi CraftNest! I'm interested in the <span className="text-[#25D366]/70 font-bold">Kundan Necklace</span>. Please share details.</p>
+          </div>
+        </div>
+        <p className="text-[6px] text-white/20 text-center">↑ This message auto-opens in WhatsApp when customer taps the Enquire button</p>
+        <div className="rounded-xl border border-[#C9A84C]/10 p-2" style={{background:'rgba(255,255,255,0.03)'}}>
+          <p className="text-[6px] text-white/25 mb-1 font-bold">Custom WhatsApp Message field (in product edit form):</p>
+          <div className="h-5 rounded-lg border border-[#C9A84C]/15 bg-white/5 px-2 flex items-center">
+            <p className="text-[6px] text-white/25 truncate">Hi! I want to order 50 Kundan sets for a wedding event…</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5 p-1.5 rounded-lg border border-red-500/15" style={{background:'rgba(180,40,40,0.05)'}}>
+          <EyeOff className="w-2.5 h-2.5 text-red-400/50 shrink-0"/>
+          <p className="text-[6px] text-red-300/40">Out of Stock → Enquire button is greyed out and disabled for customers</p>
+        </div>
+      </div>
+    </VisualDiagram>
+  )
+
+  if (id === 'tips') return (
+    <VisualDiagram title="Pro Tips — quick reference card">
+      <div className="flex-1 grid grid-cols-2 gap-1.5 min-w-[220px]">
+        {[
+          { Ic: Star,         color: '#E8C96B', tip: 'Feature 2–4 top products per category' },
+          { Ic: ImageIcon,    color: '#8BA4F8', tip: 'Add 2–3 gallery photos every month' },
+          { Ic: Home,         color: '#F5A623', tip: 'Update hero before festivals & events' },
+          { Ic: EyeOff,       color: '#5DBEA3', tip: 'Hide instead of Delete — reversible' },
+          { Ic: GripVertical, color: '#C9A84C', tip: 'Drag best-sellers to the top of list' },
+          { Ic: Download,     color: '#9B8EFF', tip: 'Export CSV monthly as a backup' },
+          { Ic: MessageCircle,color: '#25D366', tip: 'Test WhatsApp after editing the number' },
+          { Ic: LogOut,       color: '#E87D7D', tip: 'Log out after every admin session' },
+        ].map(({ Ic, color, tip }) => (
+          <div key={tip} className="flex items-start gap-1.5 p-1.5 rounded-lg" style={{background:'rgba(255,255,255,0.03)'}}>
+            <div className="w-4 h-4 rounded flex items-center justify-center shrink-0" style={{background:`${color}12`}}>
+              <Ic className="w-2.5 h-2.5" style={{color}}/>
+            </div>
+            <p className="text-[6px] text-white/35 leading-relaxed">{tip}</p>
+          </div>
+        ))}
+      </div>
+    </VisualDiagram>
+  )
+
+  return null
+}
+
 // ── Guide Tab ─────────────────────────────────────────────────────────────────
 
 function GuideTab({ onGoMedia, onGoSettings }: { onGoMedia: () => void; onGoSettings: () => void }) {
   const [expandedId, setExpandedId] = useState<string | null>('overview')
 
   return (
-    <div className="space-y-5 w-full max-w-3xl">
+    <div className="space-y-5 w-full">
       {/* Header */}
       <div className="rounded-2xl border border-[#C9A84C]/20 p-5 flex flex-col sm:flex-row items-start gap-4" style={{ background:'linear-gradient(135deg,rgba(10,35,24,0.95),rgba(15,50,30,0.9))' }}>
         <div className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border border-[#C9A84C]/25" style={{ background:'rgba(201,168,76,0.1)' }}>
