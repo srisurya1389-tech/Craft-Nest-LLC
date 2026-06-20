@@ -1073,36 +1073,36 @@ function ScheduleTab({ data, show, onRefresh }: { data: AdminData; show: (msg:st
       </div>
 
       {/* Calendar + Panel grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-4 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,540px)_380px] gap-4 items-start">
 
         {/* ── Calendar ── */}
         <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5" style={{ background:'rgba(10,35,24,0.8)' }}>
           {/* Month nav */}
-          <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center justify-between mb-4">
             <button onClick={prevMonth}
-              className="w-9 h-9 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-[#C9A84C]/30 transition-all cursor-pointer">
+              className="w-8 h-8 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-[#C9A84C]/30 transition-all cursor-pointer">
               <ChevronLeft className="w-4 h-4"/>
             </button>
             <div className="text-center">
-              <p className="text-base font-serif text-white">{CAL_MONTHS[viewMonth]}</p>
+              <p className="text-sm font-serif text-white">{CAL_MONTHS[viewMonth]}</p>
               <p className="text-[10px] text-white/30">{viewYear}</p>
             </div>
             <button onClick={nextMonth}
-              className="w-9 h-9 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-[#C9A84C]/30 transition-all cursor-pointer">
+              className="w-8 h-8 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-[#C9A84C]/30 transition-all cursor-pointer">
               <ChevronRight className="w-4 h-4"/>
             </button>
           </div>
 
           {/* Day headers */}
-          <div className="grid grid-cols-7 mb-2">
+          <div className="grid grid-cols-7 mb-1">
             {CAL_DAYS.map(d => (
-              <div key={d} className="text-center text-[9px] font-bold text-white/25 tracking-[0.08em]">{d}</div>
+              <div key={d} className="text-center text-[9px] font-bold text-white/25 tracking-[0.08em] py-1">{d}</div>
             ))}
           </div>
 
-          {/* Date grid */}
-          <div className="grid grid-cols-7 gap-0.5">
-            {Array.from({ length: firstDay }).map((_, i) => <div key={`pad${i}`}/>)}
+          {/* Date grid — fixed cell height so calendar never blows up */}
+          <div className="grid grid-cols-7 gap-1">
+            {Array.from({ length: firstDay }).map((_, i) => <div key={`pad${i}`} className="h-10"/>)}
             {Array.from({ length: daysInMonth }).map((_, i) => {
               const d       = i + 1
               const dateStr = fmtDate(viewYear, viewMonth, d)
@@ -1112,18 +1112,18 @@ function ScheduleTab({ data, show, onRefresh }: { data: AdminData; show: (msg:st
               const isPast  = new Date(viewYear, viewMonth, d) < new Date(today.getFullYear(), today.getMonth(), today.getDate())
               return (
                 <button key={d} onClick={() => selectDate(dateStr)}
-                  className={`relative flex flex-col items-center justify-center aspect-square rounded-xl text-[11px] font-bold transition-all cursor-pointer border
+                  className={`relative h-10 w-full flex flex-col items-center justify-center rounded-lg text-[11px] font-bold transition-all cursor-pointer border
                     ${isSel ? 'bg-[#C9A84C] border-[#C9A84C] text-[#04140E] ' + (entry ? SCHED_STATUS[entry.status].glow : '') :
                       isToday ? 'border-[#C9A84C]/40 text-[#E8C96B] bg-[#C9A84C]/10' :
                       isPast ? 'border-transparent text-white/20 hover:text-white/40' :
                       entry ? 'border-white/10 text-white/80 hover:border-[#C9A84C]/30 hover:bg-white/[0.04]' :
                       'border-transparent text-white/50 hover:text-white/80 hover:bg-white/[0.03]'}`}>
-                  <span className="leading-none">{d}</span>
+                  <span className="leading-none text-xs">{d}</span>
                   {entry && !isSel && (
-                    <div className={`w-1.5 h-1.5 rounded-full mt-0.5 ${SCHED_STATUS[entry.status].dot}`}/>
+                    <div className={`w-1 h-1 rounded-full mt-0.5 ${SCHED_STATUS[entry.status].dot}`}/>
                   )}
                   {entry && isSel && (
-                    <div className="w-1.5 h-1.5 rounded-full mt-0.5 bg-[#04140E]/50"/>
+                    <div className="w-1 h-1 rounded-full mt-0.5 bg-[#04140E]/50"/>
                   )}
                 </button>
               )
