@@ -1682,6 +1682,17 @@ function SectionVisual({ id }: { id: string }) {
 
 function GuideTab({ onGoMedia, onGoSettings }: { onGoMedia: () => void; onGoSettings: () => void }) {
   const [expandedId, setExpandedId] = useState<string | null>('overview')
+  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
+
+  const jumpTo = (id: string) => {
+    const isOpening = expandedId !== id
+    setExpandedId(expandedId === id ? null : id)
+    if (isOpening) {
+      setTimeout(() => {
+        sectionRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 80)
+    }
+  }
 
   return (
     <div className="space-y-5 w-full">
@@ -1704,7 +1715,7 @@ function GuideTab({ onGoMedia, onGoSettings }: { onGoMedia: () => void; onGoSett
         <p className="text-[9px] tracking-[0.2em] text-[#C9A84C]/40 uppercase font-bold mb-2">Jump to topic</p>
         <div className="flex flex-wrap gap-1.5">
           {GUIDE_SECTIONS.map(s => (
-            <button key={s.id} onClick={() => setExpandedId(expandedId === s.id ? null : s.id)}
+            <button key={s.id} onClick={() => jumpTo(s.id)}
               className={`flex items-center gap-1 text-[9px] font-bold tracking-[0.08em] uppercase px-2.5 py-1 rounded-full border transition-all cursor-pointer ${expandedId===s.id ? 'border-transparent text-[#04140E]' : 'border-white/10 text-white/30 hover:text-white/60 hover:border-white/20'}`}
               style={expandedId===s.id ? { background:s.color } : {}}>
               <s.icon className="w-2.5 h-2.5"/>
@@ -1819,8 +1830,10 @@ function GuideTab({ onGoMedia, onGoSettings }: { onGoMedia: () => void; onGoSett
       {/* Text sections */}
       <div className="space-y-2">
         {GUIDE_SECTIONS.map(section => (
-          <GuideSection key={section.id} section={section} expanded={expandedId===section.id}
-            onToggle={() => setExpandedId(expandedId===section.id ? null : section.id)}/>
+          <div key={section.id} ref={el => { sectionRefs.current[section.id] = el }} className="scroll-mt-16">
+            <GuideSection section={section} expanded={expandedId===section.id}
+              onToggle={() => setExpandedId(expandedId===section.id ? null : section.id)}/>
+          </div>
         ))}
       </div>
 
