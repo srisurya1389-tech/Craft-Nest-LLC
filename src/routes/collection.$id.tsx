@@ -149,9 +149,13 @@ function CollectionPage() {
   const toggleWishlist = (t: string) =>
     setWishlist(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t])
 
+  const published = data.products
+    .filter(p => p.visible !== false)
+    .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0))
+
   const visibleProducts = activeFilter === 'All'
-    ? data.products
-    : data.products.filter(p => p.occasion === activeFilter || p.badge === activeFilter)
+    ? published
+    : published.filter(p => p.occasion === activeFilter || p.badge === activeFilter)
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 60)
@@ -299,6 +303,9 @@ function CollectionPage() {
                   <span className={`absolute top-3 left-3 text-[8px] font-bold tracking-[0.15em] uppercase px-3 py-1 rounded-full ${badgeColors[item.badge] ?? 'bg-[#0B3D2E] text-[#E8C96B]'}`}>
                     {item.badge}
                   </span>
+                  {'featured' in item && item.featured && (
+                    <span className="absolute top-3 left-[4.5rem] text-[8px] font-bold tracking-[0.08em] uppercase px-2 py-1 rounded-full bg-[#C9A84C]/20 border border-[#C9A84C]/40 text-[#E8C96B]">⭐ Featured</span>
+                  )}
 
                   {/* Wishlist */}
                   <button
@@ -314,17 +321,27 @@ function CollectionPage() {
                   <h3 className="font-serif text-base sm:text-lg text-white font-medium mb-1.5 sm:mb-2 group-hover:text-[#E8C96B] transition-colors leading-snug">
                     {item.title}
                   </h3>
+                  {'stock' in item && item.stock && item.stock !== 'available' && (
+                    <span className={`inline-block text-[8px] font-bold px-2.5 py-1 rounded-full mb-2 border ${
+                      item.stock === 'out-of-stock'   ? 'bg-red-600/15 text-red-400 border-red-600/30' :
+                      item.stock === 'limited'        ? 'bg-amber-600/15 text-amber-400 border-amber-600/30' :
+                      'bg-sky-600/15 text-sky-400 border-sky-600/30'
+                    }`}>
+                      {item.stock === 'out-of-stock' ? '🔴 Out of Stock' : item.stock === 'limited' ? '⚡ Limited Stock' : '🛠 Made to Order'}
+                    </span>
+                  )}
+                  {item.price && <p className="text-[#C9A84C] text-sm font-bold mb-1.5">{item.price}</p>}
                   <p className="font-sans text-[10px] sm:text-[11px] text-white/45 leading-relaxed mb-4 sm:mb-5 flex-grow">
                     {item.desc}
                   </p>
 
                   <div className="pt-4 border-t border-[#C9A84C]/10">
                     <a
-                      href={`https://wa.me/14704527988?text=${encodeURIComponent(`Hi CraftNest! I'm interested in the "${item.title}". Please share more details.`)}`}
+                      href={`https://wa.me/14704527988?text=${encodeURIComponent(('whatsappMsg' in item && item.whatsappMsg) ? item.whatsappMsg : `Hi CraftNest! I'm interested in the "${item.title}". Please share more details.`)}`}
                       target="_blank" rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-[9px] tracking-[0.18em] font-bold uppercase bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] px-4 py-2.5 rounded-full transition-all hover:scale-105 cursor-pointer shadow-[0_2px_12px_rgba(201,168,76,0.15)] hover:shadow-[0_4px_20px_rgba(201,168,76,0.3)] w-full justify-center"
+                      className={`inline-flex items-center gap-1.5 text-[9px] tracking-[0.18em] font-bold uppercase px-4 py-2.5 rounded-full transition-all hover:scale-105 cursor-pointer shadow-[0_2px_12px_rgba(201,168,76,0.15)] hover:shadow-[0_4px_20px_rgba(201,168,76,0.3)] w-full justify-center ${'stock' in item && item.stock === 'out-of-stock' ? 'bg-white/5 border border-white/10 text-white/30 pointer-events-none' : 'bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E]'}`}
                     >
-                      ENQUIRE ON WHATSAPP →
+                      {'stock' in item && item.stock === 'out-of-stock' ? 'OUT OF STOCK' : 'ENQUIRE ON WHATSAPP →'}
                     </a>
                   </div>
                 </div>

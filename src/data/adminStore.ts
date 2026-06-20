@@ -1,48 +1,76 @@
-import { defaultProducts, defaultGallery, type AdminData, type Product, type GalleryItem } from './defaultData'
+import {
+  defaultProducts, defaultGallery, defaultHeroImages, defaultSettings,
+  type AdminData, type Product, type GalleryItem, type SiteSettings,
+} from './defaultData'
 
-const STORAGE_KEY = 'craftnest_admin_data'
+export type { AdminData, Product, GalleryItem, SiteSettings }
 
-export type { AdminData, Product, GalleryItem }
+const KEY = 'craftnest_admin_data'
 
 export function getAdminData(): AdminData {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) return JSON.parse(stored) as AdminData
+    const raw = localStorage.getItem(KEY)
+    if (raw) {
+      const parsed = JSON.parse(raw) as AdminData
+      // migrate older data that lacks new fields
+      for (const cat of ['jewellery', 'gifts', 'painting'] as const) {
+        parsed.products[cat] = parsed.products[cat].map(p => ({
+          ...p,
+          visible:     p.visible     ?? true,
+          featured:    p.featured    ?? false,
+          stock:       p.stock       ?? ('available' as const),
+          whatsappMsg: p.whatsappMsg ?? '',
+        }))
+      }
+      if (!parsed.heroImages) parsed.heroImages = defaultHeroImages
+      if (!parsed.settings)   parsed.settings   = defaultSettings
+      return parsed
+    }
   } catch {}
-  return { products: defaultProducts, gallery: defaultGallery }
+  return { products: defaultProducts, gallery: defaultGallery, heroImages: defaultHeroImages, settings: defaultSettings }
 }
 
 export function saveAdminData(data: AdminData): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+  localStorage.setItem(KEY, JSON.stringify(data))
 }
 
-export function getProducts(category: 'jewellery' | 'gifts' | 'painting'): Product[] {
-  return getAdminData().products[category]
+// ── Products ────────────────────────────────────────────────────────────────
+
+export type Category = 'jewellery' | 'gifts' | 'painting'
+
+export function getProducts(cat: Category): Product[] {
+  return getAdminData().products[cat]
 }
 
-export function addProduct(category: 'jewellery' | 'gifts' | 'painting', product: Omit<Product, 'id'>): void {
+export function addProduct(cat: Category, product: Omit<Product, 'id'>): void {
   const data = getAdminData()
-  const id = `${category[0]}_${Date.now()}`
-  data.products[category] = [...data.products[category], { ...product, id }]
+  data.products[cat] = [...data.products[cat], { ...product, id: `${cat[0]}_${Date.now()}` }]
   saveAdminData(data)
 }
 
-export function updateProduct(category: 'jewellery' | 'gifts' | 'painting', updated: Product): void {
+export function updateProduct(cat: Category, updated: Product): void {
   const data = getAdminData()
-  data.products[category] = data.products[category].map(p => p.id === updated.id ? updated : p)
+  data.products[cat] = data.products[cat].map(p => p.id === updated.id ? updated : p)
   saveAdminData(data)
 }
 
-export function deleteProduct(category: 'jewellery' | 'gifts' | 'painting', id: string): void {
+export function deleteProduct(cat: Category, id: string): void {
   const data = getAdminData()
-  data.products[category] = data.products[category].filter(p => p.id !== id)
+  data.products[cat] = data.products[cat].filter(p => p.id !== id)
   saveAdminData(data)
 }
+
+export function reorderProducts(cat: Category, ordered: Product[]): void {
+  const data = getAdminData()
+  data.products[cat] = ordered
+  saveAdminData(data)
+}
+
+// ── Gallery ─────────────────────────────────────────────────────────────────
 
 export function addGalleryItem(item: Omit<GalleryItem, 'id'>): void {
   const data = getAdminData()
-  const id = `gal_${Date.now()}`
-  data.gallery = [...data.gallery, { ...item, id }]
+  data.gallery = [...data.gallery, { ...item, id: `gal_${Date.now()}` }]
   saveAdminData(data)
 }
 
@@ -52,6 +80,75 @@ export function deleteGalleryItem(id: string): void {
   saveAdminData(data)
 }
 
+// ── Hero Images ──────────────────────────────────────────────────────────────
+
+export function addHeroImage(url: string): void {
+  const data = getAdminData()
+  data.heroImages = [...data.heroImages, url]
+  saveAdminData(data)
+}
+
+export function removeHeroImage(url: string): void {
+  const data = getAdminData()
+  data.heroImages = data.heroImages.filter(u => u !== url)
+  saveAdminData(data)
+}
+
+export function reorderHeroImages(images: string[]): void {
+  const data = getAdminData()
+  data.heroImages = images
+  saveAdminData(data)
+}
+
+// ── Settings ─────────────────────────────────────────────────────────────────
+
+export function getSettings(): SiteSettings {
+  return getAdminData().settings
+}
+
+export function saveSettings(settings: SiteSettings): void {
+  const data = getAdminData()
+  data.settings = settings
+  saveAdminData(data)
+}
+
+// ── Cloudinary Upload ────────────────────────────────────────────────────────
+
+export async function uploadToCloudinary(file: File): Promise<string> {
+  const settings = getSettings()
+  if (!settings.cloudinaryPreset) throw new Error('No Cloudinary upload preset configured in Settings.')
+  const fd = new FormData()
+  fd.append('file', file)
+  fd.append('upload_preset', settings.cloudinaryPreset)
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${settings.cloudinaryCloud}/image/upload`, {
+    method: 'POST', body: fd,
+  })
+  if (!res.ok) throw new Error('Upload failed')
+  const json = await res.json() as { secure_url: string }
+  return json.secure_url
+}
+
+// ── CSV Export ────────────────────────────────────────────────────────────────
+
+export function exportProductsCSV(): void {
+  const data = getAdminData()
+  const rows = [['Category', 'Title', 'Badge', 'Price', 'Stock', 'Visible', 'Featured', 'Description', 'Image URL']]
+  for (const [cat, products] of Object.entries(data.products)) {
+    for (const p of products as Product[]) {
+      rows.push([cat, p.title, p.badge, p.price, p.stock, String(p.visible), String(p.featured), p.desc, p.img])
+    }
+  }
+  const csv = rows.map(r => r.map(c => `"${c.replace(/"/g, '""')}"`).join(',')).join('\n')
+  const blob = new Blob([csv], { type: 'text/csv' })
+  const url  = URL.createObjectURL(blob)
+  const a    = document.createElement('a')
+  a.href = url; a.download = `craftnest-products-${new Date().toISOString().slice(0,10)}.csv`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
+// ── Reset ─────────────────────────────────────────────────────────────────────
+
 export function resetToDefaults(): void {
-  localStorage.removeItem(STORAGE_KEY)
+  localStorage.removeItem(KEY)
 }
