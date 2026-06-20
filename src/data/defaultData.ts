@@ -31,10 +31,12 @@ export type SiteSettings = {
 
 export type ScheduleStatus = 'free' | 'busy' | 'limited' | 'booked'
 export type ScheduleEntry = {
-  date: string       // YYYY-MM-DD
+  date: string
   status: ScheduleStatus
   note: string
-  services: string[] // which CraftNest services are available on this day
+  services: string[]
+  amStatus?: ScheduleStatus
+  pmStatus?: ScheduleStatus
 }
 
 export type AdminData = {

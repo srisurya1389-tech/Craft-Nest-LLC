@@ -2568,22 +2568,6 @@ function Home() {
           </div>
         </div>
       </footer>
-
-      {/* Floating WhatsApp Action Button */}
-      <div className="fixed bottom-6 right-6 z-[9999]">
-        <a 
-          href="https://wa.me/14704527988" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          aria-label="Contact on WhatsApp"
-          className="flex items-center justify-center w-[52px] h-[52px] bg-[#25D366] text-white rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all duration-200 ease-out hover:shadow-[0_4px_20px_rgba(37,211,102,0.4)] group"
-        >
-          {/* Custom SVG WhatsApp logo in white */}
-          <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-            <path d="M12.004 2c-5.51 0-9.99 4.49-9.99 10 0 2 .59 3.88 1.61 5.47l-1.07 3.93 4.07-1.07c1.51.82 3.22 1.29 5.02 1.29 5.51 0 10-4.49 10-10s-4.49-10-10-10zm6.5 13.91c-.24.67-1.18 1.24-1.92 1.32-.51.05-1.18.08-3.41-.85-2.85-1.18-4.69-4.08-4.83-4.27-.14-.19-1.15-1.53-1.15-2.92S7.92 7.4 8.16 7.15c.24-.24.52-.31.7-.31.17 0 .34.01.49.02.16.01.37-.06.57.43.2.5.7 1.7.76 1.83.06.13.1.28.01.46-.09.18-.14.29-.28.45-.14.16-.3.36-.43.48-.15.14-.31.3-.13.61.18.31.8 1.31 1.71 2.12.91.81 1.67 1.06 2.05 1.25.31.16.49.14.67-.06.19-.22.82-.95 1.04-1.28.22-.33.45-.28.76-.16.31.12 1.97.93 2.31 1.1.34.17.57.25.65.39.09.14.09.82-.15 1.49z"/>
-          </svg>
-        </a>
-      </div>
     </div>
   )
 }

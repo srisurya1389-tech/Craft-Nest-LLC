@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   LayoutDashboard, ImageIcon, LogOut, Plus, Pencil, Settings,
   Trash2, X, Eye, EyeOff, ShieldCheck, Gem, Gift, Palette,
@@ -16,7 +16,7 @@ import {
   exportProductsCSV, uploadToCloudinary, resetToDefaults,
   setScheduleEntry, removeScheduleEntry,
   type Product, type GalleryItem, type AdminData, type SiteSettings, type Category,
-  type ScheduleStatus,
+  type ScheduleStatus, type ScheduleEntry,
 } from '../data/adminStore'
 
 export const Route = createFileRoute('/admin')({ component: AdminPanel })
@@ -994,206 +994,360 @@ function ScheduleTab({ data, show, onRefresh }: { data: AdminData; show: (msg:st
   const [viewYear,  setViewYear]  = useState(today.getFullYear())
   const [viewMonth, setViewMonth] = useState(today.getMonth())
   const [selDate,   setSelDate]   = useState<string | null>(null)
-  const [form, setForm] = useState<{ status: ScheduleStatus; note: string; services: string[] }>({
-    status: 'free', note: '', services: [...CN_SERVICES],
+  const [hovered,   setHovered]   = useState<string | null>(null)   // Feature 2: tooltip
+  const [form, setForm] = useState<{ status: ScheduleStatus; note: string; services: string[]; amStatus: ScheduleStatus|''; pmStatus: ScheduleStatus|'' }>({
+    status: 'free', note: '', services: [...CN_SERVICES], amStatus: '', pmStatus: '',
   })
 
   const schedule    = data.schedule ?? {}
-  const fmtDate     = (y: number, m: number, d: number) => `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`
+  const fmt         = (y: number, m: number, d: number) => `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`
   const firstDay    = new Date(viewYear, viewMonth, 1).getDay()
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
 
+  // Build week rows for Feature 3 (bulk-mark) and Feature 14 (mini strips)
+  const weeks: (number|null)[][] = []
+  let wk: (number|null)[] = Array(firstDay).fill(null)
+  for (let d = 1; d <= daysInMonth; d++) { wk.push(d); if (wk.length === 7) { weeks.push(wk); wk = [] } }
+  while (wk.length > 0 && wk.length < 7) wk.push(null)
+  if (wk.length) weeks.push(wk)
+
+  // Feature 1: Jump to Today
+  const goToday   = () => { setViewYear(today.getFullYear()); setViewMonth(today.getMonth()) }
   const prevMonth = () => { if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y-1) } else setViewMonth(m => m-1) }
   const nextMonth = () => { if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y+1) } else setViewMonth(m => m+1) }
 
   const selectDate = (dateStr: string) => {
     setSelDate(dateStr)
     const ex = schedule[dateStr]
-    setForm(ex ? { status: ex.status, note: ex.note, services: ex.services ?? [...CN_SERVICES] }
-               : { status: 'free', note: '', services: [...CN_SERVICES] })
+    setForm(ex
+      ? { status: ex.status, note: ex.note, services: ex.services ?? [...CN_SERVICES], amStatus: ex.amStatus ?? '', pmStatus: ex.pmStatus ?? '' }
+      : { status: 'free', note: '', services: [...CN_SERVICES], amStatus: '', pmStatus: '' })
   }
 
   const handleSave = () => {
     if (!selDate) return
     const [y,m,d] = selDate.split('-').map(Number)
     const label = new Date(y, m-1, d).toLocaleDateString('en-US', { month:'long', day:'numeric' })
-    setScheduleEntry({ date: selDate, status: form.status, note: form.note, services: form.services })
-    onRefresh()
-    show(`Schedule saved for ${label}`)
+    const entry: ScheduleEntry = { date: selDate, status: form.status, note: form.note, services: form.services }
+    if (form.amStatus) entry.amStatus = form.amStatus
+    if (form.pmStatus) entry.pmStatus = form.pmStatus
+    setScheduleEntry(entry)
+    onRefresh(); show(`Schedule saved for ${label}`)
   }
 
   const handleClear = () => {
     if (!selDate) return
-    removeScheduleEntry(selDate)
-    onRefresh()
-    show('Schedule entry removed')
-    setSelDate(null)
+    removeScheduleEntry(selDate); onRefresh(); show('Schedule entry removed'); setSelDate(null)
+  }
+
+  // Feature 3: Bulk-mark entire week row
+  const bulkMarkWeek = (wkDays: (number|null)[]) => {
+    let n = 0
+    wkDays.forEach(d => {
+      if (!d) return
+      const dateStr = fmt(viewYear, viewMonth, d)
+      const ex = schedule[dateStr] ?? {}
+      setScheduleEntry({ ...(ex as ScheduleEntry), date: dateStr, status: form.status, note: form.note, services: form.services })
+      n++
+    })
+    onRefresh(); show(`${n} days marked as ${SCHED_STATUS[form.status].label}`)
+  }
+
+  // Feature 4: Copy current month entries to next month
+  const copyToNext = () => {
+    const nm = viewMonth === 11 ? 0 : viewMonth + 1
+    const ny = viewMonth === 11 ? viewYear + 1 : viewYear
+    const nextDim = new Date(ny, nm + 1, 0).getDate()
+    let n = 0
+    Object.values(schedule).forEach(e => {
+      const [ey, em, ed] = e.date.split('-').map(Number)
+      if (ey === viewYear && em - 1 === viewMonth && ed <= nextDim) { setScheduleEntry({ ...e, date: fmt(ny, nm, ed) }); n++ }
+    })
+    onRefresh(); show(n ? `Copied ${n} entries to ${CAL_MONTHS[nm]}` : 'No entries to copy')
   }
 
   const toggleService = (s: string) =>
     setForm(f => ({ ...f, services: f.services.includes(s) ? f.services.filter(x => x !== s) : [...f.services, s] }))
 
-  const selEntry = selDate ? schedule[selDate] : null
-  const selDisplay = selDate
-    ? (() => { const [y,m,d] = selDate.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}) })()
-    : ''
+  const selEntry   = selDate ? schedule[selDate] : null
+  const selDisplay = selDate ? (() => { const [y,m,d] = selDate.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}) })() : ''
 
-  const freeCount  = Object.values(schedule).filter(e => e.status === 'free').length
-  const busyCount  = Object.values(schedule).filter(e => e.status === 'busy').length
-  const bookedCount= Object.values(schedule).filter(e => e.status === 'booked' || e.status === 'limited').length
+  // Feature 6: Monthly summary for current view
+  const mEntries   = Object.values(schedule).filter(e => { const [y,m] = e.date.split('-').map(Number); return y===viewYear && m-1===viewMonth })
+  const mFree      = mEntries.filter(e=>e.status==='free').length
+  const mLimited   = mEntries.filter(e=>e.status==='limited').length
+  const mBusy      = mEntries.filter(e=>e.status==='busy').length
+  const mBooked    = mEntries.filter(e=>e.status==='booked').length
+
+  // Feature 5: Upcoming busy/booked/limited
+  const upcoming   = Object.values(schedule).filter(e => e.date >= todayStr && e.status !== 'free').sort((a,b) => a.date.localeCompare(b.date)).slice(0, 8)
+
+  // Feature 14: Ghost rows from prev / next month
+  const prevDim    = new Date(viewMonth===0?viewYear-1:viewYear, viewMonth===0?12:viewMonth, 0).getDate()
+  const daysAfter  = (7 - (firstDay + daysInMonth) % 7) % 7
+
+  // Feature 8: Keyboard shortcuts
+  useEffect(() => {
+    if (!selDate) return
+    const h = (e: KeyboardEvent) => {
+      if (['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement).tagName)) return
+      const [y,m,d] = selDate.split('-').map(Number)
+      const go = (days: number) => {
+        const nd = new Date(y, m-1, d+days)
+        const ns = `${nd.getFullYear()}-${String(nd.getMonth()+1).padStart(2,'0')}-${String(nd.getDate()).padStart(2,'0')}`
+        selectDate(ns); setViewYear(nd.getFullYear()); setViewMonth(nd.getMonth())
+      }
+      if (e.key==='ArrowRight'){ e.preventDefault(); go(1) }
+      if (e.key==='ArrowLeft') { e.preventDefault(); go(-1) }
+      if (e.key==='ArrowDown') { e.preventDefault(); go(7) }
+      if (e.key==='ArrowUp')   { e.preventDefault(); go(-7) }
+      if (e.key==='Enter')     { e.preventDefault(); handleSave() }
+      if (e.key==='Escape')    { e.preventDefault(); setSelDate(null) }
+    }
+    window.addEventListener('keydown', h)
+    return () => window.removeEventListener('keydown', h)
+  }, [selDate, form])
+
+  const STATUS_FILL: Record<ScheduleStatus, string> = {
+    free:'rgba(52,211,153,0.08)', limited:'rgba(245,158,11,0.09)', busy:'rgba(239,68,68,0.09)', booked:'rgba(168,85,247,0.09)',
+  }
 
   return (
-    <div className="space-y-5 w-full">
+    <div className="space-y-4 w-full">
       {/* Header */}
-      <div>
-        <h2 className="font-serif text-xl sm:text-2xl text-white mb-0.5">Schedule Manager</h2>
-        <p className="text-xs text-white/35">Set your availability. The chatbot uses this to answer customer booking queries in real time.</p>
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h2 className="font-serif text-xl sm:text-2xl text-white mb-0.5">Schedule Manager</h2>
+          <p className="text-xs text-white/35">Set your availability. The chatbot reads this in real time to answer booking queries.</p>
+        </div>
+        {/* Feature 8 hint */}
+        <div className="flex items-center gap-1.5 text-[9px] text-white/20 border border-white/8 rounded-lg px-2.5 py-1.5 shrink-0">
+          <span>← → ↑ ↓ navigate</span><span className="opacity-40 mx-1">·</span><span>↵ save</span><span className="opacity-40 mx-1">·</span><span>Esc close</span>
+        </div>
       </div>
 
-      {/* Stats + Legend */}
+      {/* Legend + global counts */}
       <div className="flex flex-wrap items-center gap-4">
-        {/* Status legend */}
         <div className="flex flex-wrap gap-3">
-          {(Object.entries(SCHED_STATUS) as [ScheduleStatus, typeof SCHED_STATUS[ScheduleStatus]][]).map(([key, val]) => (
-            <div key={key} className="flex items-center gap-1.5">
-              <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${val.dot}`}/>
-              <span className="text-[10px] text-white/50">{val.label}</span>
+          {(Object.entries(SCHED_STATUS) as [ScheduleStatus, typeof SCHED_STATUS[ScheduleStatus]][]).map(([k,v]) => (
+            <div key={k} className="flex items-center gap-1.5">
+              <div className={`w-2 h-2 rounded-full shrink-0 ${v.dot}`}/>
+              <span className="text-[10px] text-white/45">{v.label}</span>
             </div>
           ))}
         </div>
-        {/* Counts */}
         <div className="ml-auto flex gap-3 shrink-0">
-          {[{label:'Free',v:freeCount,c:'text-emerald-400'},{label:'Busy',v:busyCount,c:'text-red-400'},{label:'Booked',v:bookedCount,c:'text-purple-400'}].map(({label,v,c}) => (
-            <div key={label} className="text-center">
+          {[{l:'Free',v:Object.values(schedule).filter(e=>e.status==='free').length,c:'text-emerald-400'},
+            {l:'Busy',v:Object.values(schedule).filter(e=>e.status==='busy').length,c:'text-red-400'},
+            {l:'Booked',v:Object.values(schedule).filter(e=>e.status==='booked'||e.status==='limited').length,c:'text-purple-400'}
+          ].map(({l,v,c}) => (
+            <div key={l} className="text-center">
               <p className={`text-sm font-bold ${c}`}>{v}</p>
-              <p className="text-[9px] text-white/25">{label}</p>
+              <p className="text-[9px] text-white/20">{l}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Calendar + Panel grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,540px)_380px] gap-4 items-start">
+      {/* Calendar + Panel */}
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,560px)_380px] gap-4 items-start">
 
         {/* ── Calendar ── */}
         <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5" style={{ background:'rgba(10,35,24,0.8)' }}>
-          {/* Month nav */}
-          <div className="flex items-center justify-between mb-4">
-            <button onClick={prevMonth}
-              className="w-8 h-8 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-[#C9A84C]/30 transition-all cursor-pointer">
-              <ChevronLeft className="w-4 h-4"/>
-            </button>
-            <div className="text-center">
+
+          {/* Month nav + Feature 1: Today button */}
+          <div className="flex items-center justify-between mb-3">
+            <button onClick={prevMonth} className="w-8 h-8 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-[#C9A84C]/30 transition-all cursor-pointer"><ChevronLeft className="w-4 h-4"/></button>
+            <div className="flex flex-col items-center gap-0.5">
               <p className="text-sm font-serif text-white">{CAL_MONTHS[viewMonth]}</p>
-              <p className="text-[10px] text-white/30">{viewYear}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-[10px] text-white/30">{viewYear}</p>
+                {(viewYear!==today.getFullYear()||viewMonth!==today.getMonth()) && (
+                  <button onClick={goToday} className="text-[8px] font-bold text-[#C9A84C]/60 hover:text-[#C9A84C] border border-[#C9A84C]/20 hover:border-[#C9A84C]/50 rounded px-1.5 py-0.5 transition-all cursor-pointer">Today</button>
+                )}
+              </div>
             </div>
-            <button onClick={nextMonth}
-              className="w-8 h-8 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-[#C9A84C]/30 transition-all cursor-pointer">
-              <ChevronRight className="w-4 h-4"/>
-            </button>
+            <button onClick={nextMonth} className="w-8 h-8 flex items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-[#C9A84C]/30 transition-all cursor-pointer"><ChevronRight className="w-4 h-4"/></button>
           </div>
 
-          {/* Day headers */}
-          <div className="grid grid-cols-7 mb-1">
-            {CAL_DAYS.map(d => (
-              <div key={d} className="text-center text-[9px] font-bold text-white/25 tracking-[0.08em] py-1">{d}</div>
+          {/* Feature 4: Copy to next month */}
+          <button onClick={copyToNext} className="w-full flex items-center justify-center gap-1.5 mb-3 py-1.5 rounded-lg border border-[#C9A84C]/12 text-[9px] font-bold text-[#C9A84C]/40 hover:text-[#C9A84C]/80 hover:border-[#C9A84C]/35 transition-all cursor-pointer">
+            <Copy className="w-3 h-3"/> Copy this month's schedule → {CAL_MONTHS[viewMonth===11?0:viewMonth+1].slice(0,3)}
+          </button>
+
+          {/* Day headers — Feature 12: weekend shading */}
+          <div className="grid grid-cols-[20px_repeat(7,1fr)] mb-1">
+            <div/>
+            {CAL_DAYS.map((d,i) => (
+              <div key={d} className="text-center text-[9px] font-bold tracking-wider py-1 rounded-t"
+                style={{ color:(i===0||i===6)?'rgba(232,201,107,0.55)':'rgba(255,255,255,0.22)', background:(i===0||i===6)?'rgba(201,168,76,0.035)':'transparent' }}>
+                {d}
+              </div>
             ))}
           </div>
 
-          {/* Date grid — fixed cell height so calendar never blows up */}
-          <div className="grid grid-cols-7 gap-1">
-            {Array.from({ length: firstDay }).map((_, i) => <div key={`pad${i}`} className="h-10"/>)}
-            {Array.from({ length: daysInMonth }).map((_, i) => {
-              const d       = i + 1
-              const dateStr = fmtDate(viewYear, viewMonth, d)
-              const entry   = schedule[dateStr]
-              const isToday = dateStr === todayStr
-              const isSel   = selDate === dateStr
-              const isPast  = new Date(viewYear, viewMonth, d) < new Date(today.getFullYear(), today.getMonth(), today.getDate())
+          {/* Feature 14: Prev month ghost row */}
+          {firstDay > 0 && (
+            <div className="grid grid-cols-[20px_repeat(7,1fr)] gap-0.5 mb-0.5">
+              <div className="text-[7px] text-white/10 flex items-center justify-center">·</div>
+              {Array.from({length:firstDay}).map((_,i)=>(
+                <div key={i} className="h-8 flex items-center justify-center text-[10px] rounded-lg" style={{color:'rgba(255,255,255,0.1)'}}>{prevDim-firstDay+1+i}</div>
+              ))}
+              {Array.from({length:7-firstDay}).map((_,i)=><div key={i}/>)}
+            </div>
+          )}
+
+          {/* Main grid — Features 2, 3, 12, 13 */}
+          <div className="relative space-y-0.5">
+            {/* Feature 2: Hover tooltip */}
+            {hovered && schedule[hovered] && (() => {
+              const e = schedule[hovered]
               return (
-                <button key={d} onClick={() => selectDate(dateStr)}
-                  className={`relative h-10 w-full flex flex-col items-center justify-center rounded-lg text-[11px] font-bold transition-all cursor-pointer border
-                    ${isSel ? 'bg-[#C9A84C] border-[#C9A84C] text-[#04140E] ' + (entry ? SCHED_STATUS[entry.status].glow : '') :
-                      isToday ? 'border-[#C9A84C]/40 text-[#E8C96B] bg-[#C9A84C]/10' :
-                      isPast ? 'border-transparent text-white/20 hover:text-white/40' :
-                      entry ? 'border-white/10 text-white/80 hover:border-[#C9A84C]/30 hover:bg-white/[0.04]' :
-                      'border-transparent text-white/50 hover:text-white/80 hover:bg-white/[0.03]'}`}>
-                  <span className="leading-none text-xs">{d}</span>
-                  {entry && !isSel && (
-                    <div className={`w-1 h-1 rounded-full mt-0.5 ${SCHED_STATUS[entry.status].dot}`}/>
-                  )}
-                  {entry && isSel && (
-                    <div className="w-1 h-1 rounded-full mt-0.5 bg-[#04140E]/50"/>
-                  )}
-                </button>
+                <div className="absolute z-20 left-6 top-0 pointer-events-none" style={{ background:'rgba(5,20,12,0.97)', border:'1px solid rgba(201,168,76,0.25)', borderRadius:'10px', padding:'8px 12px', minWidth:'170px', boxShadow:'0 8px 24px rgba(0,0,0,0.6)' }}>
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <div className={`w-2 h-2 rounded-full ${SCHED_STATUS[e.status].dot}`}/>
+                    <p className="text-[10px] font-bold text-white">{SCHED_STATUS[e.status].label}</p>
+                  </div>
+                  {e.amStatus && <p className="text-[8px] text-white/35">🌅 AM: {SCHED_STATUS[e.amStatus].label}</p>}
+                  {e.pmStatus && <p className="text-[8px] text-white/35">🌆 PM: {SCHED_STATUS[e.pmStatus].label}</p>}
+                  {e.note && <p className="text-[9px] text-white/40 mt-1 leading-relaxed">{e.note}</p>}
+                  {e.services?.length ? <p className="text-[8px] text-emerald-400/50 mt-0.5">{e.services.join(' · ')}</p> : null}
+                </div>
               )
-            })}
+            })()}
+
+            {weeks.map((wkDays, wi) => (
+              <div key={wi} className="grid grid-cols-[20px_repeat(7,1fr)] gap-0.5">
+                {/* Feature 3: Week label / bulk-mark */}
+                <button onClick={()=>bulkMarkWeek(wkDays)} title={`Mark all ${wkDays.filter(Boolean).length} days as ${SCHED_STATUS[form.status].label}`}
+                  className="h-9 text-[7px] font-bold text-white/12 hover:text-[#C9A84C]/50 hover:bg-[#C9A84C]/5 rounded transition-all cursor-pointer flex items-center justify-center">
+                  {wi+1}
+                </button>
+                {wkDays.map((d, di) => {
+                  if (!d) return <div key={`e${di}`} className="h-9 rounded-lg" style={{background:(di===0||di===6)?'rgba(201,168,76,0.02)':'transparent'}}/>
+                  const dateStr  = fmt(viewYear, viewMonth, d)
+                  const entry    = schedule[dateStr]
+                  const isToday  = dateStr === todayStr
+                  const isSel    = selDate === dateStr
+                  const isPast   = new Date(viewYear,viewMonth,d) < new Date(today.getFullYear(),today.getMonth(),today.getDate())
+                  const isWeekend= di===0||di===6
+                  return (
+                    <button key={d}
+                      onClick={()=>selectDate(dateStr)}
+                      onMouseEnter={()=>entry?setHovered(dateStr):undefined}
+                      onMouseLeave={()=>setHovered(null)}
+                      className={`relative h-9 w-full flex flex-col items-center justify-center rounded-lg text-[11px] font-bold transition-all cursor-pointer border
+                        ${isSel ? 'border-[#C9A84C] text-[#04140E]'+(entry?' '+SCHED_STATUS[entry.status].glow:'')
+                          : isToday  ? 'border-[#C9A84C]/40 text-[#E8C96B]'
+                          : isPast   ? 'border-transparent text-white/18 hover:text-white/35'
+                          : entry    ? 'border-white/8 text-white/80 hover:border-[#C9A84C]/30'
+                          : isWeekend? 'border-transparent text-white/30 hover:text-white/55'
+                          : 'border-transparent text-white/45 hover:text-white/75'}`}
+                      style={{ background: isSel?'#C9A84C' : isToday?'rgba(201,168,76,0.1)' : isWeekend?'rgba(201,168,76,0.025)' : entry?STATUS_FILL[entry.status]:'' }}
+                    >
+                      <span className="text-xs leading-none">{d}</span>
+                      {entry && !isSel && <div className={`w-1 h-1 rounded-full mt-0.5 ${SCHED_STATUS[entry.status].dot}`}/>}
+                      {entry && isSel  && <div className="w-1 h-1 rounded-full mt-0.5 bg-[#04140E]/50"/>}
+                    </button>
+                  )
+                })}
+              </div>
+            ))}
           </div>
 
-          {/* Chatbot info banner */}
-          <div className="mt-4 flex items-start gap-2.5 p-3 rounded-xl border border-[#C9A84C]/10" style={{ background:'rgba(201,168,76,0.04)' }}>
+          {/* Feature 14: Next month ghost row */}
+          {daysAfter > 0 && (
+            <div className="grid grid-cols-[20px_repeat(7,1fr)] gap-0.5 mt-0.5">
+              <div className="text-[7px] text-white/10 flex items-center justify-center">·</div>
+              {Array.from({length:7-daysAfter}).map((_,i)=><div key={i}/>)}
+              {Array.from({length:daysAfter}).map((_,i)=>(
+                <div key={i} className="h-8 flex items-center justify-center text-[10px] rounded-lg" style={{color:'rgba(255,255,255,0.1)'}}>{i+1}</div>
+              ))}
+            </div>
+          )}
+
+          {/* Feature 6: Monthly summary bar */}
+          {mEntries.length > 0 && (
+            <div className="mt-3 flex flex-wrap items-center gap-2.5 px-3 py-2 rounded-xl border border-white/5" style={{background:'rgba(255,255,255,0.02)'}}>
+              <p className="text-[8px] text-white/20 font-bold uppercase tracking-widest">{CAL_MONTHS[viewMonth].slice(0,3)} Summary</p>
+              {([['Free',mFree,'#34D399'],['Limited',mLimited,'#FBBF24'],['Busy',mBusy,'#F87171'],['Booked',mBooked,'#C084FC']] as [string,number,string][]).filter(([,v])=>v>0).map(([l,v,c])=>(
+                <div key={l} className="flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{background:c}}/>
+                  <span className="text-[9px]" style={{color:c+'99'}}>{v} {l}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Chatbot info */}
+          <div className="mt-3 flex items-start gap-2.5 p-3 rounded-xl border border-[#C9A84C]/10" style={{background:'rgba(201,168,76,0.04)'}}>
             <Bot className="w-3.5 h-3.5 text-[#C9A84C] shrink-0 mt-0.5"/>
-            <p className="text-[10px] text-white/35 leading-relaxed">
-              The chatbot on your website checks this schedule in real time. When customers ask "Are you free on [date]?", it reads your entries here and replies instantly.
-            </p>
+            <p className="text-[10px] text-white/30 leading-relaxed">Chatbot reads this live. Customers can ask "Are you free on [date]?", "What's available this week?", or "Free for face painting on Saturday?" and get instant answers.</p>
           </div>
         </div>
 
         {/* ── Day Panel ── */}
         {selDate ? (
-          <div className="rounded-2xl border border-[#C9A84C]/15 p-4 sm:p-5 space-y-4 sticky top-20" style={{ background:'rgba(10,35,24,0.95)' }}>
-            {/* Date header */}
+          <div className="rounded-2xl border border-[#C9A84C]/15 p-4 sm:p-5 space-y-4 sticky top-20" style={{background:'rgba(10,35,24,0.95)'}}>
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-[9px] tracking-[0.2em] text-[#C9A84C]/50 uppercase font-bold mb-0.5">Selected Date</p>
                 <p className="text-sm font-bold text-white leading-snug">{selDisplay}</p>
-                {selEntry && (
-                  <span className={`inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full border mt-1 ${SCHED_STATUS[selEntry.status].pill}`}>
-                    {SCHED_STATUS[selEntry.status].label}
-                  </span>
-                )}
+                {selEntry && <span className={`inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full border mt-1 ${SCHED_STATUS[selEntry.status].pill}`}>{SCHED_STATUS[selEntry.status].label}</span>}
               </div>
-              <button onClick={() => setSelDate(null)} className="shrink-0 p-1.5 rounded-lg text-white/25 hover:text-white cursor-pointer">
-                <X className="w-4 h-4"/>
-              </button>
+              <button onClick={()=>setSelDate(null)} className="shrink-0 p-1.5 rounded-lg text-white/25 hover:text-white cursor-pointer"><X className="w-4 h-4"/></button>
             </div>
 
-            {/* Status picker */}
+            {/* Overall status */}
             <div>
-              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold mb-2">Set Status</label>
+              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold mb-2">Overall Status</label>
               <div className="grid grid-cols-2 gap-1.5">
-                {(Object.entries(SCHED_STATUS) as [ScheduleStatus, typeof SCHED_STATUS[ScheduleStatus]][]).map(([key, val]) => (
-                  <button key={key} type="button" onClick={() => setForm(f => ({ ...f, status: key }))}
-                    className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[10px] font-bold transition-all cursor-pointer ${form.status === key ? val.pill + ' ' + val.glow : 'border-white/8 text-white/30 hover:text-white/60 hover:border-white/15'}`}>
-                    <div className={`w-2 h-2 rounded-full shrink-0 ${val.dot} ${form.status !== key ? 'opacity-40' : ''}`}/>
-                    <span className="truncate">{val.label}</span>
+                {(Object.entries(SCHED_STATUS) as [ScheduleStatus, typeof SCHED_STATUS[ScheduleStatus]][]).map(([k,v]) => (
+                  <button key={k} type="button" onClick={()=>setForm(f=>({...f,status:k}))}
+                    className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[10px] font-bold transition-all cursor-pointer ${form.status===k ? v.pill+' '+v.glow : 'border-white/8 text-white/30 hover:text-white/60 hover:border-white/15'}`}>
+                    <div className={`w-2 h-2 rounded-full shrink-0 ${v.dot} ${form.status!==k?'opacity-40':''}`}/>
+                    <span className="truncate">{v.label}</span>
                   </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Feature 7: AM / PM time slots */}
+            <div>
+              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold mb-2">Time Slots</label>
+              <div className="grid grid-cols-2 gap-2">
+                {(['amStatus','pmStatus'] as const).map((field,fi) => (
+                  <div key={field}>
+                    <p className="text-[9px] text-white/25 font-bold mb-1">{fi===0?'🌅 Morning':'🌆 Afternoon'}</p>
+                    <select value={form[field]} onChange={e=>setForm(f=>({...f,[field]:e.target.value as ScheduleStatus|''}))}
+                      className="w-full rounded-lg px-2 py-2 text-[10px] text-white/65 focus:outline-none cursor-pointer"
+                      style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(201,168,76,0.15)'}}>
+                      <option value="">— Same as overall</option>
+                      {(Object.entries(SCHED_STATUS) as [ScheduleStatus, typeof SCHED_STATUS[ScheduleStatus]][]).map(([k,v])=>(
+                        <option key={k} value={k}>{v.label}</option>
+                      ))}
+                    </select>
+                  </div>
                 ))}
               </div>
             </div>
 
             {/* Note */}
             <div>
-              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold mb-1.5">
-                Notes <span className="text-white/20 normal-case tracking-normal font-normal">(optional — shown in chatbot)</span>
-              </label>
-              <textarea
-                value={form.note}
-                onChange={e => setForm(f => ({ ...f, note: e.target.value }))}
-                rows={3}
-                placeholder="e.g. Birthday party booking (10am–4pm) · Still open for jewellery orders"
-                className="w-full bg-white/5 border border-[#C9A84C]/15 rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/20 focus:outline-none focus:border-[#C9A84C]/50 resize-none transition-colors"
-              />
+              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold mb-1.5">Notes <span className="text-white/20 normal-case tracking-normal font-normal">(shown in chatbot)</span></label>
+              <textarea value={form.note} onChange={e=>setForm(f=>({...f,note:e.target.value}))} rows={2}
+                placeholder="e.g. Birthday party 10am–4pm · Jewellery orders still OK"
+                className="w-full bg-white/5 border border-[#C9A84C]/15 rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/20 focus:outline-none focus:border-[#C9A84C]/50 resize-none transition-colors"/>
             </div>
 
             {/* Services */}
             <div>
-              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold mb-2">Services Available</label>
-              <div className="space-y-2">
+              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold mb-1.5">Services Available</label>
+              <div className="space-y-1.5">
                 {CN_SERVICES.map(s => (
-                  <button key={s} type="button" onClick={() => toggleService(s)}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border text-sm transition-all cursor-pointer text-left ${form.services.includes(s) ? 'border-emerald-600/30 bg-emerald-600/8 text-white/80' : 'border-white/8 text-white/30 hover:border-white/15'}`}>
-                    <div className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-all ${form.services.includes(s) ? 'bg-emerald-500 border-emerald-500' : 'border-white/20'}`}>
+                  <button key={s} type="button" onClick={()=>toggleService(s)}
+                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl border text-sm transition-all cursor-pointer text-left ${form.services.includes(s)?'border-emerald-600/30 bg-emerald-600/8 text-white/80':'border-white/8 text-white/30 hover:border-white/15'}`}>
+                    <div className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${form.services.includes(s)?'bg-emerald-500 border-emerald-500':'border-white/20'}`}>
                       {form.services.includes(s) && <CheckCircle2 className="w-3 h-3 text-white"/>}
                     </div>
                     <span className="font-medium text-[11px]">{s}</span>
@@ -1202,19 +1356,16 @@ function ScheduleTab({ data, show, onRefresh }: { data: AdminData; show: (msg:st
               </div>
             </div>
 
-            {/* Action buttons */}
+            {/* Actions */}
             <div className="flex gap-2 pt-1">
-              <button onClick={handleSave}
-                className="flex-1 flex items-center justify-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.18em] uppercase py-3 rounded-full transition-all hover:scale-[1.02] cursor-pointer shadow-[0_4px_16px_rgba(201,168,76,0.3)]">
-                <CheckCircle2 className="w-4 h-4"/> Save Schedule
+              <button onClick={handleSave} className="flex-1 flex items-center justify-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.18em] uppercase py-3 rounded-full transition-all hover:scale-[1.02] cursor-pointer shadow-[0_4px_16px_rgba(201,168,76,0.3)]">
+                <CheckCircle2 className="w-4 h-4"/> Save (↵)
               </button>
               {selEntry && (
-                <button onClick={handleClear}
-                  className="px-5 py-3 rounded-full border border-red-500/25 text-red-400/70 hover:text-red-400 hover:border-red-500/50 text-[10px] font-bold tracking-[0.18em] uppercase transition-all cursor-pointer shrink-0">
-                  Clear
-                </button>
+                <button onClick={handleClear} className="px-5 py-3 rounded-full border border-red-500/25 text-red-400/70 hover:text-red-400 hover:border-red-500/50 text-[10px] font-bold tracking-[0.18em] uppercase transition-all cursor-pointer shrink-0">Clear</button>
               )}
             </div>
+            <p className="text-[8px] text-white/12 text-center">←→↑↓ navigate dates · Esc to close</p>
           </div>
         ) : (
           <div className="rounded-2xl border-2 border-dashed border-[#C9A84C]/12 flex flex-col items-center justify-center gap-3 p-10 text-center">
@@ -1224,6 +1375,32 @@ function ScheduleTab({ data, show, onRefresh }: { data: AdminData; show: (msg:st
           </div>
         )}
       </div>
+
+      {/* Feature 5: Upcoming bookings panel */}
+      {upcoming.length > 0 && (
+        <div className="rounded-2xl border border-[#C9A84C]/10 p-4" style={{background:'rgba(10,35,24,0.7)'}}>
+          <p className="text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-3">📋 Upcoming Busy / Booked Dates</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+            {upcoming.map(e => {
+              const [y,m,d] = e.date.split('-').map(Number)
+              const disp = new Date(y,m-1,d).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})
+              const s = SCHED_STATUS[e.status]
+              return (
+                <button key={e.date} onClick={()=>{selectDate(e.date);setViewYear(y);setViewMonth(m-1)}}
+                  className="flex items-start gap-2 p-2.5 rounded-xl border transition-all hover:border-[#C9A84C]/25 cursor-pointer text-left"
+                  style={{background:'rgba(255,255,255,0.02)',borderColor:'rgba(255,255,255,0.06)'}}>
+                  <div className={`w-2 h-2 rounded-full mt-1 shrink-0 ${s.dot}`}/>
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-bold text-white/65">{disp}</p>
+                    <p className="text-[8px] font-bold text-white/30">{s.label}</p>
+                    {e.note && <p className="text-[8px] text-white/20 truncate mt-0.5">{e.note}</p>}
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
