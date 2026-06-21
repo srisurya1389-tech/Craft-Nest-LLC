@@ -369,7 +369,7 @@ function LoginScreen({ onLogin }: { onLogin: (name: string) => void }) {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4"
-      style={{ background:'radial-gradient(ellipse at 30% 40%,#1A1A2E 0%,#0A0A14 60%,#060610 100%)' }}>
+      style={{ background:'radial-gradient(ellipse at 30% 40%,#201860 0%,#0E0E2C 55%,#08081A 100%)' }}>
       <div className={`relative w-full max-w-[380px] rounded-3xl border border-[#C9A84C]/15 shadow-2xl ${shaking ? 'animate-[shake_0.4s_ease]' : ''}`}
         style={{ background:'linear-gradient(160deg,#061A0F 0%,#091E13 50%,#0A2318 100%)' }}>
         <div className="p-8 sm:p-10">
@@ -419,7 +419,7 @@ function LoginScreen({ onLogin }: { onLogin: (name: string) => void }) {
 
 function StatCard({ icon: Icon, label, value, sub, color }: { icon: React.ElementType; label: string; value: number; sub?: string; color: string }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 hover:border-[#C9A84C]/25 transition-all" style={{ background:'rgba(20,20,28,0.88)' }}>
+    <div className="relative overflow-hidden rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 hover:border-[#C9A84C]/25 transition-all" style={{ background:'rgba(18,18,50,0.92)' }}>
       <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full opacity-5" style={{ background:`radial-gradient(circle,${color},transparent)` }}/>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -463,7 +463,7 @@ function Dashboard({ data, onNavigate, role }: { data: AdminData; onNavigate: (t
           { label:'Live / Visible', value:visible,  color:'#5DBEA3' },
           { label:'Featured',       value:featured, color:'#E8C96B' },
         ].map(({ label, value, color }) => (
-          <div key={label} className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5" style={{ background:'rgba(20,20,28,0.88)' }}>
+          <div key={label} className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5" style={{ background:'rgba(18,18,50,0.92)' }}>
             <p className="text-[9px] tracking-[0.18em] uppercase font-bold mb-1 truncate" style={{ color }}>{label}</p>
             <p className="text-2xl sm:text-3xl font-serif text-white">{value}</p>
           </div>
@@ -590,7 +590,7 @@ function ProductsTab({ category, data, role, onAdd, onEdit, onDelete, onToggleV,
                 onDragEnd={() => setDragId(null)}
                 onDragOver={e => handleDragOver(e, product.id)}
                 className={`group relative flex flex-col rounded-2xl border overflow-hidden transition-all ${!product.visible ? 'opacity-50' : ''} ${dragId===product.id ? 'opacity-30 scale-95' : ''} border-[#C9A84C]/10 hover:border-[#C9A84C]/30`}
-                style={{ background:'rgba(20,20,28,0.88)' }}
+                style={{ background:'rgba(18,18,50,0.92)' }}
               >
                 {/* Drag handle */}
                 <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing">
@@ -724,7 +724,7 @@ function HeroTab({ data, onAdd, onRemove, onReorder }: { data: AdminData; onAdd:
         <p className="text-xs text-white/35">{data.heroImages.length} images · Drag to reorder</p>
       </div>
 
-      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 space-y-3" style={{ background:'rgba(20,20,28,0.88)' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 space-y-3" style={{ background:'rgba(18,18,50,0.92)' }}>
         <label className="block text-[10px] tracking-[0.2em] text-[#C9A84C]/60 uppercase font-bold">Add Image</label>
         <div className="flex flex-col sm:flex-row gap-2">
           <input type="url" value={newUrl} onChange={e => setNewUrl(e.target.value)} placeholder="Paste Cloudinary URL…"
@@ -852,7 +852,7 @@ function MediaTab({ onGoSettings }: { onGoSettings: () => void }) {
         onDrop={onDrop}
         onClick={() => fileRef.current?.click()}
         className={`relative flex flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed transition-all duration-200 cursor-pointer min-h-[180px] sm:min-h-[220px] ${dragging ? 'border-[#C9A84C] bg-[#C9A84C]/8 scale-[1.01]' : 'border-[#C9A84C]/20 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5'}`}
-        style={{ background: dragging ? 'rgba(201,168,76,0.06)' : 'rgba(14,14,20,0.62)' }}
+        style={{ background: dragging ? 'rgba(201,168,76,0.06)' : 'rgba(13,13,38,0.64)' }}
       >
         <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border transition-all ${dragging ? 'border-[#C9A84C]/60 bg-[#C9A84C]/15' : 'border-[#C9A84C]/20 bg-[#C9A84C]/5'}`}>
           {dragging
@@ -889,7 +889,7 @@ function MediaTab({ onGoSettings }: { onGoSettings: () => void }) {
         <div className="space-y-2">
           {items.map((item, idx) => (
             <div key={idx} className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${item.status==='done' ? 'border-emerald-600/20 bg-emerald-950/20' : item.status==='error' ? 'border-red-500/20 bg-red-950/20' : 'border-[#C9A84C]/10'}`}
-              style={item.status!=='done' && item.status!=='error' ? { background:'rgba(20,20,28,0.88)' } : {}}>
+              style={item.status!=='done' && item.status!=='error' ? { background:'rgba(18,18,50,0.92)' } : {}}>
               {/* Preview */}
               <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-white/10">
                 <img src={item.previewUrl} alt="" className="w-full h-full object-cover"/>
@@ -950,7 +950,7 @@ function MediaTab({ onGoSettings }: { onGoSettings: () => void }) {
       )}
 
       {items.length === 0 && (
-        <div className="rounded-2xl border border-[#C9A84C]/8 p-4" style={{ background:'rgba(14,14,20,0.52)' }}>
+        <div className="rounded-2xl border border-[#C9A84C]/8 p-4" style={{ background:'rgba(13,13,38,0.55)' }}>
           <p className="text-[10px] tracking-[0.2em] text-[#C9A84C]/40 uppercase font-bold mb-3">How it works</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
@@ -1154,7 +1154,7 @@ function ScheduleTab({ data, show, onRefresh }: { data: AdminData; show: (msg:st
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,560px)_380px] gap-4 items-start">
 
         {/* ── Calendar ── */}
-        <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5" style={{ background:'rgba(20,20,28,0.88)' }}>
+        <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5" style={{ background:'rgba(18,18,50,0.92)' }}>
 
           {/* Month nav + Feature 1: Today button */}
           <div className="flex items-center justify-between mb-3">
@@ -1289,7 +1289,7 @@ function ScheduleTab({ data, show, onRefresh }: { data: AdminData; show: (msg:st
 
         {/* ── Day Panel ── */}
         {selDate ? (
-          <div className="rounded-2xl border border-[#C9A84C]/15 p-4 sm:p-5 space-y-4 sticky top-20" style={{background:'rgba(14,14,20,0.97)'}}>
+          <div className="rounded-2xl border border-[#C9A84C]/15 p-4 sm:p-5 space-y-4 sticky top-20" style={{background:'rgba(13,13,38,0.98)'}}>
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-[9px] tracking-[0.2em] text-[#C9A84C]/50 uppercase font-bold mb-0.5">Selected Date</p>
@@ -1379,7 +1379,7 @@ function ScheduleTab({ data, show, onRefresh }: { data: AdminData; show: (msg:st
 
       {/* Feature 5: Upcoming bookings panel */}
       {upcoming.length > 0 && (
-        <div className="rounded-2xl border border-[#C9A84C]/10 p-4" style={{background:'rgba(14,14,20,0.72)'}}>
+        <div className="rounded-2xl border border-[#C9A84C]/10 p-4" style={{background:'rgba(13,13,38,0.75)'}}>
           <p className="text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-3">📋 Upcoming Busy / Booked Dates</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
             {upcoming.map(e => {
@@ -1424,7 +1424,7 @@ function SettingsTab({ data, show }: { data: AdminData; show: (msg:string, t?: '
       </div>
 
       {/* Announcement Banner */}
-      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(20,20,28,0.88)' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(18,18,50,0.92)' }}>
         <div className="flex items-center gap-3">
           <Megaphone className="w-4 h-4 text-amber-400 shrink-0"/>
           <span className="text-sm font-bold text-white flex-1 min-w-0">Announcement Banner</span>
@@ -1446,7 +1446,7 @@ function SettingsTab({ data, show }: { data: AdminData; show: (msg:string, t?: '
       </div>
 
       {/* WhatsApp */}
-      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(20,20,28,0.88)' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(18,18,50,0.92)' }}>
         <div className="flex items-center gap-3">
           <MessageCircle className="w-4 h-4 text-[#25D366] shrink-0"/>
           <span className="text-sm font-bold text-white">WhatsApp Number</span>
@@ -1458,7 +1458,7 @@ function SettingsTab({ data, show }: { data: AdminData; show: (msg:string, t?: '
       </div>
 
       {/* Social Links */}
-      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(20,20,28,0.88)' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(18,18,50,0.92)' }}>
         <div className="flex items-center gap-3">
           <Link className="w-4 h-4 text-[#C9A84C] shrink-0"/>
           <span className="text-sm font-bold text-white">Social Links</span>
@@ -1480,7 +1480,7 @@ function SettingsTab({ data, show }: { data: AdminData; show: (msg:string, t?: '
       </div>
 
       {/* Cloudinary */}
-      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(20,20,28,0.88)' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(18,18,50,0.92)' }}>
         <div className="flex items-center gap-3">
           <Upload className="w-4 h-4 text-[#C9A84C] shrink-0"/>
           <span className="text-sm font-bold text-white">Image Upload (Cloudinary)</span>
@@ -1789,7 +1789,7 @@ function GuideSection({ section, expanded, onToggle }: { section: GuideSection; 
   return (
     <div
       className={`rounded-2xl border transition-all duration-200 overflow-hidden ${expanded ? 'border-[#C9A84C]/30' : 'border-white/5 hover:border-white/10'}`}
-      style={{ background: expanded ? 'rgba(14,14,20,0.97)' : 'rgba(14,14,20,0.52)' }}
+      style={{ background: expanded ? 'rgba(13,13,38,0.98)' : 'rgba(13,13,38,0.55)' }}
     >
       {/* Header */}
       <button
@@ -1880,7 +1880,7 @@ function MockSidebar() {
 function MockProductCard({ featured, hidden, badge }: { featured?: boolean; hidden?: boolean; badge?: string }) {
   return (
     <div className={`rounded-xl overflow-hidden border w-32 shrink-0 ${hidden ? 'opacity-40 border-white/10' : 'border-[#C9A84C]/20'}`} style={{ background:'rgba(10,35,24,0.9)' }}>
-      <div className="relative h-16 bg-gradient-to-br from-[#1A1A28] to-[#0D0D18] flex items-center justify-center">
+      <div className="relative h-16 bg-gradient-to-br from-[#1A1A40] to-[#0E0E28] flex items-center justify-center">
         <ImageIcon className="w-5 h-5 text-white/10"/>
         {badge && <span className="absolute top-1 left-1 text-[6px] font-bold px-1.5 py-0.5 rounded-full bg-[#C9A84C] text-[#04140E]">{badge}</span>}
         {featured && <span className="absolute top-1 right-1 text-[7px]">⭐</span>}
@@ -2017,7 +2017,7 @@ function SectionVisual({ id }: { id: string }) {
         </div>
         <div className="grid grid-cols-4 gap-1">
           {(['events','arts','arts','other','events','arts','other','events'] as const).map((cat,i)=>(
-            <div key={i} className="aspect-square rounded-lg bg-gradient-to-br from-[#1A1A28] to-[#0D0D18] flex items-center justify-center relative overflow-hidden border border-[#C9A84C]/10">
+            <div key={i} className="aspect-square rounded-lg bg-gradient-to-br from-[#1A1A40] to-[#0E0E28] flex items-center justify-center relative overflow-hidden border border-[#C9A84C]/10">
               <ImageIcon className="w-2.5 h-2.5 text-white/10"/>
               <span className="absolute bottom-0 left-0 right-0 text-[4px] text-center text-white/25 bg-black/30 capitalize py-0.5">{cat}</span>
             </div>
@@ -2044,7 +2044,7 @@ function SectionVisual({ id }: { id: string }) {
         </div>
         <div className="grid grid-cols-4 gap-1">
           {[1,2,3,4].map(n=>(
-            <div key={n} className={`aspect-square rounded-lg bg-gradient-to-br from-[#1A1A28] to-[#0D0D18] relative flex items-center justify-center border ${n===1?'border-[#C9A84C]/30':'border-white/5'}`}>
+            <div key={n} className={`aspect-square rounded-lg bg-gradient-to-br from-[#1A1A40] to-[#0E0E28] relative flex items-center justify-center border ${n===1?'border-[#C9A84C]/30':'border-white/5'}`}>
               <Home className="w-3 h-3 text-white/10"/>
               <span className="absolute top-0.5 right-0.5 text-[5px] font-bold text-white/30">#{n}</span>
               <GripVertical className="absolute top-0.5 left-0.5 w-2 h-2 text-white/20"/>
@@ -2395,7 +2395,7 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
       </div>
     ),
     showcase: (
-      <div className="border border-white/8 rounded-xl overflow-hidden divide-y divide-white/6" style={{background:'rgba(14,14,20,0.97)'}}>
+      <div className="border border-white/8 rounded-xl overflow-hidden divide-y divide-white/6" style={{background:'rgba(13,13,38,0.98)'}}>
         {PREVIEW_MOCKS.map((m,i) => (
           <div key={m.label} className="flex items-center gap-3 px-3 py-2.5">
             <span className="text-[10px] font-black tabular-nums shrink-0 w-5" style={{color:'rgba(201,168,76,0.55)'}}>0{i+1}</span>
@@ -2444,7 +2444,7 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
     {
       id:'mosaic', label:'Mosaic Grid', badge:'BENTO', desc:'Featured card large + smaller cards. Best for 4+ services.',
       thumb:(
-        <div className="flex gap-1 h-[68px]">
+        <div className="flex gap-1 h-[96px]">
           <MiniServiceCard m={PREVIEW_MOCKS[0]} wide/>
           <div className="flex flex-col gap-1 w-[42%]">
             <MiniServiceCard m={PREVIEW_MOCKS[1]} wide/>
@@ -2456,7 +2456,7 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
     {
       id:'strips', label:'Alternating Strips', badge:'CINEMATIC', desc:'Full-width image rows alternating left/right. Premium look.',
       thumb:(
-        <div className="space-y-1 h-[68px]">
+        <div className="space-y-1 h-[96px]">
           {[0,1,2].map(i => (
             <div key={i} className={`flex gap-1 ${i%2===1?'flex-row-reverse':''}`} style={{height:'20px'}}>
               <div className="w-[55%] rounded-md border border-white/8" style={{background:`linear-gradient(90deg,${PREVIEW_MOCKS[i].c1},${PREVIEW_MOCKS[i].c2})`}}/>
@@ -2472,7 +2472,7 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
     {
       id:'showcase', label:'Showcase List', badge:'ACCORDION', desc:'Numbered rows that expand on click. Clean & minimal.',
       thumb:(
-        <div className="space-y-1 h-[68px] flex flex-col justify-between">
+        <div className="space-y-1 h-[96px] flex flex-col justify-between">
           {[1,2,3,4].map(i => (
             <div key={i} className="flex items-center gap-1.5 pb-1 border-b border-white/6">
               <span className="text-[8px] font-black tabular-nums shrink-0" style={{color:'rgba(201,168,76,0.5)'}}>0{i}</span>
@@ -2487,7 +2487,7 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
     {
       id:'cards', label:'Card Grid', badge:'MODERN', desc:'Equal-size cards in 2-3 columns. Great for any number of services.',
       thumb:(
-        <div className="grid grid-cols-3 gap-1 h-[68px]">
+        <div className="grid grid-cols-3 gap-1 h-[96px]">
           {PREVIEW_MOCKS.slice(0,3).map(m => (
             <div key={m.label} className="rounded-lg overflow-hidden border border-white/8 flex flex-col" style={{background:'rgba(18,18,26,0.95)'}}>
               <div className="flex-[2]" style={{background:`linear-gradient(135deg,${m.c1},${m.c2})`}}/>
@@ -2503,7 +2503,7 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
     {
       id:'carousel', label:'Carousel Scroll', badge:'SWIPE', desc:'Horizontal scrolling cards. Perfect for mobile visitors.',
       thumb:(
-        <div className="flex gap-1 h-[68px] overflow-hidden">
+        <div className="flex gap-1 h-[96px] overflow-hidden">
           {PREVIEW_MOCKS.map((m,i) => (
             <div key={m.label} className={`shrink-0 rounded-lg overflow-hidden border border-white/8 relative ${i===0?'w-[48%]':'w-[38%]'}`} style={{background:`linear-gradient(135deg,${m.c1},${m.c2})`}}>
               {i===0 && <div className="absolute bottom-0 inset-x-0 p-1" style={{background:'rgba(0,0,0,0.6)'}}>
@@ -2532,31 +2532,31 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
 
       {/* ── Template Picker ── */}
       <div>
-        <p className="text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold mb-3">Choose Display Layout</p>
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+        <p className="text-xs tracking-[0.15em] text-[#C9A84C]/70 uppercase font-bold mb-4">Choose Display Layout</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
           {TEMPLATES.map(t => (
             <div key={t.id} className="relative">
               {/* Select card */}
               <button type="button" onClick={() => pickTemplate(t.id)}
-                className="w-full text-left p-3 rounded-2xl border transition-all cursor-pointer"
-                style={{ background: template===t.id ? 'rgba(201,168,76,0.08)' : 'rgba(255,255,255,0.02)', borderColor: template===t.id ? 'rgba(201,168,76,0.45)' : 'rgba(255,255,255,0.07)' }}>
+                className="w-full text-left p-4 rounded-2xl border transition-all duration-200 cursor-pointer hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
+                style={{ background: template===t.id ? 'rgba(201,168,76,0.10)' : 'rgba(255,255,255,0.035)', borderColor: template===t.id ? 'rgba(201,168,76,0.50)' : 'rgba(255,255,255,0.10)' }}>
                 {/* Thumbnail */}
-                <div className="mb-2.5">{t.thumb}</div>
+                <div className="mb-3">{t.thumb}</div>
                 {/* Label row */}
-                <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
-                  <p className="text-[10px] font-bold text-white leading-tight">{t.label}</p>
-                  {template===t.id && <span className="text-[7px] font-bold px-1.5 py-0.5 rounded-full shrink-0" style={{background:'rgba(201,168,76,0.20)',color:'#C9A84C'}}>ACTIVE</span>}
+                <div className="flex items-center gap-2 flex-wrap mb-1.5">
+                  <p className="text-xs font-bold text-white leading-tight">{t.label}</p>
+                  {template===t.id && <span className="text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0" style={{background:'rgba(201,168,76,0.22)',color:'#E8C96B'}}>ACTIVE</span>}
                 </div>
-                <span className="inline-block text-[7px] font-bold tracking-[0.12em] px-1.5 py-0.5 rounded-full border mb-1" style={{borderColor:'rgba(255,255,255,0.10)',color:'rgba(255,255,255,0.35)'}}>
+                <span className="inline-block text-[9px] font-bold tracking-[0.10em] px-2 py-0.5 rounded-full border mb-1.5" style={{borderColor:'rgba(255,255,255,0.14)',color:'rgba(255,255,255,0.45)'}}>
                   {t.badge}
                 </span>
-                <p className="text-[9px] text-white/28 leading-relaxed">{t.desc}</p>
+                <p className="text-[10px] text-white/40 leading-relaxed">{t.desc}</p>
               </button>
               {/* Info (ⓘ) button */}
               <button type="button" onClick={() => setPreviewModal(t.id)}
-                className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center cursor-pointer transition-all hover:scale-110 z-10"
-                style={{background:'rgba(201,168,76,0.12)',border:'1px solid rgba(201,168,76,0.20)',color:'rgba(201,168,76,0.70)'}}>
-                <Info className="w-3 h-3"/>
+                className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full flex items-center justify-center cursor-pointer transition-all hover:scale-110 z-10"
+                style={{background:'rgba(201,168,76,0.16)',border:'1px solid rgba(201,168,76,0.30)',color:'rgba(201,168,76,0.85)'}}>
+                <Info className="w-3.5 h-3.5"/>
               </button>
             </div>
           ))}
@@ -2564,14 +2564,14 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
       </div>
 
       {/* ── Services list + Edit panel ── */}
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-4 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-4 items-start">
         {/* Left: list */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold">{services.length} Service{services.length!==1?'s':''}</p>
+            <p className="text-xs tracking-[0.15em] text-[#C9A84C]/70 uppercase font-bold">{services.length} Service{services.length!==1?'s':''}</p>
             <button onClick={startAdd}
-              className="flex items-center gap-1.5 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.18em] uppercase px-4 py-2 rounded-full transition-all hover:scale-105 cursor-pointer shadow-[0_4px_14px_rgba(201,168,76,0.25)]">
-              <Plus className="w-3.5 h-3.5"/> Add Service
+              className="flex items-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-xs tracking-[0.15em] uppercase px-5 py-2.5 rounded-full transition-all hover:scale-105 cursor-pointer shadow-[0_4px_20px_rgba(201,168,76,0.30)]">
+              <Plus className="w-4 h-4"/> Add Service
             </button>
           </div>
 
@@ -2585,19 +2585,19 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
             <div className="space-y-2">
               {services.map(svc => (
                 <div key={svc.id}
-                  className="flex items-center gap-3 p-3 rounded-2xl border transition-all"
+                  className="flex items-center gap-3 p-4 rounded-2xl border transition-all"
                   style={{ background: selId===svc.id?'rgba(201,168,76,0.06)':'rgba(255,255,255,0.02)', borderColor: selId===svc.id?'rgba(201,168,76,0.25)':'rgba(255,255,255,0.06)', opacity: svc.visible?1:0.50 }}>
                   {/* Thumbnail */}
-                  <div className="w-12 h-12 rounded-xl shrink-0 overflow-hidden border border-white/8 flex items-center justify-center text-xl" style={{background:'rgba(255,255,255,0.04)'}}>
+                  <div className="w-14 h-14 rounded-xl shrink-0 overflow-hidden border border-white/8 flex items-center justify-center text-2xl" style={{background:'rgba(255,255,255,0.04)'}}>
                     {svc.img ? <img src={svc.img} alt={svc.name} className="w-full h-full object-cover"/> : <span>{svc.emoji}</span>}
                   </div>
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <p className="text-sm font-bold text-white truncate">{svc.name || 'Untitled'}</p>
+                      <p className="text-base font-bold text-white truncate">{svc.name || 'Untitled'}</p>
                       {svc.price && <span className="text-[9px] font-bold shrink-0 px-1.5 py-0.5 rounded-full" style={{background:'rgba(201,168,76,0.10)',color:'rgba(201,168,76,0.80)'}}>{svc.price}</span>}
                     </div>
-                    <p className="text-[10px] text-white/30 truncate">{svc.description || 'No description'}</p>
+                    <p className="text-xs text-white/38 truncate">{svc.description || 'No description'}</p>
                   </div>
                   {/* Actions — aligned right, equal size buttons */}
                   <div className="flex items-center gap-1 shrink-0">
@@ -2623,9 +2623,9 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
 
         {/* Right: edit / empty state */}
         {selId ? (
-          <div className="rounded-2xl border p-5 space-y-4 xl:sticky xl:top-20" style={{background:'rgba(14,14,20,0.97)', borderColor:'rgba(201,168,76,0.15)'}}>
+          <div className="rounded-2xl border p-5 space-y-4 xl:sticky xl:top-20" style={{background:'rgba(13,13,38,0.98)', borderColor:'rgba(201,168,76,0.15)'}}>
             <div className="flex items-center justify-between">
-              <p className="text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold">{isNew ? 'New Service' : 'Edit Service'}</p>
+              <p className="text-xs tracking-[0.15em] text-[#C9A84C]/70 uppercase font-bold">{isNew ? 'New Service' : 'Edit Service'}</p>
               <button onClick={() => setSelId(null)} className="w-8 h-8 rounded-lg flex items-center justify-center text-white/30 hover:text-white cursor-pointer transition-colors">
                 <X className="w-4 h-4"/>
               </button>
@@ -2634,13 +2634,13 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
             {/* Name + Emoji */}
             <div className="grid grid-cols-[1fr_76px] gap-2 items-end">
               <div>
-                <label className="block text-[10px] tracking-[0.15em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Service Name *</label>
+                <label className="block text-xs tracking-[0.12em] text-[#C9A84C]/65 uppercase font-bold mb-2">Service Name *</label>
                 <input value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))}
                   placeholder="e.g. Balloon Art" className={inputCls} style={inputSt}
                   onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
               </div>
               <div>
-                <label className="block text-[10px] tracking-[0.15em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Emoji</label>
+                <label className="block text-xs tracking-[0.12em] text-[#C9A84C]/65 uppercase font-bold mb-2">Emoji</label>
                 <input value={form.emoji} onChange={e=>setForm(f=>({...f,emoji:e.target.value}))}
                   maxLength={4} className="w-full rounded-xl px-2 py-2.5 text-white/90 text-center text-xl focus:outline-none transition-colors" style={inputSt}
                   onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
@@ -2649,7 +2649,7 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
 
             {/* Price */}
             <div>
-              <label className="block text-[10px] tracking-[0.15em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">
+              <label className="block text-xs tracking-[0.12em] text-[#C9A84C]/65 uppercase font-bold mb-2">
                 Starting Price <span className="text-white/20 normal-case tracking-normal font-normal text-[10px]">(e.g. From ₹500)</span>
               </label>
               <input value={form.price} onChange={e=>setForm(f=>({...f,price:e.target.value}))}
@@ -2659,7 +2659,7 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
 
             {/* Description */}
             <div>
-              <label className="block text-[10px] tracking-[0.15em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Description</label>
+              <label className="block text-xs tracking-[0.12em] text-[#C9A84C]/65 uppercase font-bold mb-2">Description</label>
               <textarea value={form.description} onChange={e=>setForm(f=>({...f,description:e.target.value}))}
                 rows={2} placeholder="Short description shown on your website..."
                 className="w-full rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/20 focus:outline-none resize-none transition-colors" style={inputSt}
@@ -2668,7 +2668,7 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
 
             {/* Photo */}
             <div>
-              <label className="block text-[10px] tracking-[0.15em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">
+              <label className="block text-xs tracking-[0.12em] text-[#C9A84C]/65 uppercase font-bold mb-2">
                 Photo <span className="text-white/20 normal-case tracking-normal font-normal text-[10px]">(optional)</span>
               </label>
               {form.img ? (
@@ -2691,7 +2691,7 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
 
             {/* WhatsApp message */}
             <div>
-              <label className="block text-[10px] tracking-[0.15em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">WhatsApp Enquiry Message</label>
+              <label className="block text-xs tracking-[0.12em] text-[#C9A84C]/65 uppercase font-bold mb-2">WhatsApp Enquiry Message</label>
               <input value={form.whatsappMsg} onChange={e=>setForm(f=>({...f,whatsappMsg:e.target.value}))}
                 placeholder="Hi! I'd like to know about Balloon Art..."
                 className={inputCls} style={inputSt}
@@ -2702,8 +2702,8 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
             <div className="flex items-center justify-between px-3 py-2.5 rounded-xl border"
               style={{background:'rgba(255,255,255,0.025)', borderColor:'rgba(255,255,255,0.07)'}}>
               <div>
-                <p className="text-[11px] font-semibold text-white/65">Visible on website</p>
-                <p className="text-[9px] text-white/28">{form.visible ? 'Shown to visitors' : 'Hidden from visitors'}</p>
+                <p className="text-sm font-semibold text-white/75">Visible on website</p>
+                <p className="text-xs text-white/35">{form.visible ? 'Shown to visitors' : 'Hidden from visitors'}</p>
               </div>
               <button type="button" onClick={()=>setForm(f=>({...f,visible:!f.visible}))}
                 className="relative w-11 h-6 rounded-full transition-all cursor-pointer shrink-0 ml-3"
@@ -2715,7 +2715,7 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
 
             {/* Save */}
             <button onClick={handleSave}
-              className="w-full flex items-center justify-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.18em] uppercase py-3 rounded-full transition-all hover:scale-[1.02] cursor-pointer shadow-[0_4px_16px_rgba(201,168,76,0.28)]">
+              className="w-full flex items-center justify-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-xs tracking-[0.15em] uppercase py-3 rounded-full transition-all hover:scale-[1.02] cursor-pointer shadow-[0_4px_20px_rgba(201,168,76,0.35)]">
               <CheckCircle2 className="w-4 h-4"/> Save Service
             </button>
           </div>
@@ -2756,7 +2756,7 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
               </button>
             </div>
             <div className="h-px" style={{background:'rgba(255,255,255,0.07)'}}/>
-            <p className="text-[9px] tracking-[0.18em] text-[#C9A84C]/50 uppercase font-bold">Layout Preview</p>
+            <p className="text-xs tracking-[0.15em] text-[#C9A84C]/60 uppercase font-bold">Layout Preview</p>
             {/* Big preview */}
             <div className="rounded-2xl overflow-hidden border border-white/8 p-3" style={{background:'rgba(8,8,12,0.95)'}}>
               {BIG_PREVIEWS[previewModal]}
@@ -2764,7 +2764,7 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
             {/* Select button */}
             <div className="flex gap-2">
               <button onClick={() => { pickTemplate(previewModal); setPreviewModal(null) }}
-                className="flex-1 flex items-center justify-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.18em] uppercase py-2.5 rounded-full transition-all cursor-pointer">
+                className="flex-1 flex items-center justify-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-xs tracking-[0.15em] uppercase py-3 rounded-full transition-all cursor-pointer">
                 <CheckCircle2 className="w-3.5 h-3.5"/>
                 {template===previewModal ? 'Already Active' : 'Use This Layout'}
               </button>
@@ -2799,7 +2799,7 @@ function GuideTab({ onGoMedia, onGoSettings }: { onGoMedia: () => void; onGoSett
   return (
     <div className="space-y-5 w-full">
       {/* Header */}
-      <div className="rounded-2xl border border-[#C9A84C]/20 p-5 flex flex-col sm:flex-row items-start gap-4" style={{ background:'linear-gradient(135deg,rgba(14,14,20,0.97),rgba(20,20,28,0.92))' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/20 p-5 flex flex-col sm:flex-row items-start gap-4" style={{ background:'linear-gradient(135deg,rgba(13,13,38,0.98),rgba(20,20,28,0.92))' }}>
         <div className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border border-[#C9A84C]/25" style={{ background:'rgba(201,168,76,0.1)' }}>
           <BookOpen className="w-5 h-5 text-[#C9A84C]"/>
         </div>
@@ -2829,7 +2829,7 @@ function GuideTab({ onGoMedia, onGoSettings }: { onGoMedia: () => void; onGoSett
       </div>
 
       {/* ── Visual Quick-Start Flow ── */}
-      <div className="rounded-2xl border border-[#C9A84C]/15 p-4 space-y-3" style={{ background:'rgba(14,14,20,0.72)' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/15 p-4 space-y-3" style={{ background:'rgba(13,13,38,0.75)' }}>
         <p className="text-[10px] tracking-[0.2em] text-[#C9A84C]/60 uppercase font-bold">Visual Walkthrough — How the admin panel works</p>
 
         {/* Step 1 — Sidebar navigation */}
@@ -3008,7 +3008,7 @@ function AdminPanel() {
   ] as NavItem[]).filter(n => !n.ownerOnly || userRole === 'owner')
 
   return (
-    <div className="min-h-screen" style={{ background:'#09090E' }}>
+    <div className="min-h-screen" style={{ background:'#0B0B1E' }}>
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 bg-black/60 lg:hidden" onClick={() => setSidebarOpen(false)}/>
@@ -3016,13 +3016,13 @@ function AdminPanel() {
 
       {/* ── Sidebar — always fixed, never scrolls ── */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex flex-col w-56 sm:w-60 border-r border-[#C9A84C]/10 transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
-        style={{ background:'linear-gradient(180deg,#0D0D16 0%,#080812 100%)' }}
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col w-56 sm:w-64 border-r border-[#C9A84C]/18 transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
+        style={{ background:'linear-gradient(180deg,#151535 0%,#0C0C26 100%)' }}
       >
         {/* Logo */}
-        <div className="flex items-center gap-2.5 px-4 py-4 border-b border-[#C9A84C]/10 shrink-0">
-          <div className="w-8 h-8 rounded-xl border border-[#C9A84C]/25 flex items-center justify-center shrink-0" style={{ background:'rgba(201,168,76,0.08)' }}>
-            <svg viewBox="0 0 100 80" className="w-5 h-4" fill="none" stroke="#C9A84C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <div className="flex items-center gap-3 px-4 py-4 border-b border-[#C9A84C]/14 shrink-0">
+          <div className="w-10 h-10 rounded-xl border border-[#C9A84C]/30 flex items-center justify-center shrink-0" style={{ background:'rgba(201,168,76,0.10)', boxShadow:'0 0 16px rgba(201,168,76,0.12)' }}>
+            <svg viewBox="0 0 100 80" className="w-6 h-5" fill="none" stroke="#C9A84C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M 52 35 C 55 18, 38 12, 24 16 C 10 20, 8 38, 12 50 C 16 62, 30 70, 42 66 C 46 64, 48 58, 45 54 C 42 50, 48 44, 52 35 Z"/>
               <circle cx="37" cy="51" r="5.5"/><circle cx="23" cy="49" r="3.2"/>
               <rect x="57.5" y="32" width="3.0" height="40" rx="1.5"/>
@@ -3031,71 +3031,72 @@ function AdminPanel() {
             </svg>
           </div>
           <div className="min-w-0">
-            <p className="text-[11px] font-bold text-[#E8C96B] tracking-[0.08em] uppercase truncate">Craft Nest</p>
-            <p className="text-[9px] text-white/25 capitalize">{userRole} Panel</p>
+            <p className="text-sm font-bold text-[#E8C96B] tracking-[0.06em] uppercase truncate">Craft Nest</p>
+            <p className="text-[10px] text-white/35 capitalize">{userRole} Panel</p>
           </div>
           <button onClick={() => setSidebarOpen(false)} className="ml-auto lg:hidden text-white/30 hover:text-white cursor-pointer shrink-0 p-1"><X className="w-4 h-4"/></button>
         </div>
 
         {/* User badge */}
-        <div className="px-3 py-2.5 border-b border-[#C9A84C]/8 shrink-0">
-          <div className="flex items-center gap-2 px-2.5 py-2 rounded-xl" style={{ background:'rgba(201,168,76,0.05)' }}>
-            <div className="w-6 h-6 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-3 h-3 text-[#C9A84C]"/>
+        <div className="px-3 py-3 border-b border-[#C9A84C]/10 shrink-0">
+          <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl" style={{ background:'rgba(201,168,76,0.07)', border:'1px solid rgba(201,168,76,0.12)' }}>
+            <div className="w-8 h-8 rounded-full bg-[#C9A84C]/18 border border-[#C9A84C]/30 flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-4 h-4 text-[#C9A84C]"/>
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] font-bold text-white/80 truncate">{userName}</p>
-              <p className="text-[8px] text-white/25 capitalize">{userRole}</p>
+              <p className="text-xs font-bold text-white/90 truncate">{userName}</p>
+              <p className="text-[10px] text-[#C9A84C]/50 capitalize font-medium">{userRole}</p>
             </div>
           </div>
         </div>
 
         {/* Nav — no scroll, all items visible */}
-        <nav className="flex-1 px-2 py-2 space-y-0.5 overflow-hidden">
+        <nav className="flex-1 px-2.5 py-3 space-y-1 overflow-hidden">
           {NAV.map(({ id, label, icon:Icon, sub }) => (
             <button key={id} onClick={() => { setTab(id); setSidebarOpen(false) }}
-              className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition-all group cursor-pointer border min-w-0 ${tab===id ? 'bg-[#C9A84C]/10 border-[#C9A84C]/20 text-[#E8C96B]' : 'text-white/40 hover:text-white/70 hover:bg-white/[0.03] border-transparent'}`}>
-              <Icon className={`w-3.5 h-3.5 shrink-0 ${tab===id ? 'text-[#C9A84C]' : 'text-white/30 group-hover:text-white/50'}`}/>
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-150 group cursor-pointer border min-w-0 ${tab===id ? 'border-[#C9A84C]/30 text-[#E8C96B] shadow-[0_2px_12px_rgba(201,168,76,0.10)]' : 'text-white/45 hover:text-white/80 hover:bg-white/[0.04] border-transparent'}`}
+              style={tab===id ? {background:'linear-gradient(135deg,rgba(201,168,76,0.14),rgba(201,168,76,0.06))'} : {}}>
+              <Icon className={`w-4 h-4 shrink-0 ${tab===id ? 'text-[#C9A84C]' : 'text-white/35 group-hover:text-white/60'}`}/>
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold tracking-[0.04em] truncate leading-tight">{label}</p>
-                {sub && <p className="text-[8px] text-white/20 leading-tight">{sub}</p>}
+                <p className="text-xs font-semibold tracking-[0.02em] truncate leading-tight">{label}</p>
+                {sub && <p className="text-[9px] text-white/28 leading-tight mt-0.5">{sub}</p>}
               </div>
-              {tab===id && <div className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] shrink-0"/>}
+              {tab===id && <div className="w-2 h-2 rounded-full bg-[#C9A84C] shrink-0 shadow-[0_0_6px_#C9A84C]"/>}
             </button>
           ))}
         </nav>
 
         {/* Footer links */}
-        <div className="px-2 py-2 border-t border-[#C9A84C]/10 space-y-0.5 shrink-0">
+        <div className="px-2.5 py-3 border-t border-[#C9A84C]/12 space-y-1 shrink-0">
           <a href="/" target="_blank" rel="noopener noreferrer"
-            className="w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-white/30 hover:text-white/60 hover:bg-white/[0.03] text-[10px] font-bold tracking-[0.04em] transition-all">
-            <Eye className="w-3.5 h-3.5 shrink-0"/> View Website
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/38 hover:text-white/70 hover:bg-white/[0.04] text-xs font-semibold tracking-[0.02em] transition-all">
+            <Eye className="w-4 h-4 shrink-0"/> View Website
           </a>
           <button onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-red-400/50 hover:text-red-400 hover:bg-red-500/5 text-[10px] font-bold tracking-[0.04em] transition-all cursor-pointer">
-            <LogOut className="w-3.5 h-3.5 shrink-0"/> Logout
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-400/50 hover:text-red-400 hover:bg-red-500/5 text-xs font-semibold tracking-[0.02em] transition-all cursor-pointer">
+            <LogOut className="w-4 h-4 shrink-0"/> Logout
           </button>
         </div>
       </aside>
 
       {/* ── Main Content — offset by sidebar width on desktop ── */}
-      <div className="flex flex-col min-h-screen lg:ml-60">
+      <div className="flex flex-col min-h-screen lg:ml-64">
         {/* Top bar — sticky inside scrolling column */}
         <header
-          className="flex items-center gap-3 px-4 sm:px-6 py-3.5 border-b border-[#C9A84C]/10 sticky top-0 z-30 shrink-0"
-          style={{ background:'rgba(9,9,15,0.97)', backdropFilter:'blur(12px)' }}
+          className="flex items-center gap-3 px-4 sm:px-6 py-4 border-b border-[#C9A84C]/14 sticky top-0 z-30 shrink-0"
+          style={{ background:'rgba(11,11,30,0.97)', backdropFilter:'blur(16px)' }}
         >
           <button onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-2 rounded-xl border border-white/10 text-white/40 hover:text-white cursor-pointer shrink-0">
+            className="lg:hidden p-2 rounded-xl border border-white/12 text-white/40 hover:text-white cursor-pointer shrink-0">
             <Menu className="w-4 h-4"/>
           </button>
-          <p className="text-[9px] tracking-[0.25em] text-[#C9A84C]/50 uppercase font-bold truncate flex-1">
+          <p className="text-xs tracking-[0.20em] text-[#C9A84C]/60 uppercase font-bold truncate flex-1">
             {NAV.find(n => n.id===tab)?.label ?? 'Admin'}
           </p>
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="text-[10px] text-white/20 hidden sm:block truncate max-w-[120px]">{userName}</span>
-            <div className="w-7 h-7 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 flex items-center justify-center">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#C9A84C]"/>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <span className="text-xs text-white/30 hidden sm:block truncate max-w-[140px] font-medium">{userName}</span>
+            <div className="w-8 h-8 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/30 flex items-center justify-center" style={{boxShadow:'0 0 10px rgba(201,168,76,0.12)'}}>
+              <ShieldCheck className="w-4 h-4 text-[#C9A84C]"/>
             </div>
           </div>
         </header>
@@ -3169,4 +3170,6 @@ function AdminPanel() {
     </div>
   )
 }
+
+
 
