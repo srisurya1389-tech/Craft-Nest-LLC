@@ -201,7 +201,7 @@ type ExtraServicePublic = { id:string; name:string; emoji:string; price:string; 
 
 function ExtraServicesSection() {
   const [services, setServices] = useState<ExtraServicePublic[]>([])
-  const [template, setTemplate] = useState<'mosaic'|'strips'|'showcase'>('mosaic')
+  const [template, setTemplate] = useState<'mosaic'|'strips'|'showcase'|'cards'|'carousel'>('mosaic')
   const [openId,   setOpenId]   = useState<string|null>(null)
   const [waNum,    setWaNum]    = useState('14704527988')
 
@@ -290,7 +290,7 @@ function ExtraServicesSection() {
   )
 
   // Showcase — Numbered accordion
-  return (
+  if (template === 'showcase') return (
     <section id="extra-services" className="relative py-16 md:py-24 px-4 sm:px-6 md:px-12 lg:px-16 border-b border-[#C9A84C]/20" style={{background:'radial-gradient(ellipse 80% 80% at 50% 100%, #0A2E1A 0%, #040D0A 65%, #020808 100%)'}}>
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
@@ -325,6 +325,74 @@ function ExtraServicesSection() {
                 </div>
               )}
             </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+
+  // Cards — Equal-size card grid
+  if (template === 'cards') return (
+    <section id="extra-services" className="relative py-16 md:py-24 px-4 sm:px-6 md:px-12 lg:px-16 border-b border-[#C9A84C]/20" style={{background:'radial-gradient(ellipse 80% 80% at 50% 100%, #0A2E1A 0%, #040D0A 65%, #020808 100%)'}}>
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.25em] text-[#C9A84C] uppercase mb-3 block">OUR OFFERINGS</span>
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-[42px] text-white font-medium tracking-wide">More Ways to Celebrate</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {services.map(svc => (
+            <div key={svc.id} className="group rounded-2xl overflow-hidden border border-[#C9A84C]/10 hover:border-[#C9A84C]/30 transition-all hover:shadow-[0_0_28px_rgba(201,168,76,0.12)] hover:-translate-y-1" style={{background:'rgba(12,12,18,0.95)'}}>
+              <div className="h-44 relative overflow-hidden">
+                {svc.img
+                  ? <img src={svc.img} alt={svc.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                  : <div className="w-full h-full flex items-center justify-center text-6xl" style={{background:'rgba(20,20,30,0.95)'}}>{svc.emoji}</div>}
+              </div>
+              <div className="p-4">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <h3 className="font-serif text-white text-lg font-medium leading-tight">{svc.name}</h3>
+                  {svc.price && <span className="shrink-0 text-[11px] font-bold text-[#C9A84C] bg-[#C9A84C]/10 border border-[#C9A84C]/20 px-2.5 py-1 rounded-full mt-0.5">{svc.price}</span>}
+                </div>
+                {svc.description && <p className="text-white/40 text-sm leading-relaxed mb-4 line-clamp-2">{svc.description}</p>}
+                <a href={wa(svc)} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 w-full justify-center text-[10px] font-bold tracking-[0.2em] uppercase text-[#04140E] bg-[#C9A84C] hover:bg-[#E8C96B] py-2.5 rounded-full transition-all hover:scale-105">
+                  Enquire Now →
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+
+  // Carousel — Horizontal scroll
+  return (
+    <section id="extra-services" className="relative py-16 md:py-24 border-b border-[#C9A84C]/20" style={{background:'radial-gradient(ellipse 80% 80% at 50% 100%, #0A2E1A 0%, #040D0A 65%, #020808 100%)'}}>
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12 px-4 sm:px-6 md:px-12 lg:px-16">
+          <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.25em] text-[#C9A84C] uppercase mb-3 block">OUR OFFERINGS</span>
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-[42px] text-white font-medium tracking-wide">More Ways to Celebrate</h2>
+        </div>
+        <div className="flex gap-4 overflow-x-auto pb-4 px-4 sm:px-6 md:px-12 lg:px-16 scrollbar-hide"
+          style={{scrollSnapType:'x mandatory', WebkitOverflowScrolling:'touch'}}>
+          {services.map(svc => (
+            <a key={svc.id} href={wa(svc)} target="_blank" rel="noopener noreferrer"
+              className="shrink-0 w-64 sm:w-72 rounded-2xl overflow-hidden border border-[#C9A84C]/10 hover:border-[#C9A84C]/35 transition-all group hover:shadow-[0_0_30px_rgba(201,168,76,0.12)]"
+              style={{scrollSnapAlign:'start', background:'rgba(12,12,18,0.95)'}}>
+              <div className="h-48 relative overflow-hidden">
+                {svc.img
+                  ? <img src={svc.img} alt={svc.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+                  : <div className="w-full h-full flex items-center justify-center text-6xl" style={{background:'rgba(20,20,30,0.95)'}}>{svc.emoji}</div>}
+                {svc.price && <span className="absolute top-3 right-3 text-[10px] font-bold text-[#C9A84C] bg-black/70 border border-[#C9A84C]/25 px-2.5 py-1 rounded-full">{svc.price}</span>}
+              </div>
+              <div className="p-4">
+                <h3 className="font-serif text-white text-lg font-medium mb-1">{svc.name}</h3>
+                {svc.description && <p className="text-white/38 text-sm leading-relaxed line-clamp-2">{svc.description}</p>}
+                <div className="mt-3 flex items-center gap-1 text-[#C9A84C] text-xs font-bold">
+                  Enquire Now <span>→</span>
+                </div>
+              </div>
+            </a>
           ))}
         </div>
       </div>

@@ -191,7 +191,7 @@ export function deleteExtraService(id: string): void {
   saveAdminData(data)
 }
 
-export function setExtraServicesTemplate(t: 'mosaic' | 'strips' | 'showcase'): void {
+export function setExtraServicesTemplate(t: 'mosaic' | 'strips' | 'showcase' | 'cards' | 'carousel'): void {
   const data = getAdminData()
   data.extraServicesTemplate = t
   saveAdminData(data)

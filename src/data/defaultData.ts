@@ -61,7 +61,7 @@ export type AdminData = {
   settings: SiteSettings
   schedule: Record<string, ScheduleEntry>
   extraServices: ExtraService[]
-  extraServicesTemplate: 'mosaic' | 'strips' | 'showcase'
+  extraServicesTemplate: 'mosaic' | 'strips' | 'showcase' | 'cards' | 'carousel'
 }
 
 export const defaultSettings: SiteSettings = {

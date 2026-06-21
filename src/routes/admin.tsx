@@ -2284,16 +2284,38 @@ function SectionVisual({ id }: { id: string }) {
 
 // ── Extra Services Tab ────────────────────────────────────────────────────────
 
+// ── Mock data used inside template preview thumbnails ─────────────────────────
+const PREVIEW_MOCKS = [
+  { label:'Balloon Art',    price:'₹800',  c1:'#1A3A2A', c2:'#0F2A1A' },
+  { label:'Custom Cake',   price:'₹1200', c1:'#2A1A3A', c2:'#1A0F2A' },
+  { label:'Photo Booth',   price:'₹1500', c1:'#3A2A1A', c2:'#2A1A0F' },
+  { label:'Live Band',     price:'₹3000', c1:'#1A2A3A', c2:'#0F1A2A' },
+]
+
+function MiniServiceCard({ m, wide=false }:{ m:typeof PREVIEW_MOCKS[0]; wide?:boolean }) {
+  return (
+    <div className={`relative rounded-lg overflow-hidden border border-white/8 ${wide?'flex-1':'shrink-0 w-[90px]'}`} style={{background:`linear-gradient(135deg,${m.c1},${m.c2})`}}>
+      <div className="absolute bottom-0 inset-x-0 p-1.5" style={{background:'rgba(0,0,0,0.55)'}}>
+        <div className="h-[2px] w-2/3 rounded mb-0.5" style={{background:'rgba(255,255,255,0.55)'}}/>
+        <div className="h-[2px] w-1/2 rounded" style={{background:'rgba(201,168,76,0.6)'}}/>
+      </div>
+    </div>
+  )
+}
+
+type TplId = 'mosaic'|'strips'|'showcase'|'cards'|'carousel'
+
 function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (msg:string, t?:'success'|'error') => void; onRefresh: () => void }) {
-  const [selId,     setSelId]     = useState<string|null>(null)
-  const [uploading, setUploading] = useState(false)
+  const [selId,        setSelId]        = useState<string|null>(null)
+  const [uploading,    setUploading]    = useState(false)
+  const [previewModal, setPreviewModal] = useState<TplId|null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
   const [form, setForm] = useState<Omit<ExtraService,'id'>>({
     name:'', emoji:'🎨', price:'', description:'', img:'', whatsappMsg:'', visible:true,
   })
 
   const services = data.extraServices ?? []
-  const template = (data.extraServicesTemplate ?? 'mosaic') as 'mosaic'|'strips'|'showcase'
+  const template = (data.extraServicesTemplate ?? 'mosaic') as TplId
   const isNew    = selId === '__new__'
 
   const startAdd  = () => { setSelId('__new__'); setForm({ name:'', emoji:'🎨', price:'', description:'', img:'', whatsappMsg:'', visible:true }) }
@@ -2317,35 +2339,130 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
     setUploading(false)
   }
 
-  const pickTemplate = (t: 'mosaic'|'strips'|'showcase') => {
+  const pickTemplate = (t: TplId) => {
     setExtraServicesTemplate(t); onRefresh(); show(`Layout changed to ${t}`)
   }
 
-  const TEMPLATES: { id:'mosaic'|'strips'|'showcase'; label:string; desc:string; preview:React.ReactNode }[] = [
-    {
-      id:'mosaic', label:'Mosaic Grid', desc:'Bento-style — featured card large, others smaller. Perfect for visual services.',
-      preview:(
-        <div className="flex gap-1.5 h-20">
-          <div className="flex-[2] rounded-xl flex items-center justify-center text-[10px] text-white/20 border border-white/8" style={{background:'rgba(255,255,255,0.04)'}}>FEATURED</div>
+  // ── Big modal previews (realistic mockup) ────────────────────────────────────
+  const BIG_PREVIEWS: Record<TplId, React.ReactNode> = {
+    mosaic: (
+      <div className="space-y-1.5">
+        <div className="flex gap-1.5" style={{height:'140px'}}>
+          <div className="flex-[2] rounded-xl overflow-hidden relative border border-white/10" style={{background:`linear-gradient(135deg,${PREVIEW_MOCKS[0].c1},${PREVIEW_MOCKS[0].c2})`}}>
+            <div className="absolute bottom-0 inset-x-0 p-3" style={{background:'linear-gradient(to top,rgba(0,0,0,0.9),transparent)'}}>
+              <p className="text-white text-xs font-serif font-medium">Balloon Art</p>
+              <span className="text-[9px]" style={{color:'#C9A84C'}}>₹800</span>
+            </div>
+          </div>
           <div className="flex-1 flex flex-col gap-1.5">
-            <div className="flex-1 rounded-lg border border-white/6" style={{background:'rgba(255,255,255,0.025)'}}/>
-            <div className="flex-1 rounded-lg border border-white/6" style={{background:'rgba(255,255,255,0.025)'}}/>
+            {PREVIEW_MOCKS.slice(1,3).map(m => (
+              <div key={m.label} className="flex-1 rounded-xl overflow-hidden relative border border-white/8" style={{background:`linear-gradient(135deg,${m.c1},${m.c2})`}}>
+                <div className="absolute bottom-0 inset-x-0 p-1.5" style={{background:'rgba(0,0,0,0.7)'}}>
+                  <p className="text-white text-[9px] font-medium truncate">{m.label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-1.5" style={{height:'80px'}}>
+          {PREVIEW_MOCKS.map(m => (
+            <div key={m.label} className="rounded-xl overflow-hidden relative border border-white/8" style={{background:`linear-gradient(135deg,${m.c1},${m.c2})`}}>
+              <div className="absolute bottom-0 inset-x-0 p-1" style={{background:'rgba(0,0,0,0.7)'}}>
+                <p className="text-white text-[8px] truncate">{m.label}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+    strips: (
+      <div className="divide-y divide-white/8 rounded-xl overflow-hidden border border-white/8">
+        {PREVIEW_MOCKS.slice(0,3).map((m,i) => (
+          <div key={m.label} className={`flex ${i%2===1?'flex-row-reverse':''}`} style={{height:'68px'}}>
+            <div className="w-[55%] relative border-r border-white/6" style={{background:`linear-gradient(135deg,${m.c1},${m.c2})`}}>
+              {i%2===1 && <div className="absolute inset-0 border-l border-white/6"/>}
+            </div>
+            <div className="flex-1 flex flex-col justify-center px-3 py-2 gap-1" style={{background:'rgba(20,20,28,0.95)'}}>
+              <div className="flex items-center justify-between">
+                <p className="text-white text-[9px] font-serif font-medium">{m.label}</p>
+                <span className="text-[8px] font-bold" style={{color:'#C9A84C'}}>{m.price}</span>
+              </div>
+              <div className="h-[2px] w-4/5 rounded" style={{background:'rgba(255,255,255,0.12)'}}/>
+              <div className="h-[2px] w-1/2 rounded" style={{background:'rgba(255,255,255,0.06)'}}/>
+            </div>
+          </div>
+        ))}
+      </div>
+    ),
+    showcase: (
+      <div className="border border-white/8 rounded-xl overflow-hidden divide-y divide-white/6" style={{background:'rgba(14,14,20,0.97)'}}>
+        {PREVIEW_MOCKS.map((m,i) => (
+          <div key={m.label} className="flex items-center gap-3 px-3 py-2.5">
+            <span className="text-[10px] font-black tabular-nums shrink-0 w-5" style={{color:'rgba(201,168,76,0.55)'}}>0{i+1}</span>
+            <p className="flex-1 text-white text-[10px] font-serif font-medium">{m.label}</p>
+            <span className="text-[8px] font-bold shrink-0" style={{color:'#C9A84C'}}>{m.price}</span>
+            <span className="text-white/25 text-xs">›</span>
+          </div>
+        ))}
+      </div>
+    ),
+    cards: (
+      <div className="grid grid-cols-3 gap-2">
+        {PREVIEW_MOCKS.slice(0,3).map(m => (
+          <div key={m.label} className="rounded-xl overflow-hidden border border-white/8" style={{background:'rgba(18,18,26,0.95)'}}>
+            <div className="h-16 relative" style={{background:`linear-gradient(135deg,${m.c1},${m.c2})`}}/>
+            <div className="p-1.5">
+              <p className="text-white text-[8px] font-medium truncate">{m.label}</p>
+              <span className="text-[8px]" style={{color:'#C9A84C'}}>{m.price}</span>
+              <div className="mt-1 h-4 rounded-md flex items-center justify-center" style={{background:'rgba(201,168,76,0.15)'}}>
+                <span className="text-[7px] font-bold" style={{color:'#C9A84C'}}>ENQUIRE</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ),
+    carousel: (
+      <div className="flex gap-2 overflow-hidden rounded-xl">
+        {PREVIEW_MOCKS.map((m,i) => (
+          <div key={m.label} className={`shrink-0 rounded-xl overflow-hidden border border-white/8 transition-all ${i===0?'w-[45%]':'w-[38%]'}`} style={{background:`linear-gradient(135deg,${m.c1},${m.c2})`,height:'120px'}}>
+            <div className="absolute bottom-0 inset-x-0 p-2" style={{background:'rgba(0,0,0,0.65)'}}>
+              <p className="text-white text-[9px] font-serif">{m.label}</p>
+              <span className="text-[8px]" style={{color:'#C9A84C'}}>{m.price}</span>
+            </div>
+          </div>
+        ))}
+        <div className="shrink-0 w-6 rounded-xl border border-white/6 flex items-center justify-center" style={{background:'rgba(255,255,255,0.02)',height:'120px'}}>
+          <span className="text-white/20 text-xs">›</span>
+        </div>
+      </div>
+    ),
+  }
+
+  // ── Compact thumbnail previews (shown on the picker cards) ───────────────────
+  const TEMPLATES: { id:TplId; label:string; badge:string; desc:string; thumb:React.ReactNode }[] = [
+    {
+      id:'mosaic', label:'Mosaic Grid', badge:'BENTO', desc:'Featured card large + smaller cards. Best for 4+ services.',
+      thumb:(
+        <div className="flex gap-1 h-[68px]">
+          <MiniServiceCard m={PREVIEW_MOCKS[0]} wide/>
+          <div className="flex flex-col gap-1 w-[42%]">
+            <MiniServiceCard m={PREVIEW_MOCKS[1]} wide/>
+            <MiniServiceCard m={PREVIEW_MOCKS[2]} wide/>
           </div>
         </div>
       ),
     },
     {
-      id:'strips', label:'Alternating Strips', desc:'Full-width rows — image and text alternate left/right with a gold divider.',
-      preview:(
-        <div className="space-y-1.5 h-20 flex flex-col justify-between">
+      id:'strips', label:'Alternating Strips', badge:'CINEMATIC', desc:'Full-width image rows alternating left/right. Premium look.',
+      thumb:(
+        <div className="space-y-1 h-[68px]">
           {[0,1,2].map(i => (
-            <div key={i} className={`flex gap-1.5 flex-1 ${i%2===1?'flex-row-reverse':''}`}>
-              <div className="flex-[3] rounded-lg border border-white/8" style={{background:'rgba(255,255,255,0.04)'}}/>
-              <div className="flex-[2] rounded-lg border border-white/6 flex items-center justify-center px-1.5" style={{background:'rgba(255,255,255,0.02)'}}>
-                <div className="space-y-1 w-full">
-                  <div className="h-[3px] rounded bg-white/15 w-2/3"/>
-                  <div className="h-[2px] rounded bg-white/7 w-full"/>
-                </div>
+            <div key={i} className={`flex gap-1 ${i%2===1?'flex-row-reverse':''}`} style={{height:'20px'}}>
+              <div className="w-[55%] rounded-md border border-white/8" style={{background:`linear-gradient(90deg,${PREVIEW_MOCKS[i].c1},${PREVIEW_MOCKS[i].c2})`}}/>
+              <div className="flex-1 rounded-md border border-white/6 flex flex-col justify-center px-1 gap-0.5" style={{background:'rgba(18,18,26,0.95)'}}>
+                <div className="h-[2px] w-3/4 rounded" style={{background:'rgba(255,255,255,0.2)'}}/>
+                <div className="h-[2px] w-1/2 rounded" style={{background:'rgba(201,168,76,0.35)'}}/>
               </div>
             </div>
           ))}
@@ -2353,53 +2470,107 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
       ),
     },
     {
-      id:'showcase', label:'Showcase List', desc:'Numbered accordion rows — click to reveal image + details. Elegant and minimal.',
-      preview:(
-        <div className="space-y-2 h-20 flex flex-col justify-between">
-          {[1,2,3].map(i => (
-            <div key={i} className="flex items-center gap-2 border-b border-white/6 pb-1.5">
-              <span className="text-[9px] font-black w-4 shrink-0 tabular-nums" style={{color:'rgba(201,168,76,0.45)'}}>0{i}</span>
-              <div className="flex-1 h-[3px] rounded" style={{background:'rgba(255,255,255,0.10)'}}/>
-              <div className="h-[3px] w-5 rounded" style={{background:'rgba(201,168,76,0.25)'}}/>
+      id:'showcase', label:'Showcase List', badge:'ACCORDION', desc:'Numbered rows that expand on click. Clean & minimal.',
+      thumb:(
+        <div className="space-y-1 h-[68px] flex flex-col justify-between">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="flex items-center gap-1.5 pb-1 border-b border-white/6">
+              <span className="text-[8px] font-black tabular-nums shrink-0" style={{color:'rgba(201,168,76,0.5)'}}>0{i}</span>
+              <div className="flex-1 h-[2px] rounded" style={{background:'rgba(255,255,255,0.12)'}}/>
+              <div className="h-[2px] w-4 rounded" style={{background:'rgba(201,168,76,0.3)'}}/>
+              <span className="text-white/15 text-[8px]">›</span>
             </div>
           ))}
         </div>
       ),
     },
+    {
+      id:'cards', label:'Card Grid', badge:'MODERN', desc:'Equal-size cards in 2-3 columns. Great for any number of services.',
+      thumb:(
+        <div className="grid grid-cols-3 gap-1 h-[68px]">
+          {PREVIEW_MOCKS.slice(0,3).map(m => (
+            <div key={m.label} className="rounded-lg overflow-hidden border border-white/8 flex flex-col" style={{background:'rgba(18,18,26,0.95)'}}>
+              <div className="flex-[2]" style={{background:`linear-gradient(135deg,${m.c1},${m.c2})`}}/>
+              <div className="px-1 py-0.5">
+                <div className="h-[2px] rounded mb-0.5" style={{background:'rgba(255,255,255,0.2)'}}/>
+                <div className="h-[2px] w-1/2 rounded" style={{background:'rgba(201,168,76,0.35)'}}/>
+              </div>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      id:'carousel', label:'Carousel Scroll', badge:'SWIPE', desc:'Horizontal scrolling cards. Perfect for mobile visitors.',
+      thumb:(
+        <div className="flex gap-1 h-[68px] overflow-hidden">
+          {PREVIEW_MOCKS.map((m,i) => (
+            <div key={m.label} className={`shrink-0 rounded-lg overflow-hidden border border-white/8 relative ${i===0?'w-[48%]':'w-[38%]'}`} style={{background:`linear-gradient(135deg,${m.c1},${m.c2})`}}>
+              {i===0 && <div className="absolute bottom-0 inset-x-0 p-1" style={{background:'rgba(0,0,0,0.6)'}}>
+                <div className="h-[2px] w-2/3 rounded" style={{background:'rgba(255,255,255,0.4)'}}/>
+              </div>}
+            </div>
+          ))}
+          <div className="shrink-0 w-5 rounded-lg border border-white/6 flex items-center justify-center" style={{background:'rgba(255,255,255,0.02)'}}>
+            <span className="text-white/20 text-[9px]">›</span>
+          </div>
+        </div>
+      ),
+    },
   ]
+
+  const inputCls = "w-full rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/20 focus:outline-none transition-colors"
+  const inputSt  = { background:'rgba(255,255,255,0.05)', border:'1px solid rgba(201,168,76,0.15)' } as React.CSSProperties
 
   return (
     <div className="space-y-6 w-full">
       {/* Header */}
       <div>
         <h2 className="font-serif text-xl sm:text-2xl text-white mb-1">Extra Services</h2>
-        <p className="text-xs text-white/35 leading-relaxed">Add custom services that appear on your website below the main three. Choose a layout template, add services, and they go live instantly.</p>
+        <p className="text-xs text-white/35 leading-relaxed">Add custom services that appear on your website below the main three. Choose a layout, add services, and they go live instantly.</p>
       </div>
 
-      {/* Template Picker */}
+      {/* ── Template Picker ── */}
       <div>
         <p className="text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold mb-3">Choose Display Layout</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
           {TEMPLATES.map(t => (
-            <button key={t.id} type="button" onClick={() => pickTemplate(t.id)} className="text-left p-4 rounded-2xl border transition-all cursor-pointer group" style={{ background: template===t.id ? 'rgba(201,168,76,0.07)' : 'rgba(255,255,255,0.02)', borderColor: template===t.id ? 'rgba(201,168,76,0.40)' : 'rgba(255,255,255,0.06)' }}>
-              <div className="mb-3">{t.preview}</div>
-              <div className="flex items-center gap-2 mb-1">
-                <p className="text-[11px] font-bold text-white">{t.label}</p>
-                {template===t.id && <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full" style={{background:'rgba(201,168,76,0.18)',color:'#C9A84C'}}>ACTIVE</span>}
-              </div>
-              <p className="text-[10px] text-white/30 leading-relaxed">{t.desc}</p>
-            </button>
+            <div key={t.id} className="relative">
+              {/* Select card */}
+              <button type="button" onClick={() => pickTemplate(t.id)}
+                className="w-full text-left p-3 rounded-2xl border transition-all cursor-pointer"
+                style={{ background: template===t.id ? 'rgba(201,168,76,0.08)' : 'rgba(255,255,255,0.02)', borderColor: template===t.id ? 'rgba(201,168,76,0.45)' : 'rgba(255,255,255,0.07)' }}>
+                {/* Thumbnail */}
+                <div className="mb-2.5">{t.thumb}</div>
+                {/* Label row */}
+                <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
+                  <p className="text-[10px] font-bold text-white leading-tight">{t.label}</p>
+                  {template===t.id && <span className="text-[7px] font-bold px-1.5 py-0.5 rounded-full shrink-0" style={{background:'rgba(201,168,76,0.20)',color:'#C9A84C'}}>ACTIVE</span>}
+                </div>
+                <span className="inline-block text-[7px] font-bold tracking-[0.12em] px-1.5 py-0.5 rounded-full border mb-1" style={{borderColor:'rgba(255,255,255,0.10)',color:'rgba(255,255,255,0.35)'}}>
+                  {t.badge}
+                </span>
+                <p className="text-[9px] text-white/28 leading-relaxed">{t.desc}</p>
+              </button>
+              {/* Info (ⓘ) button */}
+              <button type="button" onClick={() => setPreviewModal(t.id)}
+                className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center cursor-pointer transition-all hover:scale-110 z-10"
+                style={{background:'rgba(201,168,76,0.12)',border:'1px solid rgba(201,168,76,0.20)',color:'rgba(201,168,76,0.70)'}}>
+                <Info className="w-3 h-3"/>
+              </button>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Services List + Edit Panel */}
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-4 items-start">
-        {/* Left: service list */}
+      {/* ── Services list + Edit panel ── */}
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-4 items-start">
+        {/* Left: list */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <p className="text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold">{services.length} Service{services.length!==1?'s':''}</p>
-            <button onClick={startAdd} className="flex items-center gap-1.5 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.18em] uppercase px-4 py-2 rounded-full transition-all hover:scale-105 cursor-pointer shadow-[0_4px_14px_rgba(201,168,76,0.25)]">
+            <button onClick={startAdd}
+              className="flex items-center gap-1.5 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.18em] uppercase px-4 py-2 rounded-full transition-all hover:scale-105 cursor-pointer shadow-[0_4px_14px_rgba(201,168,76,0.25)]">
               <Plus className="w-3.5 h-3.5"/> Add Service
             </button>
           </div>
@@ -2408,30 +2579,39 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
             <div className="rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 p-12 text-center" style={{borderColor:'rgba(201,168,76,0.10)'}}>
               <Sparkles className="w-8 h-8" style={{color:'rgba(201,168,76,0.20)'}}/>
               <p className="text-sm font-serif text-white/25">No extra services yet</p>
-              <p className="text-[11px] text-white/18 max-w-[200px] leading-relaxed">Click "Add Service" to add new offerings that will appear on your website below the main three services.</p>
+              <p className="text-[11px] text-white/18 max-w-xs leading-relaxed">Click "Add Service" above to add custom services that will appear on your website below the main three.</p>
             </div>
           ) : (
             <div className="space-y-2">
               {services.map(svc => (
-                <div key={svc.id} className="flex items-center gap-3 p-3 rounded-2xl border transition-all" style={{ background: selId===svc.id ? 'rgba(201,168,76,0.06)' : 'rgba(255,255,255,0.02)', borderColor: selId===svc.id ? 'rgba(201,168,76,0.25)' : 'rgba(255,255,255,0.05)', opacity: svc.visible ? 1 : 0.45 }}>
-                  <div className="w-11 h-11 rounded-xl shrink-0 overflow-hidden border border-white/8 flex items-center justify-center text-xl" style={{background:'rgba(255,255,255,0.04)'}}>
-                    {svc.img ? <img src={svc.img} alt={svc.name} className="w-full h-full object-cover"/> : svc.emoji}
+                <div key={svc.id}
+                  className="flex items-center gap-3 p-3 rounded-2xl border transition-all"
+                  style={{ background: selId===svc.id?'rgba(201,168,76,0.06)':'rgba(255,255,255,0.02)', borderColor: selId===svc.id?'rgba(201,168,76,0.25)':'rgba(255,255,255,0.06)', opacity: svc.visible?1:0.50 }}>
+                  {/* Thumbnail */}
+                  <div className="w-12 h-12 rounded-xl shrink-0 overflow-hidden border border-white/8 flex items-center justify-center text-xl" style={{background:'rgba(255,255,255,0.04)'}}>
+                    {svc.img ? <img src={svc.img} alt={svc.name} className="w-full h-full object-cover"/> : <span>{svc.emoji}</span>}
                   </div>
+                  {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mb-0.5">
                       <p className="text-sm font-bold text-white truncate">{svc.name || 'Untitled'}</p>
-                      {svc.price && <span className="text-[9px] font-bold shrink-0" style={{color:'rgba(201,168,76,0.70)'}}>{svc.price}</span>}
+                      {svc.price && <span className="text-[9px] font-bold shrink-0 px-1.5 py-0.5 rounded-full" style={{background:'rgba(201,168,76,0.10)',color:'rgba(201,168,76,0.80)'}}>{svc.price}</span>}
                     </div>
-                    <p className="text-[10px] text-white/28 truncate mt-0.5">{svc.description || 'No description'}</p>
+                    <p className="text-[10px] text-white/30 truncate">{svc.description || 'No description'}</p>
                   </div>
-                  <div className="flex items-center gap-0.5 shrink-0">
-                    <button onClick={() => { updateExtraService({...svc, visible:!svc.visible}); onRefresh() }} className="p-1.5 rounded-lg text-white/22 hover:text-white cursor-pointer transition-colors" title={svc.visible?'Hide':'Show'}>
+                  {/* Actions — aligned right, equal size buttons */}
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button onClick={() => { updateExtraService({...svc, visible:!svc.visible}); onRefresh() }}
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-white/30 hover:text-white cursor-pointer transition-colors"
+                      title={svc.visible?'Hide':'Show'}>
                       {svc.visible ? <Eye className="w-3.5 h-3.5"/> : <EyeOff className="w-3.5 h-3.5"/>}
                     </button>
-                    <button onClick={() => startEdit(svc)} className="p-1.5 rounded-lg text-white/22 hover:text-[#C9A84C] cursor-pointer transition-colors">
+                    <button onClick={() => startEdit(svc)}
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-white/30 hover:text-[#C9A84C] cursor-pointer transition-colors">
                       <Pencil className="w-3.5 h-3.5"/>
                     </button>
-                    <button onClick={() => handleDelete(svc.id)} className="p-1.5 rounded-lg text-white/22 hover:text-red-400 cursor-pointer transition-colors">
+                    <button onClick={() => handleDelete(svc.id)}
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-white/30 hover:text-red-400 cursor-pointer transition-colors">
                       <Trash2 className="w-3.5 h-3.5"/>
                     </button>
                   </div>
@@ -2441,76 +2621,161 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
           )}
         </div>
 
-        {/* Right: edit panel */}
+        {/* Right: edit / empty state */}
         {selId ? (
-          <div className="rounded-2xl border p-4 sm:p-5 space-y-4 xl:sticky xl:top-20" style={{background:'rgba(14,14,20,0.97)', borderColor:'rgba(201,168,76,0.15)'}}>
+          <div className="rounded-2xl border p-5 space-y-4 xl:sticky xl:top-20" style={{background:'rgba(14,14,20,0.97)', borderColor:'rgba(201,168,76,0.15)'}}>
             <div className="flex items-center justify-between">
               <p className="text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold">{isNew ? 'New Service' : 'Edit Service'}</p>
-              <button onClick={() => setSelId(null)} className="p-1.5 text-white/25 hover:text-white cursor-pointer rounded-lg transition-colors"><X className="w-4 h-4"/></button>
+              <button onClick={() => setSelId(null)} className="w-8 h-8 rounded-lg flex items-center justify-center text-white/30 hover:text-white cursor-pointer transition-colors">
+                <X className="w-4 h-4"/>
+              </button>
             </div>
 
-            <div className="grid grid-cols-[1fr_72px] gap-2">
+            {/* Name + Emoji */}
+            <div className="grid grid-cols-[1fr_76px] gap-2 items-end">
               <div>
-                <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Name</label>
-                <input value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} placeholder="e.g. Balloon Art" className="w-full rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/18 focus:outline-none transition-colors" style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(201,168,76,0.15)'}} onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
+                <label className="block text-[10px] tracking-[0.15em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Service Name *</label>
+                <input value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))}
+                  placeholder="e.g. Balloon Art" className={inputCls} style={inputSt}
+                  onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
               </div>
               <div>
-                <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Emoji</label>
-                <input value={form.emoji} onChange={e=>setForm(f=>({...f,emoji:e.target.value}))} maxLength={4} className="w-full rounded-xl px-2 py-2.5 text-white/90 text-center text-xl focus:outline-none transition-colors" style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(201,168,76,0.15)'}} onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
+                <label className="block text-[10px] tracking-[0.15em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Emoji</label>
+                <input value={form.emoji} onChange={e=>setForm(f=>({...f,emoji:e.target.value}))}
+                  maxLength={4} className="w-full rounded-xl px-2 py-2.5 text-white/90 text-center text-xl focus:outline-none transition-colors" style={inputSt}
+                  onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
               </div>
             </div>
 
+            {/* Price */}
             <div>
-              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Price <span className="text-white/18 normal-case tracking-normal font-normal">(e.g. From ₹500)</span></label>
-              <input value={form.price} onChange={e=>setForm(f=>({...f,price:e.target.value}))} placeholder="From ₹500" className="w-full rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/18 focus:outline-none transition-colors" style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(201,168,76,0.15)'}} onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
+              <label className="block text-[10px] tracking-[0.15em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">
+                Starting Price <span className="text-white/20 normal-case tracking-normal font-normal text-[10px]">(e.g. From ₹500)</span>
+              </label>
+              <input value={form.price} onChange={e=>setForm(f=>({...f,price:e.target.value}))}
+                placeholder="From ₹500" className={inputCls} style={inputSt}
+                onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
             </div>
 
+            {/* Description */}
             <div>
-              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Description</label>
-              <textarea value={form.description} onChange={e=>setForm(f=>({...f,description:e.target.value}))} rows={2} placeholder="Short description shown on the website..." className="w-full rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/18 focus:outline-none resize-none transition-colors" style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(201,168,76,0.15)'}} onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
+              <label className="block text-[10px] tracking-[0.15em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Description</label>
+              <textarea value={form.description} onChange={e=>setForm(f=>({...f,description:e.target.value}))}
+                rows={2} placeholder="Short description shown on your website..."
+                className="w-full rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/20 focus:outline-none resize-none transition-colors" style={inputSt}
+                onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
             </div>
 
+            {/* Photo */}
             <div>
-              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Photo <span className="text-white/18 normal-case tracking-normal font-normal">(optional)</span></label>
+              <label className="block text-[10px] tracking-[0.15em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">
+                Photo <span className="text-white/20 normal-case tracking-normal font-normal text-[10px]">(optional)</span>
+              </label>
               {form.img ? (
-                <div className="relative h-28 rounded-xl overflow-hidden border border-white/8 group">
+                <div className="relative h-28 rounded-xl overflow-hidden border border-white/10 group">
                   <img src={form.img} alt="" className="w-full h-full object-cover"/>
-                  <button onClick={()=>setForm(f=>({...f,img:''}))} className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/65 text-white/70 hover:text-white flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onClick={()=>setForm(f=>({...f,img:''}))}
+                    className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/65 text-white flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
                     <X className="w-3 h-3"/>
                   </button>
                 </div>
               ) : (
-                <button onClick={()=>fileRef.current?.click()} disabled={uploading} className="w-full h-20 rounded-xl border-2 border-dashed flex items-center justify-center gap-2 text-xs transition-all cursor-pointer" style={{borderColor:'rgba(255,255,255,0.08)',color:'rgba(255,255,255,0.22)'}}>
+                <button onClick={()=>fileRef.current?.click()} disabled={uploading}
+                  className="w-full h-20 rounded-xl border-2 border-dashed flex items-center justify-center gap-2 text-xs transition-all cursor-pointer"
+                  style={{borderColor:'rgba(255,255,255,0.10)',color:'rgba(255,255,255,0.28)'}}>
                   {uploading ? <RefreshCw className="w-4 h-4 animate-spin"/> : <><Upload className="w-4 h-4"/> Upload Photo</>}
                 </button>
               )}
               <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e=>e.target.files?.[0] && handleImg(e.target.files[0])}/>
             </div>
 
+            {/* WhatsApp message */}
             <div>
-              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">WhatsApp Enquiry Message</label>
-              <input value={form.whatsappMsg} onChange={e=>setForm(f=>({...f,whatsappMsg:e.target.value}))} placeholder="Hi! I'd like to know about Balloon Art..." className="w-full rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/18 focus:outline-none transition-colors" style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(201,168,76,0.15)'}} onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
+              <label className="block text-[10px] tracking-[0.15em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">WhatsApp Enquiry Message</label>
+              <input value={form.whatsappMsg} onChange={e=>setForm(f=>({...f,whatsappMsg:e.target.value}))}
+                placeholder="Hi! I'd like to know about Balloon Art..."
+                className={inputCls} style={inputSt}
+                onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
             </div>
 
-            <div className="flex items-center justify-between p-3 rounded-xl border" style={{background:'rgba(255,255,255,0.02)',borderColor:'rgba(255,255,255,0.06)'}}>
-              <p className="text-[11px] text-white/55 font-medium">Visible on website</p>
-              <button type="button" onClick={()=>setForm(f=>({...f,visible:!f.visible}))} className="relative w-10 h-5 rounded-full transition-all cursor-pointer" style={{background:form.visible?'#10B981':'rgba(255,255,255,0.12)'}}>
-                <span className="absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all" style={{left:form.visible?'calc(100% - 18px)':'2px'}}/>
+            {/* Visibility toggle */}
+            <div className="flex items-center justify-between px-3 py-2.5 rounded-xl border"
+              style={{background:'rgba(255,255,255,0.025)', borderColor:'rgba(255,255,255,0.07)'}}>
+              <div>
+                <p className="text-[11px] font-semibold text-white/65">Visible on website</p>
+                <p className="text-[9px] text-white/28">{form.visible ? 'Shown to visitors' : 'Hidden from visitors'}</p>
+              </div>
+              <button type="button" onClick={()=>setForm(f=>({...f,visible:!f.visible}))}
+                className="relative w-11 h-6 rounded-full transition-all cursor-pointer shrink-0 ml-3"
+                style={{background:form.visible?'#10B981':'rgba(255,255,255,0.14)'}}>
+                <span className="absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm transition-all duration-200"
+                  style={{left: form.visible ? 'calc(100% - 20px)' : '4px'}}/>
               </button>
             </div>
 
-            <button onClick={handleSave} className="w-full flex items-center justify-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.18em] uppercase py-3 rounded-full transition-all hover:scale-[1.02] cursor-pointer shadow-[0_4px_16px_rgba(201,168,76,0.28)]">
+            {/* Save */}
+            <button onClick={handleSave}
+              className="w-full flex items-center justify-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.18em] uppercase py-3 rounded-full transition-all hover:scale-[1.02] cursor-pointer shadow-[0_4px_16px_rgba(201,168,76,0.28)]">
               <CheckCircle2 className="w-4 h-4"/> Save Service
             </button>
           </div>
         ) : (
-          <div className="rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 p-10 text-center xl:min-h-[200px]" style={{borderColor:'rgba(201,168,76,0.09)'}}>
-            <Layers className="w-7 h-7" style={{color:'rgba(201,168,76,0.18)'}}/>
+          <div className="rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 p-10 text-center xl:min-h-[240px]"
+            style={{borderColor:'rgba(201,168,76,0.09)'}}>
+            <Layers className="w-8 h-8" style={{color:'rgba(201,168,76,0.16)'}}/>
             <p className="text-sm font-serif text-white/22">Select a service to edit</p>
-            <p className="text-[11px] text-white/15 max-w-[180px] leading-relaxed">Or click "Add Service" to create a new one.</p>
+            <p className="text-[11px] text-white/15 max-w-[190px] leading-relaxed">Or click "Add Service" to create a new one.</p>
           </div>
         )}
       </div>
+
+      {/* ── Big Layout Preview Modal ── */}
+      {previewModal && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" onClick={()=>setPreviewModal(null)}
+          style={{background:'rgba(0,0,0,0.85)', backdropFilter:'blur(8px)'}}>
+          <div className="w-full max-w-xl max-h-[90dvh] overflow-y-auto rounded-3xl border p-5 space-y-4"
+            style={{background:'rgba(14,14,20,0.99)', borderColor:'rgba(201,168,76,0.20)'}}
+            onClick={e=>e.stopPropagation()}>
+            {/* Modal header */}
+            <div className="flex items-center justify-between">
+              <div>
+                {(() => { const t = TEMPLATES.find(t=>t.id===previewModal)!; return (
+                  <>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <p className="font-bold text-white text-sm">{t.label}</p>
+                      <span className="text-[7px] font-bold tracking-[0.12em] px-1.5 py-0.5 rounded-full border" style={{borderColor:'rgba(201,168,76,0.25)',color:'#C9A84C'}}>{t.badge}</span>
+                    </div>
+                    <p className="text-[11px] text-white/40">{t.desc}</p>
+                  </>
+                )})()}
+              </div>
+              <button onClick={()=>setPreviewModal(null)}
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-white/30 hover:text-white cursor-pointer transition-colors shrink-0"
+                style={{background:'rgba(255,255,255,0.05)'}}>
+                <X className="w-4 h-4"/>
+              </button>
+            </div>
+            <div className="h-px" style={{background:'rgba(255,255,255,0.07)'}}/>
+            <p className="text-[9px] tracking-[0.18em] text-[#C9A84C]/50 uppercase font-bold">Layout Preview</p>
+            {/* Big preview */}
+            <div className="rounded-2xl overflow-hidden border border-white/8 p-3" style={{background:'rgba(8,8,12,0.95)'}}>
+              {BIG_PREVIEWS[previewModal]}
+            </div>
+            {/* Select button */}
+            <div className="flex gap-2">
+              <button onClick={() => { pickTemplate(previewModal); setPreviewModal(null) }}
+                className="flex-1 flex items-center justify-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.18em] uppercase py-2.5 rounded-full transition-all cursor-pointer">
+                <CheckCircle2 className="w-3.5 h-3.5"/>
+                {template===previewModal ? 'Already Active' : 'Use This Layout'}
+              </button>
+              <button onClick={()=>setPreviewModal(null)}
+                className="px-5 text-[10px] font-bold tracking-[0.15em] uppercase text-white/40 hover:text-white rounded-full border border-white/10 cursor-pointer transition-colors">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
