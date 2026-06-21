@@ -64,7 +64,62 @@ function buildReply(input: string): ChatMsg {
     ({ label:'💬 Chat on WhatsApp', href:`https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`, style:'wa' as const })
   const igLink  = ig ? { label:'📸 View on Instagram', href: ig, style:'ig' as const } : null
 
-  // ── Availability / schedule check ──────────────────────────────────────────
+  // ── Feature 9: Next available date ────────────────────────────────────────
+  if (/next (free|available)|when.*next|earliest|soonest|first available|next open/.test(lower)) {
+    try {
+      const allSched = (JSON.parse(localStorage.getItem('craftnest_admin_data')||'{}') as Record<string,Record<string,{status:string;note:string;services?:string[]}>>) ['schedule'] ?? {}
+      const now = new Date()
+      const fmt = (d:Date) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
+      let found: {date:string; entry:{status:string;note:string;services?:string[]}} | null = null
+      for (let i=0; i<90; i++) {
+        const d = new Date(now); d.setDate(d.getDate()+i)
+        const ds = fmt(d); const e = allSched[ds]
+        if (e && (e.status==='free'||e.status==='limited')) { found = {date:ds, entry:e}; break }
+      }
+      if (found) {
+        const [y,m,d] = found.date.split('-').map(Number)
+        const disp = new Date(y,m-1,d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})
+        const note = found.entry.note ? `\n\n📝 ${found.entry.note}` : ''
+        const svcs = found.entry.services?.length ? `\n\n✅ Available: ${found.entry.services.join(', ')}` : ''
+        const emoji = found.entry.status==='limited' ? '⚡' : '🎉'
+        return { id, role:'bot',
+          text: `${emoji} Our **next available date** is **${disp}**!${note}${svcs}\n\nWould you like to book it?`,
+          links: [waLink(`Hi CraftNest! I'd like to book for ${disp}.`)],
+          quick: ['Book on WhatsApp','Check Specific Date','Our Services'],
+        }
+      }
+      return { id, role:'bot',
+        text: `📅 We haven't set our upcoming schedule yet. Please reach out on WhatsApp and we'll find the best date for you! 😊`,
+        links: [waLink('Hi CraftNest! I\'d like to know your next available date.')],
+        quick: ['Contact Us','Our Services'],
+      }
+    } catch { /* fall through */ }
+  }
+
+  // ── Feature 10: Week availability overview ─────────────────────────────────
+  if (/this week|week.*availab|availab.*week|schedule this week|what.*week|week.*schedul/.test(lower)) {
+    try {
+      const allSched = (JSON.parse(localStorage.getItem('craftnest_admin_data')||'{}') as Record<string,Record<string,{status:string;note:string}>>) ['schedule'] ?? {}
+      const now = new Date()
+      const WD = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+      const SM: Record<string,string> = {free:'✅ Free',limited:'⚡ Limited',busy:'🔴 Busy',booked:'📅 Booked'}
+      const lines: string[] = []
+      for (let i=0; i<7; i++) {
+        const d = new Date(now); d.setDate(d.getDate()+i)
+        const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
+        const e = allSched[ds]
+        const label = `${WD[d.getDay()]} ${d.getDate()}`
+        lines.push(`• **${label}** — ${e ? SM[e.status]??'📋 Set' : '⬜ Not set'}`)
+      }
+      return { id, role:'bot',
+        text: `📅 **This Week's Availability:**\n\n${lines.join('\n')}\n\nWant to book a specific day?`,
+        links: [waLink('Hi CraftNest! I\'d like to check this week\'s availability.')],
+        quick: ['Book on WhatsApp','Next Available Date','Contact Us'],
+      }
+    } catch { /* fall through */ }
+  }
+
+  // ── Availability / schedule check (Feature 11: service-specific) ───────────
   const schedTriggers = ['free','available','busy','availability','schedule','book','slot','appointment','open','session','date','when']
   if (schedTriggers.some(w => lower.includes(w))) {
     const date = parseDate(lower)
@@ -72,12 +127,37 @@ function buildReply(input: string): ChatMsg {
       const [y,m,d] = date.split('-').map(Number)
       const display  = new Date(y,m-1,d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})
       const entry    = getSched(date)
+
+      // Feature 11: detect if asking about a specific service
+      const svcMap: [RegExp, string][] = [
+        [/face.?paint|paint|mehndi|henna/i, 'Face Painting'],
+        [/jewel|necklace|earring|bracelet|bangle/i, 'Handmade Jewellery'],
+        [/return.?gift|gift|favour|favor|keepsake/i, 'Return Gifts'],
+      ]
+      const askedSvc = svcMap.find(([rx]) => rx.test(lower))?.[1] ?? null
+
       if (!entry) return {
         id, role:'bot',
         text: `📅 **${display}**\n\nWe haven't set our schedule for that date yet. Please reach out on WhatsApp and we'll confirm availability for you right away! 😊`,
         links: [waLink(`Hi CraftNest! I'd like to check availability for ${display}.`)],
-        quick: ['Check another date','Our Services','Contact Us'],
+        quick: ['Check another date','Next Available Date','Contact Us'],
       }
+
+      // Feature 11: service-specific availability check
+      if (askedSvc && entry.services?.length) {
+        const svcAvail = entry.services.includes(askedSvc)
+        const emoji = svcAvail ? '✅' : '❌'
+        const svcText = svcAvail
+          ? `**${askedSvc}** is **available** on ${display}! 🎉`
+          : `**${askedSvc}** is **not available** on ${display}. Available services that day: ${entry.services.length ? entry.services.join(', ') : 'none set'}.`
+        const note = entry.note ? `\n\n📝 ${entry.note}` : ''
+        return { id, role:'bot',
+          text: `${emoji} ${svcText}${note}`,
+          links: [waLink(`Hi CraftNest! I'd like to book ${askedSvc} for ${display}.`)],
+          quick: ['Book on WhatsApp','Check Another Date','Our Services'],
+        }
+      }
+
       const map: Record<string,{e:string;t:string}> = {
         free:    {e:'🎉',t:`We are **free and available** on ${display}! We'd love to hear from you.`},
         limited: {e:'⚡',t:`We have **limited slots** on ${display}. Act fast to secure your booking!`},
@@ -85,19 +165,21 @@ function buildReply(input: string): ChatMsg {
         booked:  {e:'📅',t:`We are **fully booked** on ${display}. Contact us for the next available date.`},
       }
       const {e,t} = map[entry.status] ?? map.free
-      const note  = entry.note     ? `\n\n📝 ${entry.note}`                                        : ''
-      const svcs  = entry.services?.length ? `\n\n✅ Services available: ${entry.services.join(', ')}` : ''
+      const note  = entry.note     ? `\n\n📝 ${entry.note}` : ''
+      const svcs  = entry.services?.length ? `\n\n✅ Available: ${entry.services.join(', ')}` : ''
+      const ampm  = (entry as {amStatus?:string;pmStatus?:string}).amStatus || (entry as {amStatus?:string;pmStatus?:string}).pmStatus
+        ? `\n\n🕐 Morning: ${(entry as {amStatus?:string}).amStatus ? map[(entry as {amStatus?:string}).amStatus!]?.e+' '+(entry as {amStatus?:string}).amStatus : 'same'} · Afternoon: ${(entry as {pmStatus?:string}).pmStatus ? (entry as {pmStatus?:string}).pmStatus : 'same'}` : ''
       return {
         id, role:'bot',
-        text: `${e} ${t}${note}${svcs}`,
+        text: `${e} ${t}${note}${svcs}${ampm}`,
         links: [waLink(`Hi CraftNest! I'd like to book for ${display}.`)],
-        quick: entry.status==='free'||entry.status==='limited' ? ['Book on WhatsApp','Our Services'] : ['Check Another Date','Contact Us'],
+        quick: entry.status==='free'||entry.status==='limited' ? ['Book on WhatsApp','Our Services'] : ['Next Available Date','Contact Us'],
       }
     }
     return {
       id, role:'bot',
-      text: `📅 Sure! To check availability, just tell me the date — for example:\n\n• "Are you free on July 4th?"\n• "Is craft nest available on December 25?"\n• "Check next Saturday"\n\nI'll look it up instantly! 🙌`,
-      quick: ['Are you free today?','Are you free tomorrow?','Contact Us'],
+      text: `📅 Sure! To check availability, just tell me the date — for example:\n\n• "Are you free on July 4th?"\n• "Is CraftNest available next Saturday?"\n• "Free for face painting on December 25?"\n\nI'll look it up instantly! 🙌`,
+      quick: ['Are you free today?','Are you free tomorrow?','Next Available Date','Contact Us'],
     }
   }
 
