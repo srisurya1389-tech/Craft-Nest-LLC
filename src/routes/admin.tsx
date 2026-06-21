@@ -16,8 +16,10 @@ import {
   exportProductsCSV, uploadToCloudinary, resetToDefaults,
   setScheduleEntry, removeScheduleEntry,
   addExtraService, updateExtraService, deleteExtraService, setExtraServicesTemplate,
+  addWebSection, updateWebSection, deleteWebSection,
   type Product, type GalleryItem, type AdminData, type SiteSettings, type Category,
   type ScheduleStatus, type ScheduleEntry, type ExtraService,
+  type WebSection, type WebSectionItem, type WebSectionType,
 } from '../data/adminStore'
 
 export const Route = createFileRoute('/admin')({ component: AdminPanel })
@@ -31,7 +33,7 @@ const ADMIN_USERS: { email: string; password: string; name: string; role: Role }
 ]
 const SESSION_KEY = 'craftnest_admin_auth'
 
-type Tab = 'dashboard' | 'jewellery' | 'gifts' | 'painting' | 'gallery' | 'hero' | 'media' | 'schedule' | 'extras' | 'settings' | 'guide'
+type Tab = 'dashboard' | 'jewellery' | 'gifts' | 'painting' | 'gallery' | 'hero' | 'media' | 'schedule' | 'extras' | 'sections' | 'settings' | 'guide'
 
 const BADGES = ['Bestseller','Popular','New','Custom','Bridal','Festival','Traditional','Adults','Kids','Limited']
 const GALLERY_CATS = ['events','arts','other'] as const
@@ -2780,6 +2782,378 @@ function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (m
   )
 }
 
+// ── Page Sections Tab ─────────────────────────────────────────────────────────
+
+const STYPE_INFO: Record<string, { icon: string; label: string; color: string; desc: string }> = {
+  testimonials: { icon: '⭐', label: 'Customer Reviews', color: '#F5A623', desc: 'Show what clients say about you' },
+  faq:          { icon: '❓', label: 'FAQ',              color: '#8BA4F8', desc: 'Answer common questions' },
+  stats:        { icon: '📊', label: 'Stats Counter',    color: '#10B981', desc: 'Show achievements with numbers' },
+  process:      { icon: '✅', label: 'How It Works',     color: '#9B8EFF', desc: 'Explain your process step by step' },
+  cta:          { icon: '📣', label: 'CTA Banner',       color: '#C9A84C', desc: 'Bold call-to-action for visitors' },
+}
+
+const SECTION_LAYOUTS: Record<string, { id: string; label: string; desc: string }[]> = {
+  testimonials: [
+    { id: 'cards',  label: 'Card Grid',    desc: '3-col cards with star ratings' },
+    { id: 'quotes', label: 'Big Quotes',   desc: 'Rotating centered quote' },
+    { id: 'wall',   label: 'Review Wall',  desc: 'Pinterest-style masonry' },
+  ],
+  faq: [
+    { id: 'accordion', label: 'Accordion',  desc: 'Click to expand answers' },
+    { id: 'grid',      label: '2-Col Grid', desc: 'Side-by-side Q&A pairs' },
+    { id: 'minimal',   label: 'Minimal',    desc: 'Numbered Q&A list' },
+  ],
+  stats: [
+    { id: 'row',    label: 'Stat Row',    desc: 'Numbers in a horizontal band' },
+    { id: 'grid',   label: 'Icon Grid',   desc: '2×2 grid with icon + number' },
+    { id: 'banner', label: 'Dark Banner', desc: 'Full-width centered numbers' },
+  ],
+  process: [
+    { id: 'arrows',   label: 'Arrow Steps', desc: 'Horizontal steps with arrows' },
+    { id: 'timeline', label: 'Timeline',    desc: 'Vertical alternating timeline' },
+    { id: 'cards',    label: 'Step Cards',  desc: 'Numbered 3-col cards' },
+  ],
+  cta: [
+    { id: 'centered', label: 'Centered', desc: 'Center headline + button' },
+    { id: 'split',    label: 'Split',    desc: 'Text left, button right' },
+    { id: 'fullbg',   label: 'Full BG',  desc: 'Background image overlay' },
+  ],
+}
+
+function SectionsTab({ data, show, onRefresh }: { data: AdminData; show: (msg: string, t?: 'success' | 'error') => void; onRefresh: () => void }) {
+  const [selId,      setSelId]      = useState<string | null>(null)
+  const [addModal,   setAddModal]   = useState(false)
+  const [selItemId,  setSelItemId]  = useState<string | null>(null)
+  const [uploading,  setUploading]  = useState(false)
+  const fileRef     = useRef<HTMLInputElement>(null)
+  const itemFileRef = useRef<HTMLInputElement>(null)
+
+  const blankItem = (): Omit<WebSectionItem, 'id'> => ({ label: '', value: '', body: '', emoji: '', rating: 5 })
+  const [itemForm, setItemForm] = useState(blankItem())
+
+  const sections = data.webSections ?? []
+  const sel = selId ? sections.find(s => s.id === selId) ?? null : null
+
+  const createSection = (type: WebSectionType) => {
+    addWebSection({
+      type, layout: SECTION_LAYOUTS[type][0].id,
+      heading: STYPE_INFO[type].label,
+      subheading: '', visible: true, items: [],
+      ctaBtnText: 'Get in Touch', ctaBtnWaMsg: 'Hi CraftNest! I saw your website.', ctaBgImg: '',
+    })
+    onRefresh()
+    setAddModal(false)
+    setTimeout(() => {
+      const d = (window as any).__getCraftData?.() ?? JSON.parse(localStorage.getItem('craftnest_admin_data') ?? '{}')
+      const ws: WebSection[] = d.webSections ?? []
+      const newest = ws[ws.length - 1]
+      if (newest) { setSelId(newest.id); setSelItemId(null); setItemForm(blankItem()) }
+      onRefresh()
+    }, 60)
+    show(`${STYPE_INFO[type].label} section added`)
+  }
+
+  const updateMeta = (patch: Partial<WebSection>) => {
+    if (!sel) return
+    updateWebSection({ ...sel, ...patch })
+    onRefresh()
+  }
+
+  const saveItem = () => {
+    if (!sel || !itemForm.label.trim()) return
+    const isNew = selItemId === '__new__'
+    const updated = isNew
+      ? [...sel.items, { ...itemForm, id: `item_${Date.now()}` } as WebSectionItem]
+      : sel.items.map(it => it.id === selItemId ? ({ ...itemForm, id: selItemId } as WebSectionItem) : it)
+    updateWebSection({ ...sel, items: updated })
+    onRefresh()
+    setSelItemId(null)
+    setItemForm(blankItem())
+    show('Item saved')
+  }
+
+  const deleteItem = (id: string) => {
+    if (!sel) return
+    updateWebSection({ ...sel, items: sel.items.filter(it => it.id !== id) })
+    onRefresh()
+    if (selItemId === id) { setSelItemId(null); setItemForm(blankItem()) }
+  }
+
+  const handleBgImg = async (file: File) => {
+    setUploading(true)
+    try { const url = await uploadToCloudinary(file); updateMeta({ ctaBgImg: url }); show('Image uploaded') }
+    catch { show('Upload failed', 'error') }
+    setUploading(false)
+  }
+
+  const handleItemImg = async (file: File) => {
+    setUploading(true)
+    try { const url = await uploadToCloudinary(file); setItemForm(f => ({ ...f, img: url })); show('Avatar uploaded') }
+    catch { show('Upload failed', 'error') }
+    setUploading(false)
+  }
+
+  const iCls = "w-full rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/20 focus:outline-none"
+  const iSt  = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(201,168,76,0.15)' } as React.CSSProperties
+  const smI  = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(201,168,76,0.12)' } as React.CSSProperties
+
+  return (
+    <div className="space-y-6 w-full">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h2 className="font-serif text-xl sm:text-2xl text-white mb-1">Page Sections</h2>
+          <p className="text-xs text-white/35 leading-relaxed max-w-lg">Add custom sections to your homepage — reviews, FAQ, stats, process steps, and CTA banners. They appear live instantly.</p>
+        </div>
+        <button onClick={() => setAddModal(true)} className="flex items-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-xs tracking-[0.15em] uppercase px-5 py-2.5 rounded-full transition-all hover:scale-105 cursor-pointer shadow-[0_4px_20px_rgba(201,168,76,0.28)] shrink-0">
+          <Plus className="w-4 h-4"/> Add Section
+        </button>
+      </div>
+
+      {/* List + Editor */}
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_420px] gap-4 items-start">
+
+        {/* Sections list */}
+        <div className="space-y-2">
+          {sections.length === 0 ? (
+            <div className="rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 p-12 text-center" style={{ borderColor: 'rgba(201,168,76,0.10)' }}>
+              <Layers className="w-8 h-8" style={{ color: 'rgba(201,168,76,0.20)' }}/>
+              <p className="text-sm font-serif text-white/25">No sections yet</p>
+              <p className="text-[11px] text-white/15 max-w-xs leading-relaxed">Click "+ Add Section" to add testimonials, FAQ, stats, process steps, or a CTA banner to your website.</p>
+            </div>
+          ) : sections.map(sec => {
+            const info = STYPE_INFO[sec.type]
+            return (
+              <div key={sec.id}
+                className="flex items-center gap-3 p-4 rounded-2xl border transition-all cursor-pointer"
+                style={{ background: selId === sec.id ? 'rgba(201,168,76,0.07)' : 'rgba(255,255,255,0.02)', borderColor: selId === sec.id ? 'rgba(201,168,76,0.28)' : 'rgba(255,255,255,0.06)', opacity: sec.visible ? 1 : 0.50 }}
+                onClick={() => { setSelId(sec.id); setSelItemId(null); setItemForm(blankItem()) }}>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 border border-white/8" style={{ background: 'rgba(255,255,255,0.04)' }}>{info.icon}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <p className="text-sm font-bold text-white truncate">{sec.heading}</p>
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full shrink-0" style={{ background: `${info.color}18`, color: info.color }}>{info.label}</span>
+                  </div>
+                  <p className="text-[10px] text-white/30">
+                    {SECTION_LAYOUTS[sec.type]?.find(l => l.id === sec.layout)?.label ?? sec.layout}
+                    {sec.type !== 'cta' ? ` · ${sec.items.length} item${sec.items.length !== 1 ? 's' : ''}` : ' · Banner'}
+                  </p>
+                </div>
+                <div className="flex items-center gap-1 shrink-0" onClick={e => e.stopPropagation()}>
+                  <button onClick={() => { updateWebSection({ ...sec, visible: !sec.visible }); onRefresh() }} className="w-8 h-8 rounded-lg flex items-center justify-center text-white/28 hover:text-white cursor-pointer transition-colors">
+                    {sec.visible ? <Eye className="w-3.5 h-3.5"/> : <EyeOff className="w-3.5 h-3.5"/>}
+                  </button>
+                  <button onClick={() => { deleteWebSection(sec.id); onRefresh(); if (selId === sec.id) setSelId(null) }} className="w-8 h-8 rounded-lg flex items-center justify-center text-white/28 hover:text-red-400 cursor-pointer transition-colors">
+                    <Trash2 className="w-3.5 h-3.5"/>
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Edit panel */}
+        {sel ? (
+          <div key={sel.id} className="rounded-2xl border p-5 space-y-4 xl:sticky xl:top-20 max-h-[calc(100dvh-140px)] overflow-y-auto" style={{ background: 'rgba(13,13,38,0.98)', borderColor: 'rgba(201,168,76,0.15)' }}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-lg">{STYPE_INFO[sel.type].icon}</span>
+                <p className="text-xs tracking-[0.12em] font-bold uppercase" style={{ color: STYPE_INFO[sel.type].color }}>{STYPE_INFO[sel.type].label}</p>
+              </div>
+              <button onClick={() => setSelId(null)} className="w-8 h-8 rounded-lg flex items-center justify-center text-white/28 hover:text-white cursor-pointer transition-colors"><X className="w-4 h-4"/></button>
+            </div>
+
+            {/* Heading / subheading */}
+            <div className="space-y-1">
+              <label className="block text-[10px] tracking-[0.12em] text-[#C9A84C]/60 uppercase font-bold">Section Heading</label>
+              <input key={sel.id + 'h'} defaultValue={sel.heading} onBlur={e => updateMeta({ heading: e.target.value })} className={iCls} style={iSt} placeholder="e.g. What Our Clients Say"/>
+            </div>
+            <div className="space-y-1">
+              <label className="block text-[10px] tracking-[0.12em] text-[#C9A84C]/60 uppercase font-bold">Subheading <span className="text-white/20 normal-case tracking-normal font-normal">(optional)</span></label>
+              <input key={sel.id + 's'} defaultValue={sel.subheading} onBlur={e => updateMeta({ subheading: e.target.value })} className={iCls} style={iSt} placeholder="A short description..."/>
+            </div>
+
+            {/* Layout picker */}
+            <div>
+              <label className="block text-[10px] tracking-[0.12em] text-[#C9A84C]/60 uppercase font-bold mb-2">Layout</label>
+              <div className="grid grid-cols-3 gap-2">
+                {(SECTION_LAYOUTS[sel.type] ?? []).map(l => (
+                  <button key={l.id} type="button" onClick={() => updateMeta({ layout: l.id })}
+                    className="text-left p-2.5 rounded-xl border transition-all cursor-pointer"
+                    style={{ background: sel.layout === l.id ? 'rgba(201,168,76,0.10)' : 'rgba(255,255,255,0.025)', borderColor: sel.layout === l.id ? 'rgba(201,168,76,0.40)' : 'rgba(255,255,255,0.08)' }}>
+                    <p className="text-[10px] font-bold text-white mb-0.5">{l.label}</p>
+                    <p className="text-[9px] text-white/30 leading-relaxed">{l.desc}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA-specific fields */}
+            {sel.type === 'cta' && (
+              <div className="space-y-3 pt-2 border-t border-white/6">
+                <div className="space-y-1">
+                  <label className="block text-[10px] tracking-[0.12em] text-[#C9A84C]/60 uppercase font-bold">Button Text</label>
+                  <input key={sel.id + 'bt'} defaultValue={sel.ctaBtnText} onBlur={e => updateMeta({ ctaBtnText: e.target.value })} className={iCls} style={iSt} placeholder="Get in Touch"/>
+                </div>
+                <div className="space-y-1">
+                  <label className="block text-[10px] tracking-[0.12em] text-[#C9A84C]/60 uppercase font-bold">WhatsApp Message</label>
+                  <input key={sel.id + 'wm'} defaultValue={sel.ctaBtnWaMsg} onBlur={e => updateMeta({ ctaBtnWaMsg: e.target.value })} className={iCls} style={iSt} placeholder="Hi CraftNest! I'd like to..."/>
+                </div>
+                <div className="space-y-1">
+                  <label className="block text-[10px] tracking-[0.12em] text-[#C9A84C]/60 uppercase font-bold">Background Image <span className="text-white/20 normal-case tracking-normal font-normal">(optional)</span></label>
+                  {sel.ctaBgImg ? (
+                    <div className="relative h-20 rounded-xl overflow-hidden border border-white/8 group">
+                      <img src={sel.ctaBgImg} alt="" className="w-full h-full object-cover"/>
+                      <button onClick={() => updateMeta({ ctaBgImg: '' })} className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/65 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"><X className="w-3 h-3 text-white"/></button>
+                    </div>
+                  ) : (
+                    <button onClick={() => fileRef.current?.click()} disabled={uploading} className="w-full h-14 rounded-xl border-2 border-dashed flex items-center justify-center gap-2 text-xs cursor-pointer" style={{ borderColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.25)' }}>
+                      {uploading ? <RefreshCw className="w-4 h-4 animate-spin"/> : <><Upload className="w-4 h-4"/> Upload Background</>}
+                    </button>
+                  )}
+                  <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && handleBgImg(e.target.files[0])}/>
+                </div>
+              </div>
+            )}
+
+            {/* Visibility toggle */}
+            <div className="flex items-center justify-between px-3 py-2.5 rounded-xl border" style={{ background: 'rgba(255,255,255,0.025)', borderColor: 'rgba(255,255,255,0.07)' }}>
+              <div>
+                <p className="text-sm font-semibold text-white/70">Visible on website</p>
+                <p className="text-[10px] text-white/30">{sel.visible ? 'Shown to visitors' : 'Hidden from visitors'}</p>
+              </div>
+              <button type="button" onClick={() => updateMeta({ visible: !sel.visible })} className="relative w-11 h-6 rounded-full transition-all cursor-pointer shrink-0 ml-3" style={{ background: sel.visible ? '#10B981' : 'rgba(255,255,255,0.14)' }}>
+                <span className="absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm transition-all duration-200" style={{ left: sel.visible ? 'calc(100% - 20px)' : '4px' }}/>
+              </button>
+            </div>
+
+            {/* Items (hidden for CTA) */}
+            {sel.type !== 'cta' && (
+              <div className="space-y-3 pt-2 border-t border-white/6">
+                <div className="flex items-center justify-between">
+                  <p className="text-[10px] tracking-[0.12em] text-[#C9A84C]/60 uppercase font-bold">{sel.items.length} Item{sel.items.length !== 1 ? 's' : ''}</p>
+                  <button onClick={() => { setSelItemId('__new__'); setItemForm(blankItem()) }} className="flex items-center gap-1.5 text-[10px] font-bold tracking-[0.12em] uppercase text-[#C9A84C] hover:text-[#E8C96B] cursor-pointer transition-colors">
+                    <Plus className="w-3.5 h-3.5"/> Add Item
+                  </button>
+                </div>
+                {sel.items.map(it => (
+                  <div key={it.id} className="flex items-center gap-2 p-2.5 rounded-xl border" style={{ background: selItemId === it.id ? 'rgba(201,168,76,0.06)' : 'rgba(255,255,255,0.02)', borderColor: selItemId === it.id ? 'rgba(201,168,76,0.20)' : 'rgba(255,255,255,0.06)' }}>
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm border border-white/8 overflow-hidden shrink-0" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                      {it.img ? <img src={it.img} alt="" className="w-full h-full object-cover"/> : (it.emoji || '•')}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold text-white truncate">{it.label || 'Untitled'}</p>
+                      {(it.body || it.value) && <p className="text-[10px] text-white/30 truncate">{it.body || it.value}</p>}
+                    </div>
+                    <div className="flex items-center gap-0.5 shrink-0">
+                      <button onClick={() => { setSelItemId(it.id); setItemForm({ label: it.label, value: it.value ?? '', body: it.body ?? '', emoji: it.emoji ?? '', rating: it.rating ?? 5, img: it.img ?? '' }) }} className="w-7 h-7 rounded-lg flex items-center justify-center text-white/25 hover:text-[#C9A84C] cursor-pointer transition-colors"><Pencil className="w-3 h-3"/></button>
+                      <button onClick={() => deleteItem(it.id)} className="w-7 h-7 rounded-lg flex items-center justify-center text-white/25 hover:text-red-400 cursor-pointer transition-colors"><Trash2 className="w-3 h-3"/></button>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Item editor */}
+                {selItemId && (
+                  <div className="rounded-xl border p-3.5 space-y-3" style={{ background: 'rgba(255,255,255,0.025)', borderColor: 'rgba(201,168,76,0.12)' }}>
+                    <div className="flex items-center justify-between">
+                      <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-white/50">{selItemId === '__new__' ? 'New Item' : 'Edit Item'}</p>
+                      <button onClick={() => { setSelItemId(null); setItemForm(blankItem()) }} className="text-white/25 hover:text-white cursor-pointer"><X className="w-3.5 h-3.5"/></button>
+                    </div>
+                    <div>
+                      <label className="block text-[9px] tracking-[0.12em] text-[#C9A84C]/55 uppercase font-bold mb-1">
+                        {sel.type === 'testimonials' ? 'Name' : sel.type === 'faq' ? 'Question' : sel.type === 'stats' ? 'Stat Label' : 'Step Title'}
+                      </label>
+                      <input value={itemForm.label ?? ''} onChange={e => setItemForm(f => ({ ...f, label: e.target.value }))} className="w-full rounded-lg px-3 py-2 text-white/90 text-xs focus:outline-none" style={smI} placeholder={sel.type === 'testimonials' ? 'e.g. Priya Sharma' : sel.type === 'faq' ? 'e.g. How do I book?' : sel.type === 'stats' ? 'e.g. Events Done' : 'e.g. Place Your Order'}/>
+                    </div>
+                    <div>
+                      <label className="block text-[9px] tracking-[0.12em] text-[#C9A84C]/55 uppercase font-bold mb-1">
+                        {sel.type === 'testimonials' ? 'Role / Location' : sel.type === 'faq' ? 'Answer' : sel.type === 'stats' ? 'Number (e.g. 500+)' : 'Description'}
+                      </label>
+                      {(sel.type === 'faq' || sel.type === 'process') ? (
+                        <textarea value={itemForm.value ?? ''} onChange={e => setItemForm(f => ({ ...f, value: e.target.value }))} rows={2} className="w-full rounded-lg px-3 py-2 text-white/90 text-xs focus:outline-none resize-none" style={smI}/>
+                      ) : (
+                        <input value={itemForm.value ?? ''} onChange={e => setItemForm(f => ({ ...f, value: e.target.value }))} className="w-full rounded-lg px-3 py-2 text-white/90 text-xs focus:outline-none" style={smI}/>
+                      )}
+                    </div>
+                    {sel.type === 'testimonials' && (
+                      <div>
+                        <label className="block text-[9px] tracking-[0.12em] text-[#C9A84C]/55 uppercase font-bold mb-1">Review Text</label>
+                        <textarea value={itemForm.body ?? ''} onChange={e => setItemForm(f => ({ ...f, body: e.target.value }))} rows={2} className="w-full rounded-lg px-3 py-2 text-white/90 text-xs focus:outline-none resize-none" style={smI} placeholder="What did they say?"/>
+                      </div>
+                    )}
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="block text-[9px] tracking-[0.12em] text-[#C9A84C]/55 uppercase font-bold mb-1">Emoji / Icon</label>
+                        <input value={itemForm.emoji ?? ''} onChange={e => setItemForm(f => ({ ...f, emoji: e.target.value }))} maxLength={4} className="w-full rounded-lg px-3 py-2 text-white/90 text-center text-xl focus:outline-none" style={smI}/>
+                      </div>
+                      {sel.type === 'testimonials' && (
+                        <div>
+                          <label className="block text-[9px] tracking-[0.12em] text-[#C9A84C]/55 uppercase font-bold mb-1">Rating</label>
+                          <select value={itemForm.rating ?? 5} onChange={e => setItemForm(f => ({ ...f, rating: Number(e.target.value) }))} className="w-full rounded-lg px-3 py-2 text-white/90 text-xs focus:outline-none" style={smI}>
+                            {[5, 4, 3, 2, 1].map(r => <option key={r} value={r}>{r} ★</option>)}
+                          </select>
+                        </div>
+                      )}
+                    </div>
+                    {sel.type === 'testimonials' && (
+                      <div>
+                        <label className="block text-[9px] tracking-[0.12em] text-[#C9A84C]/55 uppercase font-bold mb-1">Avatar Photo <span className="text-white/20 normal-case tracking-normal font-normal">(optional)</span></label>
+                        {itemForm.img ? (
+                          <div className="flex items-center gap-2">
+                            <img src={itemForm.img} alt="" className="w-10 h-10 rounded-full object-cover border border-white/8"/>
+                            <button onClick={() => setItemForm(f => ({ ...f, img: '' }))} className="text-[10px] text-red-400/60 hover:text-red-400 cursor-pointer">Remove</button>
+                          </div>
+                        ) : (
+                          <button onClick={() => itemFileRef.current?.click()} disabled={uploading} className="w-full h-10 rounded-lg border border-dashed flex items-center justify-center gap-1.5 text-[10px] cursor-pointer" style={{ borderColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.25)' }}>
+                            {uploading ? <RefreshCw className="w-3 h-3 animate-spin"/> : <><Upload className="w-3 h-3"/> Upload Avatar</>}
+                          </button>
+                        )}
+                        <input ref={itemFileRef} type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && handleItemImg(e.target.files[0])}/>
+                      </div>
+                    )}
+                    <button onClick={saveItem} className="w-full flex items-center justify-center gap-1.5 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.12em] uppercase py-2.5 rounded-full transition-all cursor-pointer">
+                      <CheckCircle2 className="w-3.5 h-3.5"/> Save Item
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 p-10 text-center xl:min-h-[260px]" style={{ borderColor: 'rgba(201,168,76,0.09)' }}>
+            <Layers className="w-8 h-8" style={{ color: 'rgba(201,168,76,0.16)' }}/>
+            <p className="text-sm font-serif text-white/22">Select a section to edit</p>
+            <p className="text-[11px] text-white/15 max-w-[200px] leading-relaxed">Or click "+ Add Section" to add a new one.</p>
+          </div>
+        )}
+      </div>
+
+      {/* Add Section Modal */}
+      {addModal && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" onClick={() => setAddModal(false)} style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)' }}>
+          <div className="w-full max-w-2xl rounded-3xl border p-5 space-y-4" style={{ background: 'rgba(13,13,38,0.99)', borderColor: 'rgba(201,168,76,0.20)' }} onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between">
+              <p className="font-bold text-white">Choose Section Type</p>
+              <button onClick={() => setAddModal(false)} className="w-8 h-8 rounded-xl flex items-center justify-center text-white/30 hover:text-white cursor-pointer" style={{ background: 'rgba(255,255,255,0.05)' }}><X className="w-4 h-4"/></button>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {(Object.entries(STYPE_INFO) as [string, { icon: string; label: string; color: string; desc: string }][]).map(([type, info]) => (
+                <button key={type} onClick={() => createSection(type as WebSectionType)}
+                  className="text-left p-4 rounded-2xl border transition-all cursor-pointer hover:-translate-y-0.5"
+                  style={{ background: 'rgba(255,255,255,0.035)', borderColor: `${info.color}22` }}>
+                  <div className="text-3xl mb-2">{info.icon}</div>
+                  <p className="text-xs font-bold text-white mb-0.5">{info.label}</p>
+                  <p className="text-[10px] leading-relaxed text-white/35">{info.desc}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Guide Tab ─────────────────────────────────────────────────────────────────
 
 function GuideTab({ onGoMedia, onGoSettings }: { onGoMedia: () => void; onGoSettings: () => void }) {
@@ -3002,8 +3376,9 @@ function AdminPanel() {
     { id:'hero'      as Tab, label:'Hero Carousel',  icon:Home,      sub:`${data.heroImages.length} images` },
     { id:'media'     as Tab, label:'Image Converter',icon:ImageIcon2 },
     { id:'schedule'  as Tab, label:'Schedule',        icon:CalendarDays },
-    { id:'extras'    as Tab, label:'Extra Services',  icon:Sparkles, ownerOnly:true },
-    { id:'settings'  as Tab, label:'Settings',       icon:Settings,  ownerOnly:true },
+    { id:'extras'    as Tab, label:'Extra Services',  icon:Sparkles,    ownerOnly:true },
+    { id:'sections'  as Tab, label:'Page Sections',  icon:Layers,      ownerOnly:true },
+    { id:'settings'  as Tab, label:'Settings',       icon:Settings,    ownerOnly:true },
     { id:'guide'     as Tab, label:'Starter Guide',  icon:BookOpen },
   ] as NavItem[]).filter(n => !n.ownerOnly || userRole === 'owner')
 
@@ -3137,6 +3512,8 @@ function AdminPanel() {
           {tab === 'schedule' && <ScheduleTab data={data} show={show} onRefresh={refresh}/>}
 
           {tab === 'extras' && userRole === 'owner' && <ExtraServicesTab data={data} show={show} onRefresh={refresh}/>}
+
+          {tab === 'sections' && userRole === 'owner' && <SectionsTab data={data} show={show} onRefresh={refresh}/>}
 
           {tab === 'settings' && userRole === 'owner' && <SettingsTab data={data} show={show}/>}
 

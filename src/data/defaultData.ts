@@ -50,6 +50,31 @@ export type ExtraService = {
   visible: boolean
 }
 
+export type WebSectionType = 'testimonials' | 'faq' | 'stats' | 'process' | 'cta'
+
+export type WebSectionItem = {
+  id: string
+  label: string
+  value?: string
+  body?: string
+  emoji?: string
+  rating?: number
+  img?: string
+}
+
+export type WebSection = {
+  id: string
+  type: WebSectionType
+  layout: string
+  heading: string
+  subheading: string
+  visible: boolean
+  items: WebSectionItem[]
+  ctaBtnText?: string
+  ctaBtnWaMsg?: string
+  ctaBgImg?: string
+}
+
 export type AdminData = {
   products: {
     jewellery: Product[]
@@ -62,6 +87,7 @@ export type AdminData = {
   schedule: Record<string, ScheduleEntry>
   extraServices: ExtraService[]
   extraServicesTemplate: 'mosaic' | 'strips' | 'showcase' | 'cards' | 'carousel'
+  webSections: WebSection[]
 }
 
 export const defaultSettings: SiteSettings = {

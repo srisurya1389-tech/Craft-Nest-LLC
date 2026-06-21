@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ShoppingBag, ChevronDown, Menu, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Fragment } from 'react'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { useCart } from '../context/CartContext'
 
@@ -397,6 +397,331 @@ function ExtraServicesSection() {
         </div>
       </div>
     </section>
+  )
+}
+
+// ── Web Sections Public Renderer ──────────────────────────────────────────────
+
+type WSItem = { id:string; label:string; value?:string; body?:string; emoji?:string; rating?:number; img?:string }
+type WSec   = { id:string; type:string; layout:string; heading:string; subheading:string; visible:boolean; items:WSItem[]; ctaBtnText?:string; ctaBtnWaMsg?:string; ctaBgImg?:string }
+
+function WebSectionsRenderer() {
+  const [sections, setSections] = useState<WSec[]>([])
+  const [waNum,    setWaNum]    = useState('14704527988')
+  const [openId,   setOpenId]   = useState<string|null>(null)
+  const [qIdxMap,  setQIdxMap]  = useState<Record<string,number>>({})
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('craftnest_admin_data')
+      if (!raw) return
+      const d = JSON.parse(raw)
+      setSections((d.webSections ?? []).filter((s: WSec) => s.visible))
+      if (d.settings?.whatsappNumber) setWaNum(d.settings.whatsappNumber)
+    } catch {}
+  }, [])
+
+  if (sections.length === 0) return null
+
+  const BG   = { background: 'radial-gradient(ellipse 80% 80% at 50% 50%, #0A2E1A 0%, #040D0A 65%, #020808 100%)' } as React.CSSProperties
+  const CLS  = 'relative py-16 md:py-24 px-4 sm:px-6 md:px-12 lg:px-16 border-b border-[#C9A84C]/20'
+  const CARD = { background: 'rgba(8,22,14,0.97)' } as React.CSSProperties
+
+  const Stars = ({ n }: { n:number }) => (
+    <div className="flex gap-0.5 mb-3">{[1,2,3,4,5].map(i => <span key={i} style={{color:i<=n?'#C9A84C':'rgba(201,168,76,0.18)'}}>★</span>)}</div>
+  )
+
+  const SHead = ({ sec }: { sec:WSec }) => (
+    <div className="text-center mb-12">
+      <h2 className="font-serif text-2xl sm:text-3xl md:text-[42px] text-white font-medium tracking-wide">{sec.heading}</h2>
+      {sec.subheading && <p className="text-white/45 mt-3 text-sm max-w-2xl mx-auto leading-relaxed">{sec.subheading}</p>}
+    </div>
+  )
+
+  return (
+    <>
+      {sections.map(sec => {
+        const wa = `https://wa.me/${waNum}?text=${encodeURIComponent(sec.ctaBtnWaMsg || 'Hi CraftNest!')}`
+
+        /* ── TESTIMONIALS ───────────────────────────────────────────────── */
+        if (sec.type === 'testimonials') {
+          if (sec.layout === 'cards') return (
+            <section key={sec.id} className={CLS} style={BG}>
+              <div className="max-w-7xl mx-auto"><SHead sec={sec}/>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {sec.items.map(it => (
+                    <div key={it.id} className="rounded-2xl border border-[#C9A84C]/12 p-5" style={CARD}>
+                      <Stars n={it.rating ?? 5}/>
+                      <p className="text-white/60 text-sm leading-relaxed mb-4 italic">"{it.body || it.value}"</p>
+                      <div className="flex items-center gap-2.5">
+                        {it.img ? <img src={it.img} alt={it.label} className="w-10 h-10 rounded-full object-cover border border-[#C9A84C]/20"/>
+                          : <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl border border-[#C9A84C]/10" style={{background:'rgba(201,168,76,0.08)'}}>{it.emoji||'👤'}</div>}
+                        <div>
+                          <p className="text-white text-sm font-semibold">{it.label}</p>
+                          {it.value && <p className="text-white/38 text-xs">{it.value}</p>}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )
+          if (sec.layout === 'quotes') {
+            const idx = qIdxMap[sec.id] ?? 0
+            const cur = sec.items[idx]
+            return (
+              <section key={sec.id} className={CLS} style={BG}>
+                <div className="max-w-4xl mx-auto"><SHead sec={sec}/>
+                  <div className="text-center">
+                    <div className="text-[80px] leading-none mb-2 font-serif" style={{color:'rgba(201,168,76,0.14)'}}>❝</div>
+                    <p className="text-white/70 text-xl md:text-2xl leading-relaxed italic mb-8 min-h-[60px]">{cur?.body || cur?.value}</p>
+                    <div className="flex flex-col items-center gap-1 mb-8">
+                      {cur?.img && <img src={cur.img} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-[#C9A84C]/25 mb-2"/>}
+                      <p className="text-white font-semibold">{cur?.label}</p>
+                      {cur?.value && <p className="text-white/40 text-sm">{cur.value}</p>}
+                    </div>
+                    <div className="flex gap-2 justify-center">
+                      {sec.items.map((_,i) => (
+                        <button key={i} onClick={() => setQIdxMap(m => ({...m,[sec.id]:i}))} className="w-2.5 h-2.5 rounded-full transition-all cursor-pointer" style={{background:i===idx?'#C9A84C':'rgba(201,168,76,0.22)'}}/>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )
+          }
+          return (
+            <section key={sec.id} className={CLS} style={BG}>
+              <div className="max-w-7xl mx-auto"><SHead sec={sec}/>
+                <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
+                  {sec.items.map(it => (
+                    <div key={it.id} className="break-inside-avoid mb-4 p-5 rounded-2xl border border-[#C9A84C]/10" style={CARD}>
+                      <Stars n={it.rating ?? 5}/>
+                      <p className="text-white/58 text-sm leading-relaxed mb-3 italic">"{it.body || it.value}"</p>
+                      <div className="flex items-center gap-2">
+                        {it.img ? <img src={it.img} alt="" className="w-8 h-8 rounded-full object-cover"/> : <span className="text-lg">{it.emoji||'👤'}</span>}
+                        <div><p className="text-white text-xs font-semibold">{it.label}</p>{it.value && <p className="text-white/35 text-[10px]">{it.value}</p>}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )
+        }
+
+        /* ── FAQ ────────────────────────────────────────────────────────── */
+        if (sec.type === 'faq') {
+          if (sec.layout === 'accordion') return (
+            <section key={sec.id} className={CLS} style={BG}>
+              <div className="max-w-3xl mx-auto"><SHead sec={sec}/>
+                <div className="divide-y divide-[#C9A84C]/12">
+                  {sec.items.map(it => (
+                    <div key={it.id}>
+                      <button onClick={() => setOpenId(openId===it.id?null:it.id)} className="w-full flex items-center justify-between py-5 text-left cursor-pointer group">
+                        <p className="text-white text-base md:text-lg font-serif group-hover:text-[#E8C96B] transition-colors pr-4">{it.label}</p>
+                        <span className="text-white/35 shrink-0 text-xl transition-transform duration-300" style={{transform:openId===it.id?'rotate(90deg)':'none'}}>›</span>
+                      </button>
+                      {openId===it.id && <p className="text-white/50 text-sm leading-relaxed pb-5">{it.value || it.body}</p>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )
+          if (sec.layout === 'grid') return (
+            <section key={sec.id} className={CLS} style={BG}>
+              <div className="max-w-6xl mx-auto"><SHead sec={sec}/>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {sec.items.map(it => (
+                    <div key={it.id} className="p-5 rounded-2xl border border-[#C9A84C]/10" style={CARD}>
+                      <p className="text-white font-serif text-base mb-3 leading-snug">{it.label}</p>
+                      <p className="text-white/50 text-sm leading-relaxed">{it.value || it.body}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )
+          return (
+            <section key={sec.id} className={CLS} style={BG}>
+              <div className="max-w-3xl mx-auto"><SHead sec={sec}/>
+                <div className="divide-y divide-white/8">
+                  {sec.items.map((it,i) => (
+                    <div key={it.id} className="flex gap-5 py-6">
+                      <span className="text-[#C9A84C]/55 font-bold text-sm shrink-0 w-7 tabular-nums">0{i+1}</span>
+                      <div><p className="text-white font-medium mb-1.5">{it.label}</p><p className="text-white/45 text-sm leading-relaxed">{it.value || it.body}</p></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )
+        }
+
+        /* ── STATS ──────────────────────────────────────────────────────── */
+        if (sec.type === 'stats') {
+          if (sec.layout === 'row') return (
+            <section key={sec.id} className={CLS} style={BG}>
+              <div className="max-w-6xl mx-auto"><SHead sec={sec}/>
+                <div className="flex flex-wrap justify-center gap-x-10 gap-y-8">
+                  {sec.items.map((it,i) => (
+                    <Fragment key={it.id}>
+                      <div className="text-center">
+                        {it.emoji && <div className="text-3xl mb-2">{it.emoji}</div>}
+                        <p className="font-serif text-4xl md:text-5xl font-bold" style={{color:'#E8C96B'}}>{it.value}</p>
+                        <p className="text-white/50 text-sm mt-1.5">{it.label}</p>
+                      </div>
+                      {i < sec.items.length-1 && <div className="hidden md:block self-center w-px h-14" style={{background:'rgba(201,168,76,0.18)'}}/>}
+                    </Fragment>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )
+          if (sec.layout === 'grid') return (
+            <section key={sec.id} className={CLS} style={BG}>
+              <div className="max-w-5xl mx-auto"><SHead sec={sec}/>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {sec.items.map(it => (
+                    <div key={it.id} className="p-6 rounded-2xl border border-[#C9A84C]/12 text-center" style={CARD}>
+                      {it.emoji && <div className="text-3xl mb-3">{it.emoji}</div>}
+                      <p className="font-serif text-3xl font-bold mb-1" style={{color:'#E8C96B'}}>{it.value}</p>
+                      <p className="text-white/45 text-xs uppercase tracking-wider">{it.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )
+          return (
+            <section key={sec.id} className={`${CLS} py-14`} style={{background:'rgba(4,9,6,0.99)'}}>
+              <div className="max-w-6xl mx-auto">
+                {sec.heading && <p className="text-center text-[10px] tracking-[0.25em] text-[#C9A84C]/60 uppercase mb-8">{sec.heading}</p>}
+                <div className="flex flex-wrap justify-around gap-6">
+                  {sec.items.map(it => (
+                    <div key={it.id} className="text-center px-8 border-r border-[#C9A84C]/12 last:border-0">
+                      {it.emoji && <div className="text-2xl mb-1">{it.emoji}</div>}
+                      <p className="font-serif text-4xl md:text-5xl font-bold" style={{color:'#C9A84C'}}>{it.value}</p>
+                      <p className="text-white/40 text-xs mt-1.5 uppercase tracking-widest">{it.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )
+        }
+
+        /* ── PROCESS ────────────────────────────────────────────────────── */
+        if (sec.type === 'process') {
+          if (sec.layout === 'arrows') return (
+            <section key={sec.id} className={CLS} style={BG}>
+              <div className="max-w-6xl mx-auto"><SHead sec={sec}/>
+                <div className="flex flex-col sm:flex-row flex-wrap justify-center items-start gap-3">
+                  {sec.items.map((it,i) => (
+                    <Fragment key={it.id}>
+                      <div className="flex flex-col items-center text-center max-w-[160px]">
+                        <div className="w-14 h-14 rounded-2xl border-2 flex items-center justify-center mb-3" style={{background:'rgba(201,168,76,0.08)',borderColor:'rgba(201,168,76,0.28)'}}>
+                          {it.emoji ? <span className="text-2xl">{it.emoji}</span> : <span className="font-bold text-base" style={{color:'#C9A84C'}}>0{i+1}</span>}
+                        </div>
+                        <p className="text-white font-semibold text-sm mb-1.5">{it.label}</p>
+                        {it.value && <p className="text-white/40 text-xs leading-relaxed">{it.value}</p>}
+                      </div>
+                      {i < sec.items.length-1 && <div className="hidden sm:flex items-center mt-7 text-3xl" style={{color:'rgba(201,168,76,0.28)'}}>›</div>}
+                    </Fragment>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )
+          if (sec.layout === 'timeline') return (
+            <section key={sec.id} className={CLS} style={BG}>
+              <div className="max-w-3xl mx-auto"><SHead sec={sec}/>
+                {sec.items.map((it,i) => (
+                  <div key={it.id} className={`flex gap-5 mb-6 ${i%2===1?'flex-row-reverse':''}`}>
+                    <div className="flex flex-col items-center shrink-0">
+                      <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center" style={{background:'rgba(201,168,76,0.08)',borderColor:'rgba(201,168,76,0.35)'}}>
+                        {it.emoji ? <span className="text-xl">{it.emoji}</span> : <span className="font-bold text-sm" style={{color:'#C9A84C'}}>0{i+1}</span>}
+                      </div>
+                      {i < sec.items.length-1 && <div className="w-px flex-1 mt-2" style={{background:'rgba(201,168,76,0.15)'}}/>}
+                    </div>
+                    <div className={`flex-1 pb-8 ${i%2===1?'text-right':''}`}>
+                      <p className="text-white font-serif text-xl mb-2">{it.label}</p>
+                      {it.value && <p className="text-white/45 text-sm leading-relaxed">{it.value}</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+          return (
+            <section key={sec.id} className={CLS} style={BG}>
+              <div className="max-w-7xl mx-auto"><SHead sec={sec}/>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {sec.items.map((it,i) => (
+                    <div key={it.id} className="p-6 rounded-2xl border border-[#C9A84C]/10" style={CARD}>
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="font-black text-3xl tabular-nums" style={{color:'rgba(201,168,76,0.40)'}}>0{i+1}</span>
+                        {it.emoji && <span className="text-3xl">{it.emoji}</span>}
+                      </div>
+                      <p className="text-white font-serif text-lg mb-2">{it.label}</p>
+                      {it.value && <p className="text-white/45 text-sm leading-relaxed">{it.value}</p>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )
+        }
+
+        /* ── CTA ────────────────────────────────────────────────────────── */
+        if (sec.type === 'cta') {
+          if (sec.layout === 'centered') return (
+            <section key={sec.id} className={`${CLS} relative overflow-hidden`} style={BG}>
+              {sec.ctaBgImg && <><img src={sec.ctaBgImg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-12"/><div className="absolute inset-0" style={{background:'rgba(3,10,6,0.75)'}}/></>}
+              <div className="relative max-w-3xl mx-auto text-center">
+                <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white font-medium mb-4 leading-tight">{sec.heading}</h2>
+                {sec.subheading && <p className="text-white/50 text-base mb-10 leading-relaxed">{sec.subheading}</p>}
+                <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold px-10 py-4 rounded-full text-sm transition-all hover:scale-105 shadow-[0_4px_30px_rgba(201,168,76,0.30)]">
+                  {sec.ctaBtnText || 'Get in Touch'} →
+                </a>
+              </div>
+            </section>
+          )
+          if (sec.layout === 'split') return (
+            <section key={sec.id} className={`${CLS} relative overflow-hidden`} style={BG}>
+              {sec.ctaBgImg && <><img src={sec.ctaBgImg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-10"/><div className="absolute inset-0" style={{background:'rgba(3,10,6,0.80)'}}/></>}
+              <div className="relative max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+                <div className="flex-1">
+                  <h2 className="font-serif text-3xl md:text-4xl text-white font-medium mb-3">{sec.heading}</h2>
+                  {sec.subheading && <p className="text-white/50 text-base leading-relaxed">{sec.subheading}</p>}
+                </div>
+                <a href={wa} target="_blank" rel="noopener noreferrer" className="shrink-0 inline-flex items-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold px-10 py-4 rounded-full text-sm transition-all hover:scale-105 shadow-[0_4px_30px_rgba(201,168,76,0.28)]">
+                  {sec.ctaBtnText || 'Contact Us'} →
+                </a>
+              </div>
+            </section>
+          )
+          return (
+            <section key={sec.id} className="relative py-24 border-b border-[#C9A84C]/20 overflow-hidden">
+              {sec.ctaBgImg
+                ? <><img src={sec.ctaBgImg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-20"/><div className="absolute inset-0" style={{background:'rgba(3,10,6,0.80)'}}/></>
+                : <div className="absolute inset-0" style={{background:'linear-gradient(135deg,#0A2E1A,#040D08)'}}/>}
+              <div className="relative max-w-3xl mx-auto text-center px-4">
+                <h2 className="font-serif text-3xl md:text-5xl text-white font-medium mb-4">{sec.heading}</h2>
+                {sec.subheading && <p className="text-white/50 text-base mb-10 max-w-lg mx-auto leading-relaxed">{sec.subheading}</p>}
+                <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold px-12 py-5 rounded-full text-sm transition-all hover:scale-105 shadow-[0_4px_40px_rgba(201,168,76,0.40)]">
+                  {sec.ctaBtnText || 'Connect Now'} →
+                </a>
+              </div>
+            </section>
+          )
+        }
+
+        return null
+      })}
+    </>
   )
 }
 
@@ -1240,6 +1565,8 @@ function Home() {
       </section>
 
       <ExtraServicesSection/>
+
+      <WebSectionsRenderer/>
 
       {/* Our Arts & Crafts Section — Bento Masonry Gallery */}
       <section

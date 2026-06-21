@@ -2,9 +2,10 @@ import {
   defaultProducts, defaultGallery, defaultHeroImages, defaultSettings,
   type AdminData, type Product, type GalleryItem, type SiteSettings,
   type ScheduleEntry, type ScheduleStatus, type ExtraService,
+  type WebSection, type WebSectionItem, type WebSectionType,
 } from './defaultData'
 
-export type { AdminData, Product, GalleryItem, SiteSettings, ScheduleEntry, ScheduleStatus, ExtraService }
+export type { AdminData, Product, GalleryItem, SiteSettings, ScheduleEntry, ScheduleStatus, ExtraService, WebSection, WebSectionItem, WebSectionType }
 
 const KEY = 'craftnest_admin_data'
 
@@ -28,10 +29,11 @@ export function getAdminData(): AdminData {
       if (!parsed.schedule)               parsed.schedule              = {}
       if (!parsed.extraServices)          parsed.extraServices         = []
       if (!parsed.extraServicesTemplate)  parsed.extraServicesTemplate = 'mosaic'
+      if (!parsed.webSections)            parsed.webSections           = []
       return parsed
     }
   } catch {}
-  return { products: defaultProducts, gallery: defaultGallery, heroImages: defaultHeroImages, settings: defaultSettings, schedule: {}, extraServices: [], extraServicesTemplate: 'mosaic' }
+  return { products: defaultProducts, gallery: defaultGallery, heroImages: defaultHeroImages, settings: defaultSettings, schedule: {}, extraServices: [], extraServicesTemplate: 'mosaic', webSections: [] }
 }
 
 export function saveAdminData(data: AdminData): void {
@@ -194,6 +196,26 @@ export function deleteExtraService(id: string): void {
 export function setExtraServicesTemplate(t: 'mosaic' | 'strips' | 'showcase' | 'cards' | 'carousel'): void {
   const data = getAdminData()
   data.extraServicesTemplate = t
+  saveAdminData(data)
+}
+
+// ── Web Sections ──────────────────────────────────────────────────────────────
+
+export function addWebSection(s: Omit<WebSection, 'id'>): void {
+  const data = getAdminData()
+  data.webSections.push({ ...s, id: `ws_${Date.now()}` })
+  saveAdminData(data)
+}
+
+export function updateWebSection(s: WebSection): void {
+  const data = getAdminData()
+  data.webSections = data.webSections.map(ws => ws.id === s.id ? s : ws)
+  saveAdminData(data)
+}
+
+export function deleteWebSection(id: string): void {
+  const data = getAdminData()
+  data.webSections = data.webSections.filter(ws => ws.id !== id)
   saveAdminData(data)
 }
 
