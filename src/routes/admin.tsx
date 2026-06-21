@@ -7,7 +7,7 @@ import {
   Star, EyeOff as HideIcon, Download, Upload, GripVertical, Home,
   MessageCircle, Megaphone, Link, Camera, Menu,
   BookOpen, ChevronRight, ChevronLeft, Info, Lightbulb, Copy, Zap, Image as ImageIcon2,
-  CalendarDays, Bot, Sparkles, Layers,
+  CalendarDays, Bot, Sparkles, Layers, PenLine,
 } from 'lucide-react'
 import {
   getAdminData, saveSettings, addProduct, updateProduct, deleteProduct,
@@ -17,9 +17,11 @@ import {
   setScheduleEntry, removeScheduleEntry,
   addExtraService, updateExtraService, deleteExtraService, setExtraServicesTemplate,
   addWebSection, updateWebSection, deleteWebSection,
+  savePageContent,
   type Product, type GalleryItem, type AdminData, type SiteSettings, type Category,
   type ScheduleStatus, type ScheduleEntry, type ExtraService,
   type WebSection, type WebSectionItem, type WebSectionType,
+  type PageContent,
 } from '../data/adminStore'
 
 export const Route = createFileRoute('/admin')({ component: AdminPanel })
@@ -33,7 +35,7 @@ const ADMIN_USERS: { email: string; password: string; name: string; role: Role }
 ]
 const SESSION_KEY = 'craftnest_admin_auth'
 
-type Tab = 'dashboard' | 'jewellery' | 'gifts' | 'painting' | 'gallery' | 'hero' | 'media' | 'schedule' | 'extras' | 'sections' | 'settings' | 'guide'
+type Tab = 'dashboard' | 'jewellery' | 'gifts' | 'painting' | 'gallery' | 'hero' | 'media' | 'schedule' | 'extras' | 'sections' | 'content' | 'settings' | 'guide'
 
 const BADGES = ['Bestseller','Popular','New','Custom','Bridal','Festival','Traditional','Adults','Kids','Limited']
 const GALLERY_CATS = ['events','arts','other'] as const
@@ -3154,6 +3156,263 @@ function SectionsTab({ data, show, onRefresh }: { data: AdminData; show: (msg: s
   )
 }
 
+// ── Content Editor Tab ────────────────────────────────────────────────────────
+
+const ADMIN_DEFAULT_PC: PageContent = {
+  heroTagline: 'Handmade with Love',
+  stats: [
+    { num: '10+',  label: 'Events Done',   sub: 'across Georgia' },
+    { num: '12+',  label: 'Art Forms',     sub: 'handcrafted in-house' },
+    { num: '100%', label: 'Custom Made',   sub: 'every single piece' },
+    { num: '5 ★',  label: 'Client Rating', sub: 'loved by families' },
+  ],
+  stripItems: ['Handmade Crafts', 'Face Painting', 'Bespoke Gifts'],
+  servicesLabel: 'FEATURED COLLECTIONS', servicesHeading: 'Our Services',
+  servicesSubheading: 'Bespoke handcrafted experiences tailored for your most memorable celebrations',
+  servicePanels: [
+    { name: 'Face Painting',      tagline: 'Art that wears the crowd',           desc: 'Whimsical, safe, and event-ready designs for every age and festive occasion — bringing joy and vibrant colour to every face at your celebration.',                                                                    features: ['Suitable for all age groups', 'Only certified skin-safe colours', 'Book for parties, schools & festivals'] },
+    { name: 'Handmade Jewellery', tagline: 'Worn with pride, crafted with soul', desc: 'Elegant, masterfully crafted organic and stone accessories designed to turn heads at every occasion — from intimate celebrations to grand events.',                                                                    features: ['Fully custom designs to order', 'Organic & semi-precious stones', 'Available in bulk for weddings & events'] },
+    { name: 'Return Gifts',       tagline: 'Memories wrapped in craftsmanship',  desc: 'Curated, handcrafted keepsakes that turn your celebrations into lifetime memories. Each piece is designed with intention — a lasting token of gratitude for every guest.',                                           features: ['Fully personalised per theme', 'Minimum 10 pieces per order', 'Gift-wrapped & ready to give'] },
+  ],
+  storyHeadingLine1: 'Where Creativity', storyHeadingLine2: 'Meets Celebration',
+  storyItalic: 'Born from a passion for handmade art.',
+  storyPara1: 'CraftNest was born from a passion for handmade art, personalized gifts, and creating memorable experiences for families and children. What started as a hobby of crafting unique handmade creations gradually grew into a business dedicated to bringing joy through art and creativity.',
+  storyPara2: 'At CraftNest, we believe handmade creations tell a story. Every item we create is crafted with love and designed to make your celebrations more meaningful and memorable.',
+  storyQuote: 'Thank you for supporting our small business and allowing us to be a part of your special moments.',
+  storySpecialties: [
+    { icon: '🎨', title: 'Face Painting',  desc: 'Transforming birthdays, festivals, school events, and parties into colourful and unforgettable experiences with creative, skin-safe face painting designs.' },
+    { icon: '🎁', title: 'Return Gifts',   desc: 'Thoughtfully handcrafted return gifts for every occasion — custom hair accessories, bangles, and keepsakes your guests will cherish long after the celebration.' },
+    { icon: '🖌️', title: 'Crafts & Arts',  desc: 'Traditional Lippan Art, personalized nameplates, mandala art, canvas painting, wood painting, and custom handmade décor — every piece crafted with love.' },
+  ],
+  contactHeading: "Let's Create", contactHighlight: 'Together',
+  contactBody: "Planning a special event or need a custom creation? We'd love to bring your vision to life. Reach out — every enquiry gets a personal reply.",
+  contactBadges: [{ icon: '⚡', label: 'Responds in 2 hrs' }, { icon: '🤝', label: 'Free consultation' }, { icon: '✨', label: '100% custom made' }],
+  contactPhone: '+1 (470) 452-7988', contactPhoneHref: 'tel:+14704527988',
+  contactLocation: 'Georgia, USA', contactWebsite: 'www.craftnestshop.com', contactWebsiteHref: 'https://craftnestshop.com',
+}
+
+function ContentEditorTab({ data, show, onRefresh }: { data: AdminData; show: (msg: string, t?: 'success' | 'error') => void; onRefresh: () => void }) {
+  const [pc, setPc]       = useState<PageContent>({ ...ADMIN_DEFAULT_PC, ...(data.pageContent ?? {}) })
+  const [openSec, setOpenSec] = useState<string>('hero')
+
+  const save = (next: PageContent) => {
+    savePageContent(next)
+    setPc(next)
+    onRefresh()
+    show('Content saved')
+  }
+
+  const patch = <K extends keyof PageContent>(key: K, val: PageContent[K]) => save({ ...pc, [key]: val })
+
+  const iCls = 'w-full rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/25 focus:outline-none'
+  const iSt  = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(201,168,76,0.15)' } as React.CSSProperties
+  const lCls = 'block text-[10px] tracking-[0.12em] text-[#C9A84C]/60 uppercase font-bold mb-1.5'
+
+  const Sec = ({ id, label, icon, children }: { id: string; label: string; icon: string; children: React.ReactNode }) => (
+    <div className="rounded-2xl border overflow-hidden" style={{ borderColor: 'rgba(201,168,76,0.12)' }}>
+      <button type="button" onClick={() => setOpenSec(s => s === id ? '' : id)} className="w-full flex items-center justify-between px-5 py-4 cursor-pointer transition-colors" style={{ background: openSec === id ? 'rgba(201,168,76,0.07)' : 'rgba(255,255,255,0.025)' }}>
+        <div className="flex items-center gap-3">
+          <span className="text-xl">{icon}</span>
+          <p className="text-sm font-bold text-white">{label}</p>
+        </div>
+        <span className="text-white/35 text-xl transition-transform duration-200" style={{ transform: openSec === id ? 'rotate(90deg)' : 'none' }}>›</span>
+      </button>
+      {openSec === id && (
+        <div className="px-5 pb-5 pt-4 space-y-4 border-t" style={{ background: 'rgba(13,13,38,0.80)', borderColor: 'rgba(201,168,76,0.08)' }}>
+          {children}
+        </div>
+      )}
+    </div>
+  )
+
+  return (
+    <div className="space-y-6 w-full">
+      <div>
+        <h2 className="font-serif text-xl sm:text-2xl text-white mb-1">Content Editor</h2>
+        <p className="text-xs text-white/35 leading-relaxed max-w-lg">Edit the text of every section on your website. Click a section below to expand it. Changes save automatically when you click out of a field.</p>
+      </div>
+
+      <div className="space-y-3 max-w-3xl">
+
+        {/* ── Hero ──────────────────────────────────────────────────────────── */}
+        <Sec id="hero" label="Hero Section" icon="🏠">
+          <div>
+            <label className={lCls}>Tagline (animated gold text below logo)</label>
+            <input key={pc.heroTagline} defaultValue={pc.heroTagline} onBlur={e => patch('heroTagline', e.target.value)} className={iCls} style={iSt} placeholder="Handmade with Love"/>
+          </div>
+        </Sec>
+
+        {/* ── Stats Strip ───────────────────────────────────────────────────── */}
+        <Sec id="stats" label="Stats Strip" icon="📊">
+          <p className="text-[10px] text-white/30 -mt-1">4 achievement numbers shown below the hero.</p>
+          {pc.stats.map((stat, i) => (
+            <div key={i} className="grid grid-cols-3 gap-2.5">
+              {i === 0 && <><label className={lCls}>Number</label><label className={lCls}>Label</label><label className={lCls}>Sub-text</label></>}
+              <input defaultValue={stat.num} onBlur={e => { const n = pc.stats.map((s,j) => j===i?{...s,num:e.target.value}:s); patch('stats',n) }} className={iCls} style={iSt} placeholder="10+"/>
+              <input defaultValue={stat.label} onBlur={e => { const n = pc.stats.map((s,j) => j===i?{...s,label:e.target.value}:s); patch('stats',n) }} className={iCls} style={iSt}/>
+              <input defaultValue={stat.sub} onBlur={e => { const n = pc.stats.map((s,j) => j===i?{...s,sub:e.target.value}:s); patch('stats',n) }} className={iCls} style={iSt}/>
+            </div>
+          ))}
+          <div className="pt-1">
+            <label className={lCls}>Center Strip Items (3 gold text items)</label>
+            <div className="grid grid-cols-3 gap-2.5">
+              {pc.stripItems.map((item, i) => (
+                <input key={i} defaultValue={item} onBlur={e => { const n = pc.stripItems.map((s,j) => j===i?e.target.value:s); patch('stripItems',n) }} className={iCls} style={iSt} placeholder={['Handmade Crafts','Face Painting','Bespoke Gifts'][i]}/>
+              ))}
+            </div>
+          </div>
+        </Sec>
+
+        {/* ── Services Section ──────────────────────────────────────────────── */}
+        <Sec id="services" label="Services Section" icon="🎨">
+          <div className="grid grid-cols-2 gap-2.5">
+            <div className="col-span-2">
+              <label className={lCls}>Section Label (small uppercase above heading)</label>
+              <input key={pc.servicesLabel} defaultValue={pc.servicesLabel} onBlur={e => patch('servicesLabel', e.target.value)} className={iCls} style={iSt}/>
+            </div>
+            <div>
+              <label className={lCls}>Main Heading</label>
+              <input key={pc.servicesHeading} defaultValue={pc.servicesHeading} onBlur={e => patch('servicesHeading', e.target.value)} className={iCls} style={iSt}/>
+            </div>
+            <div>
+              <label className={lCls}>Subheading</label>
+              <input key={pc.servicesSubheading} defaultValue={pc.servicesSubheading} onBlur={e => patch('servicesSubheading', e.target.value)} className={iCls} style={iSt}/>
+            </div>
+          </div>
+          <div className="border-t border-white/6 pt-4 space-y-4">
+            <p className="text-[10px] font-bold tracking-wider uppercase text-white/45">Service Panels (tabs on the website)</p>
+            {pc.servicePanels.map((panel, i) => (
+              <div key={i} className="rounded-xl border p-4 space-y-3" style={{ background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(201,168,76,0.10)' }}>
+                <p className="text-[10px] font-bold tracking-[0.12em] uppercase" style={{ color: '#C9A84C' }}>Panel {i + 1}</p>
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label className={lCls}>Name</label>
+                    <input defaultValue={panel.name} onBlur={e => { const n = pc.servicePanels.map((p,j) => j===i?{...p,name:e.target.value}:p); patch('servicePanels',n) }} className={iCls} style={iSt}/>
+                  </div>
+                  <div>
+                    <label className={lCls}>Tagline</label>
+                    <input defaultValue={panel.tagline} onBlur={e => { const n = pc.servicePanels.map((p,j) => j===i?{...p,tagline:e.target.value}:p); patch('servicePanels',n) }} className={iCls} style={iSt}/>
+                  </div>
+                </div>
+                <div>
+                  <label className={lCls}>Description</label>
+                  <textarea defaultValue={panel.desc} onBlur={e => { const n = pc.servicePanels.map((p,j) => j===i?{...p,desc:e.target.value}:p); patch('servicePanels',n) }} rows={2} className={`${iCls} resize-none`} style={iSt}/>
+                </div>
+                <div>
+                  <label className={lCls}>Features (one per line)</label>
+                  <textarea defaultValue={panel.features.join('\n')} onBlur={e => { const features = e.target.value.split('\n').filter(Boolean); const n = pc.servicePanels.map((p,j) => j===i?{...p,features}:p); patch('servicePanels',n) }} rows={3} className={`${iCls} resize-none`} style={iSt}/>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Sec>
+
+        {/* ── Our Story ─────────────────────────────────────────────────────── */}
+        <Sec id="story" label="Our Story Section" icon="📖">
+          <div className="grid grid-cols-2 gap-2.5">
+            <div>
+              <label className={lCls}>Heading Line 1 (white)</label>
+              <input key={pc.storyHeadingLine1} defaultValue={pc.storyHeadingLine1} onBlur={e => patch('storyHeadingLine1', e.target.value)} className={iCls} style={iSt}/>
+            </div>
+            <div>
+              <label className={lCls}>Heading Line 2 (gold)</label>
+              <input key={pc.storyHeadingLine2} defaultValue={pc.storyHeadingLine2} onBlur={e => patch('storyHeadingLine2', e.target.value)} className={iCls} style={iSt}/>
+            </div>
+          </div>
+          <div>
+            <label className={lCls}>Italic Opener</label>
+            <input key={pc.storyItalic} defaultValue={pc.storyItalic} onBlur={e => patch('storyItalic', e.target.value)} className={iCls} style={iSt}/>
+          </div>
+          <div>
+            <label className={lCls}>Paragraph 1</label>
+            <textarea key={pc.storyPara1} defaultValue={pc.storyPara1} onBlur={e => patch('storyPara1', e.target.value)} rows={3} className={`${iCls} resize-none`} style={iSt}/>
+          </div>
+          <div>
+            <label className={lCls}>Paragraph 2</label>
+            <textarea key={pc.storyPara2} defaultValue={pc.storyPara2} onBlur={e => patch('storyPara2', e.target.value)} rows={2} className={`${iCls} resize-none`} style={iSt}/>
+          </div>
+          <div>
+            <label className={lCls}>Quote (bordered block)</label>
+            <input key={pc.storyQuote} defaultValue={pc.storyQuote} onBlur={e => patch('storyQuote', e.target.value)} className={iCls} style={iSt}/>
+          </div>
+          <div className="border-t border-white/6 pt-4 space-y-3">
+            <p className="text-[10px] font-bold tracking-wider uppercase text-white/45">Specialty Cards (What We Specialize In)</p>
+            {pc.storySpecialties.map((sp, i) => (
+              <div key={i} className="rounded-xl border p-3 space-y-2" style={{ background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(201,168,76,0.10)' }}>
+                <div className="grid grid-cols-[72px_1fr] gap-2.5">
+                  <div>
+                    <label className={lCls}>Icon</label>
+                    <input defaultValue={sp.icon} onBlur={e => { const n = pc.storySpecialties.map((s,j) => j===i?{...s,icon:e.target.value}:s); patch('storySpecialties',n) }} maxLength={4} className={`${iCls} text-center text-xl`} style={iSt}/>
+                  </div>
+                  <div>
+                    <label className={lCls}>Title</label>
+                    <input defaultValue={sp.title} onBlur={e => { const n = pc.storySpecialties.map((s,j) => j===i?{...s,title:e.target.value}:s); patch('storySpecialties',n) }} className={iCls} style={iSt}/>
+                  </div>
+                </div>
+                <div>
+                  <label className={lCls}>Description</label>
+                  <textarea defaultValue={sp.desc} onBlur={e => { const n = pc.storySpecialties.map((s,j) => j===i?{...s,desc:e.target.value}:s); patch('storySpecialties',n) }} rows={2} className={`${iCls} resize-none`} style={iSt}/>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Sec>
+
+        {/* ── Contact Section ───────────────────────────────────────────────── */}
+        <Sec id="contact" label="Contact Section" icon="📞">
+          <div className="grid grid-cols-2 gap-2.5">
+            <div>
+              <label className={lCls}>Heading (white part)</label>
+              <input key={pc.contactHeading} defaultValue={pc.contactHeading} onBlur={e => patch('contactHeading', e.target.value)} className={iCls} style={iSt} placeholder="Let's Create"/>
+            </div>
+            <div>
+              <label className={lCls}>Heading Highlight (gold)</label>
+              <input key={pc.contactHighlight} defaultValue={pc.contactHighlight} onBlur={e => patch('contactHighlight', e.target.value)} className={iCls} style={iSt} placeholder="Together"/>
+            </div>
+          </div>
+          <div>
+            <label className={lCls}>Body Text</label>
+            <textarea key={pc.contactBody} defaultValue={pc.contactBody} onBlur={e => patch('contactBody', e.target.value)} rows={2} className={`${iCls} resize-none`} style={iSt}/>
+          </div>
+          <div className="grid grid-cols-2 gap-2.5">
+            <div>
+              <label className={lCls}>Phone (display text)</label>
+              <input key={pc.contactPhone} defaultValue={pc.contactPhone} onBlur={e => patch('contactPhone', e.target.value)} className={iCls} style={iSt}/>
+            </div>
+            <div>
+              <label className={lCls}>Phone href (tel:...)</label>
+              <input key={pc.contactPhoneHref} defaultValue={pc.contactPhoneHref} onBlur={e => patch('contactPhoneHref', e.target.value)} className={iCls} style={iSt} placeholder="tel:+14704527988"/>
+            </div>
+            <div>
+              <label className={lCls}>Location</label>
+              <input key={pc.contactLocation} defaultValue={pc.contactLocation} onBlur={e => patch('contactLocation', e.target.value)} className={iCls} style={iSt}/>
+            </div>
+            <div>
+              <label className={lCls}>Website (display text)</label>
+              <input key={pc.contactWebsite} defaultValue={pc.contactWebsite} onBlur={e => patch('contactWebsite', e.target.value)} className={iCls} style={iSt}/>
+            </div>
+            <div className="col-span-2">
+              <label className={lCls}>Website href (https://...)</label>
+              <input key={pc.contactWebsiteHref} defaultValue={pc.contactWebsiteHref} onBlur={e => patch('contactWebsiteHref', e.target.value)} className={iCls} style={iSt} placeholder="https://craftnestshop.com"/>
+            </div>
+          </div>
+          <div className="border-t border-white/6 pt-3 space-y-3">
+            <p className="text-[10px] font-bold tracking-wider uppercase text-white/45">Trust Badges (3 chips shown below body text)</p>
+            {pc.contactBadges.map((badge, i) => (
+              <div key={i} className="grid grid-cols-[72px_1fr] gap-2.5">
+                {i === 0 && <><label className={lCls}>Icon</label><label className={lCls}>Label</label></>}
+                <input defaultValue={badge.icon} onBlur={e => { const n = pc.contactBadges.map((b,j) => j===i?{...b,icon:e.target.value}:b); patch('contactBadges',n) }} maxLength={4} className={`${iCls} text-center text-xl`} style={iSt}/>
+                <input defaultValue={badge.label} onBlur={e => { const n = pc.contactBadges.map((b,j) => j===i?{...b,label:e.target.value}:b); patch('contactBadges',n) }} className={iCls} style={iSt}/>
+              </div>
+            ))}
+          </div>
+        </Sec>
+
+      </div>
+    </div>
+  )
+}
+
 // ── Guide Tab ─────────────────────────────────────────────────────────────────
 
 function GuideTab({ onGoMedia, onGoSettings }: { onGoMedia: () => void; onGoSettings: () => void }) {
@@ -3378,6 +3637,7 @@ function AdminPanel() {
     { id:'schedule'  as Tab, label:'Schedule',        icon:CalendarDays },
     { id:'extras'    as Tab, label:'Extra Services',  icon:Sparkles,    ownerOnly:true },
     { id:'sections'  as Tab, label:'Page Sections',  icon:Layers,      ownerOnly:true },
+    { id:'content'   as Tab, label:'Content Editor', icon:PenLine,     ownerOnly:true },
     { id:'settings'  as Tab, label:'Settings',       icon:Settings,    ownerOnly:true },
     { id:'guide'     as Tab, label:'Starter Guide',  icon:BookOpen },
   ] as NavItem[]).filter(n => !n.ownerOnly || userRole === 'owner')
@@ -3514,6 +3774,8 @@ function AdminPanel() {
           {tab === 'extras' && userRole === 'owner' && <ExtraServicesTab data={data} show={show} onRefresh={refresh}/>}
 
           {tab === 'sections' && userRole === 'owner' && <SectionsTab data={data} show={show} onRefresh={refresh}/>}
+
+          {tab === 'content' && userRole === 'owner' && <ContentEditorTab data={data} show={show} onRefresh={refresh}/>}
 
           {tab === 'settings' && userRole === 'owner' && <SettingsTab data={data} show={show}/>}
 

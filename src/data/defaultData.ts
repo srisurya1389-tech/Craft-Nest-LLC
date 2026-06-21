@@ -75,6 +75,80 @@ export type WebSection = {
   ctaBgImg?: string
 }
 
+export type StatItem            = { num: string; label: string; sub: string }
+export type ServicePanelContent = { name: string; tagline: string; desc: string; features: string[] }
+export type SpecialtyCard       = { icon: string; title: string; desc: string }
+export type ContactBadge        = { icon: string; label: string }
+
+export type PageContent = {
+  heroTagline:        string
+  stats:              StatItem[]
+  stripItems:         string[]
+  servicesLabel:      string
+  servicesHeading:    string
+  servicesSubheading: string
+  servicePanels:      ServicePanelContent[]
+  storyHeadingLine1:  string
+  storyHeadingLine2:  string
+  storyItalic:        string
+  storyPara1:         string
+  storyPara2:         string
+  storyQuote:         string
+  storySpecialties:   SpecialtyCard[]
+  contactHeading:     string
+  contactHighlight:   string
+  contactBody:        string
+  contactBadges:      ContactBadge[]
+  contactPhone:       string
+  contactPhoneHref:   string
+  contactLocation:    string
+  contactWebsite:     string
+  contactWebsiteHref: string
+}
+
+export const defaultPageContent: PageContent = {
+  heroTagline: 'Handmade with Love',
+  stats: [
+    { num: '10+',  label: 'Events Done',   sub: 'across Georgia' },
+    { num: '12+',  label: 'Art Forms',     sub: 'handcrafted in-house' },
+    { num: '100%', label: 'Custom Made',   sub: 'every single piece' },
+    { num: '5 ★',  label: 'Client Rating', sub: 'loved by families' },
+  ],
+  stripItems: ['Handmade Crafts', 'Face Painting', 'Bespoke Gifts'],
+  servicesLabel:      'FEATURED COLLECTIONS',
+  servicesHeading:    'Our Services',
+  servicesSubheading: 'Bespoke handcrafted experiences tailored for your most memorable celebrations',
+  servicePanels: [
+    { name: 'Face Painting',      tagline: 'Art that wears the crowd',           desc: 'Whimsical, safe, and event-ready designs for every age and festive occasion — bringing joy and vibrant colour to every face at your celebration.',                                                                                              features: ['Suitable for all age groups', 'Only certified skin-safe colours', 'Book for parties, schools & festivals'] },
+    { name: 'Handmade Jewellery', tagline: 'Worn with pride, crafted with soul', desc: 'Elegant, masterfully crafted organic and stone accessories designed to turn heads at every occasion — from intimate celebrations to grand events.',                                                                                              features: ['Fully custom designs to order', 'Organic & semi-precious stones', 'Available in bulk for weddings & events'] },
+    { name: 'Return Gifts',       tagline: 'Memories wrapped in craftsmanship',  desc: 'Curated, handcrafted keepsakes that turn your celebrations into lifetime memories. Each piece is designed with intention — a lasting token of gratitude for every guest.',                                                                     features: ['Fully personalised per theme', 'Minimum 10 pieces per order', 'Gift-wrapped & ready to give'] },
+  ],
+  storyHeadingLine1: 'Where Creativity',
+  storyHeadingLine2: 'Meets Celebration',
+  storyItalic:       'Born from a passion for handmade art.',
+  storyPara1:        'CraftNest was born from a passion for handmade art, personalized gifts, and creating memorable experiences for families and children. What started as a hobby of crafting unique handmade creations gradually grew into a business dedicated to bringing joy through art and creativity.',
+  storyPara2:        'At CraftNest, we believe handmade creations tell a story. Every item we create is crafted with love and designed to make your celebrations more meaningful and memorable.',
+  storyQuote:        'Thank you for supporting our small business and allowing us to be a part of your special moments.',
+  storySpecialties: [
+    { icon: '🎨', title: 'Face Painting',  desc: 'Transforming birthdays, festivals, school events, and parties into colourful and unforgettable experiences with creative, skin-safe face painting designs.' },
+    { icon: '🎁', title: 'Return Gifts',   desc: 'Thoughtfully handcrafted return gifts for every occasion — custom hair accessories, bangles, and keepsakes your guests will cherish long after the celebration.' },
+    { icon: '🖌️', title: 'Crafts & Arts',  desc: 'Traditional Lippan Art, personalized nameplates, mandala art, canvas painting, wood painting, and custom handmade décor — every piece crafted with love.' },
+  ],
+  contactHeading:     "Let's Create",
+  contactHighlight:   'Together',
+  contactBody:        "Planning a special event or need a custom creation? We'd love to bring your vision to life. Reach out — every enquiry gets a personal reply.",
+  contactBadges: [
+    { icon: '⚡', label: 'Responds in 2 hrs' },
+    { icon: '🤝', label: 'Free consultation' },
+    { icon: '✨', label: '100% custom made' },
+  ],
+  contactPhone:       '+1 (470) 452-7988',
+  contactPhoneHref:   'tel:+14704527988',
+  contactLocation:    'Georgia, USA',
+  contactWebsite:     'www.craftnestshop.com',
+  contactWebsiteHref: 'https://craftnestshop.com',
+}
+
 export type AdminData = {
   products: {
     jewellery: Product[]
@@ -88,6 +162,7 @@ export type AdminData = {
   extraServices: ExtraService[]
   extraServicesTemplate: 'mosaic' | 'strips' | 'showcase' | 'cards' | 'carousel'
   webSections: WebSection[]
+  pageContent: PageContent
 }
 
 export const defaultSettings: SiteSettings = {

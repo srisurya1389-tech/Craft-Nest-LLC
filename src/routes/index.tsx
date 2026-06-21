@@ -196,6 +196,54 @@ const GALLERY_ITEMS: { id: number; src: string; category: Exclude<GalleryCat, 'a
   { id: 159, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812665/WhatsApp_Image_2026-06-18_at_5.58.13_PM_jkwvb4.jpg',   category: 'arts', caption: 'Handpainted Earrings' },
 ]
 
+// ── Page Content defaults (inline — avoids importing large admin data arrays) ──
+type PCStatItem  = { num: string; label: string; sub: string }
+type PCPanel     = { name: string; tagline: string; desc: string; features: string[] }
+type PCSpecialty = { icon: string; title: string; desc: string }
+type PCBadge     = { icon: string; label: string }
+type PC = {
+  heroTagline: string; stats: PCStatItem[]; stripItems: string[]
+  servicesLabel: string; servicesHeading: string; servicesSubheading: string
+  servicePanels: PCPanel[]
+  storyHeadingLine1: string; storyHeadingLine2: string; storyItalic: string
+  storyPara1: string; storyPara2: string; storyQuote: string; storySpecialties: PCSpecialty[]
+  contactHeading: string; contactHighlight: string; contactBody: string
+  contactBadges: PCBadge[]; contactPhone: string; contactPhoneHref: string
+  contactLocation: string; contactWebsite: string; contactWebsiteHref: string
+}
+const DPC: PC = {
+  heroTagline: 'Handmade with Love',
+  stats: [
+    { num: '10+',  label: 'Events Done',   sub: 'across Georgia' },
+    { num: '12+',  label: 'Art Forms',     sub: 'handcrafted in-house' },
+    { num: '100%', label: 'Custom Made',   sub: 'every single piece' },
+    { num: '5 ★',  label: 'Client Rating', sub: 'loved by families' },
+  ],
+  stripItems: ['Handmade Crafts', 'Face Painting', 'Bespoke Gifts'],
+  servicesLabel: 'FEATURED COLLECTIONS', servicesHeading: 'Our Services',
+  servicesSubheading: 'Bespoke handcrafted experiences tailored for your most memorable celebrations',
+  servicePanels: [
+    { name: 'Face Painting',      tagline: 'Art that wears the crowd',           desc: 'Whimsical, safe, and event-ready designs for every age and festive occasion — bringing joy and vibrant colour to every face at your celebration.',                                                    features: ['Suitable for all age groups', 'Only certified skin-safe colours', 'Book for parties, schools & festivals'] },
+    { name: 'Handmade Jewellery', tagline: 'Worn with pride, crafted with soul', desc: 'Elegant, masterfully crafted organic and stone accessories designed to turn heads at every occasion — from intimate celebrations to grand events.',                                                    features: ['Fully custom designs to order', 'Organic & semi-precious stones', 'Available in bulk for weddings & events'] },
+    { name: 'Return Gifts',       tagline: 'Memories wrapped in craftsmanship',  desc: 'Curated, handcrafted keepsakes that turn your celebrations into lifetime memories. Each piece is designed with intention — a lasting token of gratitude for every guest.',                           features: ['Fully personalised per theme', 'Minimum 10 pieces per order', 'Gift-wrapped & ready to give'] },
+  ],
+  storyHeadingLine1: 'Where Creativity', storyHeadingLine2: 'Meets Celebration',
+  storyItalic: 'Born from a passion for handmade art.',
+  storyPara1: 'CraftNest was born from a passion for handmade art, personalized gifts, and creating memorable experiences for families and children. What started as a hobby of crafting unique handmade creations gradually grew into a business dedicated to bringing joy through art and creativity.',
+  storyPara2: 'At CraftNest, we believe handmade creations tell a story. Every item we create is crafted with love and designed to make your celebrations more meaningful and memorable.',
+  storyQuote: 'Thank you for supporting our small business and allowing us to be a part of your special moments.',
+  storySpecialties: [
+    { icon: '🎨', title: 'Face Painting',  desc: 'Transforming birthdays, festivals, school events, and parties into colourful and unforgettable experiences with creative, skin-safe face painting designs.' },
+    { icon: '🎁', title: 'Return Gifts',   desc: 'Thoughtfully handcrafted return gifts for every occasion — custom hair accessories, bangles, and keepsakes your guests will cherish long after the celebration.' },
+    { icon: '🖌️', title: 'Crafts & Arts',  desc: 'Traditional Lippan Art, personalized nameplates, mandala art, canvas painting, wood painting, and custom handmade décor — every piece crafted with love.' },
+  ],
+  contactHeading: "Let's Create", contactHighlight: 'Together',
+  contactBody: "Planning a special event or need a custom creation? We'd love to bring your vision to life. Reach out — every enquiry gets a personal reply.",
+  contactBadges: [{ icon: '⚡', label: 'Responds in 2 hrs' }, { icon: '🤝', label: 'Free consultation' }, { icon: '✨', label: '100% custom made' }],
+  contactPhone: '+1 (470) 452-7988', contactPhoneHref: 'tel:+14704527988',
+  contactLocation: 'Georgia, USA', contactWebsite: 'www.craftnestshop.com', contactWebsiteHref: 'https://craftnestshop.com',
+}
+
 // ── Extra Services Public Section ─────────────────────────────────────────────
 type ExtraServicePublic = { id:string; name:string; emoji:string; price:string; description:string; img:string; whatsappMsg:string; visible:boolean }
 
@@ -762,6 +810,17 @@ function Home() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Page content — loaded from localStorage, falls back to defaults
+  const [pc, setPc] = useState<PC>(DPC)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('craftnest_admin_data')
+      if (!raw) return
+      const d = JSON.parse(raw)
+      if (d.pageContent) setPc({ ...DPC, ...d.pageContent })
+    } catch {}
+  }, [])
+
   // Hook to handle fade-in on scroll animations using Intersection Observer
   useScrollReveal()
 
@@ -851,10 +910,8 @@ function Home() {
 
   const servicesPanels = [
     {
-      id: 'painting', num: '01', name: 'Face Painting',
-      tagline: 'Art that wears the crowd',
-      desc: 'Whimsical, safe, and event-ready designs for every age and festive occasion — bringing joy and vibrant colour to every face at your celebration.',
-      features: ['Suitable for all age groups', 'Only certified skin-safe colours', 'Book for parties, schools & festivals'],
+      id: 'painting', num: '01',
+      ...(pc.servicePanels[0] ?? DPC.servicePanels[0]),
       images: [
         'https://res.cloudinary.com/diancfp03/image/upload/v1781810979/WhatsApp_Image_2026-06-18_at_6.08.21_PM_2_uckpwc.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781810978/WhatsApp_Image_2026-06-18_at_6.08.21_PM_6_cafst9.jpg',
@@ -866,10 +923,8 @@ function Home() {
       ],
     },
     {
-      id: 'jewellery', num: '02', name: 'Handmade Jewellery',
-      tagline: 'Worn with pride, crafted with soul',
-      desc: 'Elegant, masterfully crafted organic and stone accessories designed to turn heads at every occasion — from intimate celebrations to grand events.',
-      features: ['Fully custom designs to order', 'Organic & semi-precious stones', 'Available in bulk for weddings & events'],
+      id: 'jewellery', num: '02',
+      ...(pc.servicePanels[1] ?? DPC.servicePanels[1]),
       images: [
         'https://res.cloudinary.com/diancfp03/image/upload/v1781812600/WhatsApp_Image_2026-06-18_at_5.58.15_PM_22_huedrg.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781812600/WhatsApp_Image_2026-06-18_at_5.58.15_PM_21_hxhpgo.jpg',
@@ -880,10 +935,8 @@ function Home() {
       ],
     },
     {
-      id: 'gifts', num: '03', name: 'Return Gifts',
-      tagline: 'Memories wrapped in craftsmanship',
-      desc: 'Curated, handcrafted keepsakes that turn your celebrations into lifetime memories. Each piece is designed with intention — a lasting token of gratitude for every guest.',
-      features: ['Fully personalised per theme', 'Minimum 10 pieces per order', 'Gift-wrapped & ready to give'],
+      id: 'gifts', num: '03',
+      ...(pc.servicePanels[2] ?? DPC.servicePanels[2]),
       images: [
         'https://res.cloudinary.com/diancfp03/image/upload/v1781703432/WhatsApp_Image_2026-06-15_at_11.44.38_PM_rrjcsk.jpg',
         'https://res.cloudinary.com/diancfp03/image/upload/v1781703460/WhatsApp_Image_2026-06-15_at_11.44.39_PM_17_jtud4w.jpg',
@@ -1229,7 +1282,7 @@ function Home() {
 
           {/* Tagline */}
           <p className="font-serif italic text-base sm:text-lg md:text-2xl lg:text-3xl text-[#C4A050] tracking-wide mb-10 flex flex-wrap items-center justify-center gap-x-3">
-            {"Handmade with Love".split(" ").map((word, index) => (
+            {pc.heroTagline.split(" ").map((word, index) => (
               <span key={index} className="shiny-word">
                 {word}
               </span>
@@ -1261,12 +1314,7 @@ function Home() {
         {/* ── STATS ROW ── */}
         <div className="relative z-10 border-b" style={{ borderColor: 'rgba(201,168,76,0.1)' }}>
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-12 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0">
-            {[
-              { num: '10+',  label: 'Events Done',    sub: 'across Georgia' },
-              { num: '12+',  label: 'Art Forms',      sub: 'handcrafted in-house' },
-              { num: '100%', label: 'Custom Made',    sub: 'every single piece' },
-              { num: '5 ★',  label: 'Client Rating',  sub: 'loved by families' },
-            ].map((stat, i) => (
+            {pc.stats.map((stat, i) => (
               <div key={i} className="flex flex-col items-center text-center md:border-r last:border-r-0" style={{ borderColor: 'rgba(201,168,76,0.1)' }}>
                 <span
                   className="font-serif font-bold leading-none mb-1.5"
@@ -1295,11 +1343,12 @@ function Home() {
           </div>
 
           <h2 className="font-serif text-base sm:text-xl md:text-2xl lg:text-[28px] font-medium tracking-[0.1em] text-center select-none" style={{ color: 'rgba(255,255,255,0.82)' }}>
-            <span className="transition-colors duration-300 cursor-default hover:text-[#E8C96B]">Handmade Crafts</span>
-            <span className="mx-3 md:mx-5 font-light" style={{ color: 'rgba(201,168,76,0.35)' }}>·</span>
-            <span className="transition-colors duration-300 cursor-default hover:text-[#E8C96B]">Face Painting</span>
-            <span className="mx-3 md:mx-5 font-light" style={{ color: 'rgba(201,168,76,0.35)' }}>·</span>
-            <span className="transition-colors duration-300 cursor-default hover:text-[#E8C96B]">Bespoke Gifts</span>
+            {pc.stripItems.map((item, i) => (
+              <Fragment key={i}>
+                {i > 0 && <span className="mx-3 md:mx-5 font-light" style={{ color: 'rgba(201,168,76,0.35)' }}>·</span>}
+                <span className="transition-colors duration-300 cursor-default hover:text-[#E8C96B]">{item}</span>
+              </Fragment>
+            ))}
           </h2>
 
           {/* Right flourish */}
@@ -1433,14 +1482,14 @@ function Home() {
           {/* Section Header */}
           <div className="text-center mb-16 reveal-element">
             <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.25em] text-[#C9A84C] uppercase mb-3 block">
-              FEATURED COLLECTIONS
+              {pc.servicesLabel}
             </span>
             <h2 className="font-serif text-2xl sm:text-3xl md:text-[42px] lg:text-[46px] text-[#E8C96B] font-medium tracking-wide">
-              Our Services
+              {pc.servicesHeading}
             </h2>
             <div className="w-24 h-[1px] bg-[#C9A84C]/35 mx-auto mt-5 mb-5" />
             <p className="font-sans text-xs md:text-sm text-white/50 max-w-xl mx-auto leading-relaxed tracking-wide">
-              Bespoke handcrafted experiences tailored for your most memorable celebrations
+              {pc.servicesSubheading}
             </p>
           </div>
 
@@ -2330,8 +2379,8 @@ function Home() {
           <div className="text-center mb-12 md:mb-16">
             <span className="text-[9px] md:text-[10px] tracking-[0.38em] text-[#C9A84C] font-bold uppercase block mb-3">CONTACT & BOOKINGS</span>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white font-medium tracking-wide mb-4">
-              Let's Create{' '}
-              <span style={{ color: '#E8C96B', textShadow: '0 0 40px rgba(232,201,107,0.22)' }}>Together</span>
+              {pc.contactHeading}{' '}
+              <span style={{ color: '#E8C96B', textShadow: '0 0 40px rgba(232,201,107,0.22)' }}>{pc.contactHighlight}</span>
             </h2>
             <div className="w-16 h-[1px] mx-auto" style={{ background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)' }} />
           </div>
@@ -2342,16 +2391,12 @@ function Home() {
             {/* LEFT: Brand & contact info */}
             <div className="space-y-8">
               <p className="font-sans text-sm md:text-base leading-relaxed max-w-sm" style={{ color: 'rgba(255,255,255,0.52)' }}>
-                Planning a special event or need a custom creation? We'd love to bring your vision to life. Reach out — every enquiry gets a personal reply.
+                {pc.contactBody}
               </p>
 
               {/* Trust badges */}
               <div className="flex flex-wrap gap-2.5">
-                {[
-                  { icon: '⚡', label: 'Responds in 2 hrs' },
-                  { icon: '🤝', label: 'Free consultation' },
-                  { icon: '✨', label: '100% custom made' },
-                ].map(b => (
+                {pc.contactBadges.map(b => (
                   <div key={b.label} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-sans text-[9px] font-bold tracking-[0.12em] uppercase"
                     style={{ background: 'rgba(232,201,107,0.07)', border: '1px solid rgba(232,201,107,0.13)', color: 'rgba(232,201,107,0.62)' }}>
                     <span className="text-xs leading-none">{b.icon}</span>{b.label}
@@ -2363,15 +2408,15 @@ function Home() {
               <div className="space-y-4">
                 {[
                   {
-                    label: 'Phone & WhatsApp', value: '+1 (470) 452-7988', href: 'tel:+14704527988',
+                    label: 'Phone & WhatsApp', value: pc.contactPhone, href: pc.contactPhoneHref,
                     icon: <svg className="w-[18px] h-[18px] fill-current shrink-0" viewBox="0 0 24 24"><path d="M6.62 10.79a15.15 15.15 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>,
                   },
                   {
-                    label: 'Location', value: 'Georgia, USA', href: null,
+                    label: 'Location', value: pc.contactLocation, href: null as string | null,
                     icon: <svg className="w-[18px] h-[18px] fill-none stroke-current shrink-0" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>,
                   },
                   {
-                    label: 'Website', value: 'www.craftnestshop.com', href: 'https://craftnestshop.com',
+                    label: 'Website', value: pc.contactWebsite, href: pc.contactWebsiteHref,
                     icon: <svg className="w-[18px] h-[18px] fill-none stroke-current shrink-0" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>,
                   },
                 ].map(item => (
@@ -2891,9 +2936,9 @@ function Home() {
                 transition: 'transform 0.3s ease-out',
               }}
             >
-              Where Creativity<br />
+              {pc.storyHeadingLine1}<br />
               <span style={{ color: '#E8C96B', textShadow: '0 0 60px rgba(232,201,107,0.25)' }}>
-                Meets Celebration
+                {pc.storyHeadingLine2}
               </span>
             </h2>
             <div className="w-28 h-[1.5px] mx-auto" style={{ background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)' }} />
@@ -2905,17 +2950,17 @@ function Home() {
             {/* Story text */}
             <div className="w-full lg:w-[48%] space-y-6">
               <p className="font-serif italic text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed" style={{ color: 'rgba(232,201,107,0.72)' }}>
-                Born from a passion for handmade art.
+                {pc.storyItalic}
               </p>
               <p className="font-sans text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.52)' }}>
-                CraftNest was born from a passion for handmade art, personalized gifts, and creating memorable experiences for families and children. What started as a hobby of crafting unique handmade creations gradually grew into a business dedicated to bringing joy through art and creativity.
+                {pc.storyPara1}
               </p>
               <p className="font-sans text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.52)' }}>
-                At CraftNest, we believe handmade creations tell a story. Every item we create is crafted with love and designed to make your celebrations more meaningful and memorable.
+                {pc.storyPara2}
               </p>
               <div className="border-l-2 pl-5 mt-2" style={{ borderColor: 'rgba(201,168,76,0.3)' }}>
                 <p className="font-serif italic text-sm leading-relaxed" style={{ color: 'rgba(232,201,107,0.5)' }}>
-                  "Thank you for supporting our small business and allowing us to be a part of your special moments."
+                  "{pc.storyQuote}"
                 </p>
               </div>
             </div>
@@ -2953,11 +2998,7 @@ function Home() {
               <span className="text-[9px] tracking-[0.38em] text-[#C9A84C] uppercase font-bold">WHAT WE SPECIALIZE IN</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-              {[
-                { icon: '🎨', title: 'Face Painting', desc: 'Transforming birthdays, festivals, school events, and parties into colourful and unforgettable experiences with creative, skin-safe face painting designs.' },
-                { icon: '🎁', title: 'Return Gifts', desc: 'Thoughtfully handcrafted return gifts for every occasion — custom hair accessories, bangles, and keepsakes your guests will cherish long after the celebration.' },
-                { icon: '🖌️', title: 'Crafts & Arts', desc: 'Traditional Lippan Art, personalized nameplates, mandala art, canvas painting, wood painting, and custom handmade décor — every piece crafted with love.' },
-              ].map((item, idx) => (
+              {pc.storySpecialties.map((item, idx) => (
                 <div
                   key={idx}
                   onMouseMove={handleMouseMove3D}
@@ -3055,11 +3096,11 @@ function Home() {
 
             {/* Contact row */}
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-sans text-xs tracking-wide" style={{ color: 'rgba(255,255,255,0.28)' }}>
-              <span>📞 +1 (470) 452-7988</span>
+              <span>📞 {pc.contactPhone}</span>
               <span style={{ color: 'rgba(201,168,76,0.25)' }}>•</span>
-              <span>📍 Georgia, USA</span>
+              <span>📍 {pc.contactLocation}</span>
               <span style={{ color: 'rgba(201,168,76,0.25)' }}>•</span>
-              <span>🌐 www.craftnestshop.com</span>
+              <span>🌐 {pc.contactWebsite}</span>
             </div>
 
           </div>

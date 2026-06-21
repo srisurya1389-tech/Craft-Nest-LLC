@@ -1,11 +1,12 @@
 import {
-  defaultProducts, defaultGallery, defaultHeroImages, defaultSettings,
+  defaultProducts, defaultGallery, defaultHeroImages, defaultSettings, defaultPageContent,
   type AdminData, type Product, type GalleryItem, type SiteSettings,
   type ScheduleEntry, type ScheduleStatus, type ExtraService,
   type WebSection, type WebSectionItem, type WebSectionType,
+  type PageContent, type StatItem, type ServicePanelContent, type SpecialtyCard, type ContactBadge,
 } from './defaultData'
 
-export type { AdminData, Product, GalleryItem, SiteSettings, ScheduleEntry, ScheduleStatus, ExtraService, WebSection, WebSectionItem, WebSectionType }
+export type { AdminData, Product, GalleryItem, SiteSettings, ScheduleEntry, ScheduleStatus, ExtraService, WebSection, WebSectionItem, WebSectionType, PageContent, StatItem, ServicePanelContent, SpecialtyCard, ContactBadge }
 
 const KEY = 'craftnest_admin_data'
 
@@ -30,10 +31,11 @@ export function getAdminData(): AdminData {
       if (!parsed.extraServices)          parsed.extraServices         = []
       if (!parsed.extraServicesTemplate)  parsed.extraServicesTemplate = 'mosaic'
       if (!parsed.webSections)            parsed.webSections           = []
+      if (!parsed.pageContent)            parsed.pageContent           = defaultPageContent
       return parsed
     }
   } catch {}
-  return { products: defaultProducts, gallery: defaultGallery, heroImages: defaultHeroImages, settings: defaultSettings, schedule: {}, extraServices: [], extraServicesTemplate: 'mosaic', webSections: [] }
+  return { products: defaultProducts, gallery: defaultGallery, heroImages: defaultHeroImages, settings: defaultSettings, schedule: {}, extraServices: [], extraServicesTemplate: 'mosaic', webSections: [], pageContent: defaultPageContent }
 }
 
 export function saveAdminData(data: AdminData): void {
@@ -196,6 +198,18 @@ export function deleteExtraService(id: string): void {
 export function setExtraServicesTemplate(t: 'mosaic' | 'strips' | 'showcase' | 'cards' | 'carousel'): void {
   const data = getAdminData()
   data.extraServicesTemplate = t
+  saveAdminData(data)
+}
+
+// ── Page Content ─────────────────────────────────────────────────────────────
+
+export function getPageContent(): PageContent {
+  return getAdminData().pageContent ?? defaultPageContent
+}
+
+export function savePageContent(content: PageContent): void {
+  const data = getAdminData()
+  data.pageContent = content
   saveAdminData(data)
 }
 
