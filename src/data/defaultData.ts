@@ -39,6 +39,17 @@ export type ScheduleEntry = {
   pmStatus?: ScheduleStatus
 }
 
+export type ExtraService = {
+  id: string
+  name: string
+  emoji: string
+  price: string
+  description: string
+  img: string
+  whatsappMsg: string
+  visible: boolean
+}
+
 export type AdminData = {
   products: {
     jewellery: Product[]
@@ -49,6 +60,8 @@ export type AdminData = {
   heroImages: string[]
   settings: SiteSettings
   schedule: Record<string, ScheduleEntry>
+  extraServices: ExtraService[]
+  extraServicesTemplate: 'mosaic' | 'strips' | 'showcase'
 }
 
 export const defaultSettings: SiteSettings = {

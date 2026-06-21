@@ -1,10 +1,10 @@
 import {
   defaultProducts, defaultGallery, defaultHeroImages, defaultSettings,
   type AdminData, type Product, type GalleryItem, type SiteSettings,
-  type ScheduleEntry, type ScheduleStatus,
+  type ScheduleEntry, type ScheduleStatus, type ExtraService,
 } from './defaultData'
 
-export type { AdminData, Product, GalleryItem, SiteSettings, ScheduleEntry, ScheduleStatus }
+export type { AdminData, Product, GalleryItem, SiteSettings, ScheduleEntry, ScheduleStatus, ExtraService }
 
 const KEY = 'craftnest_admin_data'
 
@@ -23,13 +23,15 @@ export function getAdminData(): AdminData {
           whatsappMsg: p.whatsappMsg ?? '',
         }))
       }
-      if (!parsed.heroImages) parsed.heroImages = defaultHeroImages
-      if (!parsed.settings)   parsed.settings   = defaultSettings
-      if (!parsed.schedule)   parsed.schedule   = {}
+      if (!parsed.heroImages)              parsed.heroImages             = defaultHeroImages
+      if (!parsed.settings)               parsed.settings              = defaultSettings
+      if (!parsed.schedule)               parsed.schedule              = {}
+      if (!parsed.extraServices)          parsed.extraServices         = []
+      if (!parsed.extraServicesTemplate)  parsed.extraServicesTemplate = 'mosaic'
       return parsed
     }
   } catch {}
-  return { products: defaultProducts, gallery: defaultGallery, heroImages: defaultHeroImages, settings: defaultSettings, schedule: {} }
+  return { products: defaultProducts, gallery: defaultGallery, heroImages: defaultHeroImages, settings: defaultSettings, schedule: {}, extraServices: [], extraServicesTemplate: 'mosaic' }
 }
 
 export function saveAdminData(data: AdminData): void {
@@ -166,6 +168,32 @@ export function removeScheduleEntry(date: string): void {
   const data = getAdminData()
   if (!data.schedule) return
   delete data.schedule[date]
+  saveAdminData(data)
+}
+
+// ── Extra Services ─────────────────────────────────────────────────────────────
+
+export function addExtraService(svc: Omit<ExtraService, 'id'>): void {
+  const data = getAdminData()
+  data.extraServices.push({ ...svc, id: `svc_${Date.now()}` })
+  saveAdminData(data)
+}
+
+export function updateExtraService(svc: ExtraService): void {
+  const data = getAdminData()
+  data.extraServices = data.extraServices.map(s => s.id === svc.id ? svc : s)
+  saveAdminData(data)
+}
+
+export function deleteExtraService(id: string): void {
+  const data = getAdminData()
+  data.extraServices = data.extraServices.filter(s => s.id !== id)
+  saveAdminData(data)
+}
+
+export function setExtraServicesTemplate(t: 'mosaic' | 'strips' | 'showcase'): void {
+  const data = getAdminData()
+  data.extraServicesTemplate = t
   saveAdminData(data)
 }
 

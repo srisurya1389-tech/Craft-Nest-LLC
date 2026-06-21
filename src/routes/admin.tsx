@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+﻿import { createFileRoute } from '@tanstack/react-router'
 import { useState, useRef, useEffect } from 'react'
 import {
   LayoutDashboard, ImageIcon, LogOut, Plus, Pencil, Settings,
@@ -7,7 +7,7 @@ import {
   Star, EyeOff as HideIcon, Download, Upload, GripVertical, Home,
   MessageCircle, Megaphone, Link, Camera, Menu,
   BookOpen, ChevronRight, ChevronLeft, Info, Lightbulb, Copy, Zap, Image as ImageIcon2,
-  CalendarDays, Bot,
+  CalendarDays, Bot, Sparkles, Layers,
 } from 'lucide-react'
 import {
   getAdminData, saveSettings, addProduct, updateProduct, deleteProduct,
@@ -15,8 +15,9 @@ import {
   addHeroImage, removeHeroImage, reorderHeroImages,
   exportProductsCSV, uploadToCloudinary, resetToDefaults,
   setScheduleEntry, removeScheduleEntry,
+  addExtraService, updateExtraService, deleteExtraService, setExtraServicesTemplate,
   type Product, type GalleryItem, type AdminData, type SiteSettings, type Category,
-  type ScheduleStatus, type ScheduleEntry,
+  type ScheduleStatus, type ScheduleEntry, type ExtraService,
 } from '../data/adminStore'
 
 export const Route = createFileRoute('/admin')({ component: AdminPanel })
@@ -30,7 +31,7 @@ const ADMIN_USERS: { email: string; password: string; name: string; role: Role }
 ]
 const SESSION_KEY = 'craftnest_admin_auth'
 
-type Tab = 'dashboard' | 'jewellery' | 'gifts' | 'painting' | 'gallery' | 'hero' | 'media' | 'schedule' | 'settings' | 'guide'
+type Tab = 'dashboard' | 'jewellery' | 'gifts' | 'painting' | 'gallery' | 'hero' | 'media' | 'schedule' | 'extras' | 'settings' | 'guide'
 
 const BADGES = ['Bestseller','Popular','New','Custom','Bridal','Festival','Traditional','Adults','Kids','Limited']
 const GALLERY_CATS = ['events','arts','other'] as const
@@ -368,7 +369,7 @@ function LoginScreen({ onLogin }: { onLogin: (name: string) => void }) {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4"
-      style={{ background:'radial-gradient(ellipse at 30% 40%,#0A2E1A 0%,#04140E 60%,#020C08 100%)' }}>
+      style={{ background:'radial-gradient(ellipse at 30% 40%,#1A1A2E 0%,#0A0A14 60%,#060610 100%)' }}>
       <div className={`relative w-full max-w-[380px] rounded-3xl border border-[#C9A84C]/15 shadow-2xl ${shaking ? 'animate-[shake_0.4s_ease]' : ''}`}
         style={{ background:'linear-gradient(160deg,#061A0F 0%,#091E13 50%,#0A2318 100%)' }}>
         <div className="p-8 sm:p-10">
@@ -418,7 +419,7 @@ function LoginScreen({ onLogin }: { onLogin: (name: string) => void }) {
 
 function StatCard({ icon: Icon, label, value, sub, color }: { icon: React.ElementType; label: string; value: number; sub?: string; color: string }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 hover:border-[#C9A84C]/25 transition-all" style={{ background:'rgba(10,35,24,0.8)' }}>
+    <div className="relative overflow-hidden rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 hover:border-[#C9A84C]/25 transition-all" style={{ background:'rgba(20,20,28,0.88)' }}>
       <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full opacity-5" style={{ background:`radial-gradient(circle,${color},transparent)` }}/>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -462,7 +463,7 @@ function Dashboard({ data, onNavigate, role }: { data: AdminData; onNavigate: (t
           { label:'Live / Visible', value:visible,  color:'#5DBEA3' },
           { label:'Featured',       value:featured, color:'#E8C96B' },
         ].map(({ label, value, color }) => (
-          <div key={label} className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5" style={{ background:'rgba(10,35,24,0.8)' }}>
+          <div key={label} className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5" style={{ background:'rgba(20,20,28,0.88)' }}>
             <p className="text-[9px] tracking-[0.18em] uppercase font-bold mb-1 truncate" style={{ color }}>{label}</p>
             <p className="text-2xl sm:text-3xl font-serif text-white">{value}</p>
           </div>
@@ -589,7 +590,7 @@ function ProductsTab({ category, data, role, onAdd, onEdit, onDelete, onToggleV,
                 onDragEnd={() => setDragId(null)}
                 onDragOver={e => handleDragOver(e, product.id)}
                 className={`group relative flex flex-col rounded-2xl border overflow-hidden transition-all ${!product.visible ? 'opacity-50' : ''} ${dragId===product.id ? 'opacity-30 scale-95' : ''} border-[#C9A84C]/10 hover:border-[#C9A84C]/30`}
-                style={{ background:'rgba(10,35,24,0.8)' }}
+                style={{ background:'rgba(20,20,28,0.88)' }}
               >
                 {/* Drag handle */}
                 <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing">
@@ -600,7 +601,7 @@ function ProductsTab({ category, data, role, onAdd, onEdit, onDelete, onToggleV,
 
                 <div className="relative h-40 sm:h-44 overflow-hidden">
                   <img src={product.img} alt={product.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#04140E]/80 to-transparent"/>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#09090E]/80 to-transparent"/>
                   <span className={`absolute top-2.5 left-2.5 text-[8px] font-bold tracking-[0.1em] uppercase px-2 py-0.5 rounded-full ${BADGE_COLORS[product.badge]??'bg-[#C9A84C] text-[#04140E]'}`}>{product.badge}</span>
                   {product.featured && <span className="absolute top-2.5 left-16 text-[8px] font-bold px-2 py-0.5 rounded-full bg-[#C9A84C]/20 border border-[#C9A84C]/40 text-[#E8C96B] whitespace-nowrap">⭐ Featured</span>}
                   <span className={`absolute bottom-2.5 left-2.5 text-[8px] font-bold px-2 py-0.5 rounded-full border ${stockOpt.color}`}>{stockOpt.label}</span>
@@ -673,7 +674,7 @@ function GalleryTab({ data, role, onAdd, onDelete }: { data: AdminData; role: Ro
           {items.map(item => (
             <div key={item.id} className="group relative rounded-2xl overflow-hidden border border-[#C9A84C]/10 hover:border-[#C9A84C]/30 transition-all aspect-square">
               <img src={item.src} alt={item.caption} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#04140E]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#09090E]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
               <span className="absolute top-2 left-2 text-[7px] font-bold tracking-[0.1em] uppercase px-1.5 py-0.5 rounded-full bg-black/50 text-white/60 backdrop-blur-sm capitalize">{item.category}</span>
               <div className="absolute bottom-0 left-0 right-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                 {item.caption && <p className="text-[9px] text-white/80 font-medium mb-1 line-clamp-1">{item.caption}</p>}
@@ -723,7 +724,7 @@ function HeroTab({ data, onAdd, onRemove, onReorder }: { data: AdminData; onAdd:
         <p className="text-xs text-white/35">{data.heroImages.length} images · Drag to reorder</p>
       </div>
 
-      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 space-y-3" style={{ background:'rgba(10,35,24,0.8)' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 space-y-3" style={{ background:'rgba(20,20,28,0.88)' }}>
         <label className="block text-[10px] tracking-[0.2em] text-[#C9A84C]/60 uppercase font-bold">Add Image</label>
         <div className="flex flex-col sm:flex-row gap-2">
           <input type="url" value={newUrl} onChange={e => setNewUrl(e.target.value)} placeholder="Paste Cloudinary URL…"
@@ -751,7 +752,7 @@ function HeroTab({ data, onAdd, onRemove, onReorder }: { data: AdminData; onAdd:
             onDragOver={e => handleDragOver(e, idx)}
             className={`group relative rounded-2xl overflow-hidden border border-[#C9A84C]/10 hover:border-[#C9A84C]/30 transition-all aspect-square cursor-grab active:cursor-grabbing ${dragIdx===idx ? 'opacity-30 scale-95' : ''}`}>
             <img src={url} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#04140E]/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"/>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#09090E]/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"/>
             <div className="absolute top-2 left-2 w-5 h-5 rounded-md bg-black/50 backdrop-blur-sm flex items-center justify-center">
               <GripVertical className="w-3 h-3 text-white/60"/>
             </div>
@@ -851,7 +852,7 @@ function MediaTab({ onGoSettings }: { onGoSettings: () => void }) {
         onDrop={onDrop}
         onClick={() => fileRef.current?.click()}
         className={`relative flex flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed transition-all duration-200 cursor-pointer min-h-[180px] sm:min-h-[220px] ${dragging ? 'border-[#C9A84C] bg-[#C9A84C]/8 scale-[1.01]' : 'border-[#C9A84C]/20 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5'}`}
-        style={{ background: dragging ? 'rgba(201,168,76,0.06)' : 'rgba(10,35,24,0.6)' }}
+        style={{ background: dragging ? 'rgba(201,168,76,0.06)' : 'rgba(14,14,20,0.62)' }}
       >
         <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border transition-all ${dragging ? 'border-[#C9A84C]/60 bg-[#C9A84C]/15' : 'border-[#C9A84C]/20 bg-[#C9A84C]/5'}`}>
           {dragging
@@ -888,7 +889,7 @@ function MediaTab({ onGoSettings }: { onGoSettings: () => void }) {
         <div className="space-y-2">
           {items.map((item, idx) => (
             <div key={idx} className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${item.status==='done' ? 'border-emerald-600/20 bg-emerald-950/20' : item.status==='error' ? 'border-red-500/20 bg-red-950/20' : 'border-[#C9A84C]/10'}`}
-              style={item.status!=='done' && item.status!=='error' ? { background:'rgba(10,35,24,0.8)' } : {}}>
+              style={item.status!=='done' && item.status!=='error' ? { background:'rgba(20,20,28,0.88)' } : {}}>
               {/* Preview */}
               <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-white/10">
                 <img src={item.previewUrl} alt="" className="w-full h-full object-cover"/>
@@ -949,7 +950,7 @@ function MediaTab({ onGoSettings }: { onGoSettings: () => void }) {
       )}
 
       {items.length === 0 && (
-        <div className="rounded-2xl border border-[#C9A84C]/8 p-4" style={{ background:'rgba(10,35,24,0.5)' }}>
+        <div className="rounded-2xl border border-[#C9A84C]/8 p-4" style={{ background:'rgba(14,14,20,0.52)' }}>
           <p className="text-[10px] tracking-[0.2em] text-[#C9A84C]/40 uppercase font-bold mb-3">How it works</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
@@ -1153,7 +1154,7 @@ function ScheduleTab({ data, show, onRefresh }: { data: AdminData; show: (msg:st
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,560px)_380px] gap-4 items-start">
 
         {/* ── Calendar ── */}
-        <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5" style={{ background:'rgba(10,35,24,0.8)' }}>
+        <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5" style={{ background:'rgba(20,20,28,0.88)' }}>
 
           {/* Month nav + Feature 1: Today button */}
           <div className="flex items-center justify-between mb-3">
@@ -1288,7 +1289,7 @@ function ScheduleTab({ data, show, onRefresh }: { data: AdminData; show: (msg:st
 
         {/* ── Day Panel ── */}
         {selDate ? (
-          <div className="rounded-2xl border border-[#C9A84C]/15 p-4 sm:p-5 space-y-4 sticky top-20" style={{background:'rgba(10,35,24,0.95)'}}>
+          <div className="rounded-2xl border border-[#C9A84C]/15 p-4 sm:p-5 space-y-4 sticky top-20" style={{background:'rgba(14,14,20,0.97)'}}>
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-[9px] tracking-[0.2em] text-[#C9A84C]/50 uppercase font-bold mb-0.5">Selected Date</p>
@@ -1378,7 +1379,7 @@ function ScheduleTab({ data, show, onRefresh }: { data: AdminData; show: (msg:st
 
       {/* Feature 5: Upcoming bookings panel */}
       {upcoming.length > 0 && (
-        <div className="rounded-2xl border border-[#C9A84C]/10 p-4" style={{background:'rgba(10,35,24,0.7)'}}>
+        <div className="rounded-2xl border border-[#C9A84C]/10 p-4" style={{background:'rgba(14,14,20,0.72)'}}>
           <p className="text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-3">📋 Upcoming Busy / Booked Dates</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
             {upcoming.map(e => {
@@ -1423,7 +1424,7 @@ function SettingsTab({ data, show }: { data: AdminData; show: (msg:string, t?: '
       </div>
 
       {/* Announcement Banner */}
-      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(10,35,24,0.8)' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(20,20,28,0.88)' }}>
         <div className="flex items-center gap-3">
           <Megaphone className="w-4 h-4 text-amber-400 shrink-0"/>
           <span className="text-sm font-bold text-white flex-1 min-w-0">Announcement Banner</span>
@@ -1445,7 +1446,7 @@ function SettingsTab({ data, show }: { data: AdminData; show: (msg:string, t?: '
       </div>
 
       {/* WhatsApp */}
-      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(10,35,24,0.8)' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(20,20,28,0.88)' }}>
         <div className="flex items-center gap-3">
           <MessageCircle className="w-4 h-4 text-[#25D366] shrink-0"/>
           <span className="text-sm font-bold text-white">WhatsApp Number</span>
@@ -1457,7 +1458,7 @@ function SettingsTab({ data, show }: { data: AdminData; show: (msg:string, t?: '
       </div>
 
       {/* Social Links */}
-      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(10,35,24,0.8)' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(20,20,28,0.88)' }}>
         <div className="flex items-center gap-3">
           <Link className="w-4 h-4 text-[#C9A84C] shrink-0"/>
           <span className="text-sm font-bold text-white">Social Links</span>
@@ -1479,7 +1480,7 @@ function SettingsTab({ data, show }: { data: AdminData; show: (msg:string, t?: '
       </div>
 
       {/* Cloudinary */}
-      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(10,35,24,0.8)' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/10 p-4 sm:p-5 space-y-3" style={{ background:'rgba(20,20,28,0.88)' }}>
         <div className="flex items-center gap-3">
           <Upload className="w-4 h-4 text-[#C9A84C] shrink-0"/>
           <span className="text-sm font-bold text-white">Image Upload (Cloudinary)</span>
@@ -1788,7 +1789,7 @@ function GuideSection({ section, expanded, onToggle }: { section: GuideSection; 
   return (
     <div
       className={`rounded-2xl border transition-all duration-200 overflow-hidden ${expanded ? 'border-[#C9A84C]/30' : 'border-white/5 hover:border-white/10'}`}
-      style={{ background: expanded ? 'rgba(10,35,24,0.95)' : 'rgba(10,35,24,0.5)' }}
+      style={{ background: expanded ? 'rgba(14,14,20,0.97)' : 'rgba(14,14,20,0.52)' }}
     >
       {/* Header */}
       <button
@@ -1879,7 +1880,7 @@ function MockSidebar() {
 function MockProductCard({ featured, hidden, badge }: { featured?: boolean; hidden?: boolean; badge?: string }) {
   return (
     <div className={`rounded-xl overflow-hidden border w-32 shrink-0 ${hidden ? 'opacity-40 border-white/10' : 'border-[#C9A84C]/20'}`} style={{ background:'rgba(10,35,24,0.9)' }}>
-      <div className="relative h-16 bg-gradient-to-br from-[#0A3020] to-[#061A0F] flex items-center justify-center">
+      <div className="relative h-16 bg-gradient-to-br from-[#1A1A28] to-[#0D0D18] flex items-center justify-center">
         <ImageIcon className="w-5 h-5 text-white/10"/>
         {badge && <span className="absolute top-1 left-1 text-[6px] font-bold px-1.5 py-0.5 rounded-full bg-[#C9A84C] text-[#04140E]">{badge}</span>}
         {featured && <span className="absolute top-1 right-1 text-[7px]">⭐</span>}
@@ -2016,7 +2017,7 @@ function SectionVisual({ id }: { id: string }) {
         </div>
         <div className="grid grid-cols-4 gap-1">
           {(['events','arts','arts','other','events','arts','other','events'] as const).map((cat,i)=>(
-            <div key={i} className="aspect-square rounded-lg bg-gradient-to-br from-[#0A3020] to-[#061A0F] flex items-center justify-center relative overflow-hidden border border-[#C9A84C]/10">
+            <div key={i} className="aspect-square rounded-lg bg-gradient-to-br from-[#1A1A28] to-[#0D0D18] flex items-center justify-center relative overflow-hidden border border-[#C9A84C]/10">
               <ImageIcon className="w-2.5 h-2.5 text-white/10"/>
               <span className="absolute bottom-0 left-0 right-0 text-[4px] text-center text-white/25 bg-black/30 capitalize py-0.5">{cat}</span>
             </div>
@@ -2043,7 +2044,7 @@ function SectionVisual({ id }: { id: string }) {
         </div>
         <div className="grid grid-cols-4 gap-1">
           {[1,2,3,4].map(n=>(
-            <div key={n} className={`aspect-square rounded-lg bg-gradient-to-br from-[#0A3020] to-[#061A0F] relative flex items-center justify-center border ${n===1?'border-[#C9A84C]/30':'border-white/5'}`}>
+            <div key={n} className={`aspect-square rounded-lg bg-gradient-to-br from-[#1A1A28] to-[#0D0D18] relative flex items-center justify-center border ${n===1?'border-[#C9A84C]/30':'border-white/5'}`}>
               <Home className="w-3 h-3 text-white/10"/>
               <span className="absolute top-0.5 right-0.5 text-[5px] font-bold text-white/30">#{n}</span>
               <GripVertical className="absolute top-0.5 left-0.5 w-2 h-2 text-white/20"/>
@@ -2281,6 +2282,239 @@ function SectionVisual({ id }: { id: string }) {
   return null
 }
 
+// ── Extra Services Tab ────────────────────────────────────────────────────────
+
+function ExtraServicesTab({ data, show, onRefresh }: { data: AdminData; show: (msg:string, t?:'success'|'error') => void; onRefresh: () => void }) {
+  const [selId,     setSelId]     = useState<string|null>(null)
+  const [uploading, setUploading] = useState(false)
+  const fileRef = useRef<HTMLInputElement>(null)
+  const [form, setForm] = useState<Omit<ExtraService,'id'>>({
+    name:'', emoji:'🎨', price:'', description:'', img:'', whatsappMsg:'', visible:true,
+  })
+
+  const services = data.extraServices ?? []
+  const template = (data.extraServicesTemplate ?? 'mosaic') as 'mosaic'|'strips'|'showcase'
+  const isNew    = selId === '__new__'
+
+  const startAdd  = () => { setSelId('__new__'); setForm({ name:'', emoji:'🎨', price:'', description:'', img:'', whatsappMsg:'', visible:true }) }
+  const startEdit = (s: ExtraService) => { setSelId(s.id); setForm({ name:s.name, emoji:s.emoji, price:s.price, description:s.description, img:s.img, whatsappMsg:s.whatsappMsg, visible:s.visible }) }
+
+  const handleSave = () => {
+    if (!form.name.trim()) { show('Service name is required', 'error'); return }
+    if (isNew) { addExtraService(form) } else if (selId) { updateExtraService({ ...form, id: selId }) }
+    onRefresh(); show('Service saved'); setSelId(null)
+  }
+
+  const handleDelete = (id: string) => {
+    deleteExtraService(id); onRefresh(); show('Service removed')
+    if (selId === id) setSelId(null)
+  }
+
+  const handleImg = async (file: File) => {
+    setUploading(true)
+    try { const url = await uploadToCloudinary(file); setForm(f => ({ ...f, img: url })); show('Image uploaded') }
+    catch { show('Upload failed', 'error') }
+    setUploading(false)
+  }
+
+  const pickTemplate = (t: 'mosaic'|'strips'|'showcase') => {
+    setExtraServicesTemplate(t); onRefresh(); show(`Layout changed to ${t}`)
+  }
+
+  const TEMPLATES: { id:'mosaic'|'strips'|'showcase'; label:string; desc:string; preview:React.ReactNode }[] = [
+    {
+      id:'mosaic', label:'Mosaic Grid', desc:'Bento-style — featured card large, others smaller. Perfect for visual services.',
+      preview:(
+        <div className="flex gap-1.5 h-20">
+          <div className="flex-[2] rounded-xl flex items-center justify-center text-[10px] text-white/20 border border-white/8" style={{background:'rgba(255,255,255,0.04)'}}>FEATURED</div>
+          <div className="flex-1 flex flex-col gap-1.5">
+            <div className="flex-1 rounded-lg border border-white/6" style={{background:'rgba(255,255,255,0.025)'}}/>
+            <div className="flex-1 rounded-lg border border-white/6" style={{background:'rgba(255,255,255,0.025)'}}/>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id:'strips', label:'Alternating Strips', desc:'Full-width rows — image and text alternate left/right with a gold divider.',
+      preview:(
+        <div className="space-y-1.5 h-20 flex flex-col justify-between">
+          {[0,1,2].map(i => (
+            <div key={i} className={`flex gap-1.5 flex-1 ${i%2===1?'flex-row-reverse':''}`}>
+              <div className="flex-[3] rounded-lg border border-white/8" style={{background:'rgba(255,255,255,0.04)'}}/>
+              <div className="flex-[2] rounded-lg border border-white/6 flex items-center justify-center px-1.5" style={{background:'rgba(255,255,255,0.02)'}}>
+                <div className="space-y-1 w-full">
+                  <div className="h-[3px] rounded bg-white/15 w-2/3"/>
+                  <div className="h-[2px] rounded bg-white/7 w-full"/>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      id:'showcase', label:'Showcase List', desc:'Numbered accordion rows — click to reveal image + details. Elegant and minimal.',
+      preview:(
+        <div className="space-y-2 h-20 flex flex-col justify-between">
+          {[1,2,3].map(i => (
+            <div key={i} className="flex items-center gap-2 border-b border-white/6 pb-1.5">
+              <span className="text-[9px] font-black w-4 shrink-0 tabular-nums" style={{color:'rgba(201,168,76,0.45)'}}>0{i}</span>
+              <div className="flex-1 h-[3px] rounded" style={{background:'rgba(255,255,255,0.10)'}}/>
+              <div className="h-[3px] w-5 rounded" style={{background:'rgba(201,168,76,0.25)'}}/>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+  ]
+
+  return (
+    <div className="space-y-6 w-full">
+      {/* Header */}
+      <div>
+        <h2 className="font-serif text-xl sm:text-2xl text-white mb-1">Extra Services</h2>
+        <p className="text-xs text-white/35 leading-relaxed">Add custom services that appear on your website below the main three. Choose a layout template, add services, and they go live instantly.</p>
+      </div>
+
+      {/* Template Picker */}
+      <div>
+        <p className="text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold mb-3">Choose Display Layout</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {TEMPLATES.map(t => (
+            <button key={t.id} type="button" onClick={() => pickTemplate(t.id)} className="text-left p-4 rounded-2xl border transition-all cursor-pointer group" style={{ background: template===t.id ? 'rgba(201,168,76,0.07)' : 'rgba(255,255,255,0.02)', borderColor: template===t.id ? 'rgba(201,168,76,0.40)' : 'rgba(255,255,255,0.06)' }}>
+              <div className="mb-3">{t.preview}</div>
+              <div className="flex items-center gap-2 mb-1">
+                <p className="text-[11px] font-bold text-white">{t.label}</p>
+                {template===t.id && <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full" style={{background:'rgba(201,168,76,0.18)',color:'#C9A84C'}}>ACTIVE</span>}
+              </div>
+              <p className="text-[10px] text-white/30 leading-relaxed">{t.desc}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Services List + Edit Panel */}
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-4 items-start">
+        {/* Left: service list */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <p className="text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold">{services.length} Service{services.length!==1?'s':''}</p>
+            <button onClick={startAdd} className="flex items-center gap-1.5 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.18em] uppercase px-4 py-2 rounded-full transition-all hover:scale-105 cursor-pointer shadow-[0_4px_14px_rgba(201,168,76,0.25)]">
+              <Plus className="w-3.5 h-3.5"/> Add Service
+            </button>
+          </div>
+
+          {services.length === 0 ? (
+            <div className="rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 p-12 text-center" style={{borderColor:'rgba(201,168,76,0.10)'}}>
+              <Sparkles className="w-8 h-8" style={{color:'rgba(201,168,76,0.20)'}}/>
+              <p className="text-sm font-serif text-white/25">No extra services yet</p>
+              <p className="text-[11px] text-white/18 max-w-[200px] leading-relaxed">Click "Add Service" to add new offerings that will appear on your website below the main three services.</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {services.map(svc => (
+                <div key={svc.id} className="flex items-center gap-3 p-3 rounded-2xl border transition-all" style={{ background: selId===svc.id ? 'rgba(201,168,76,0.06)' : 'rgba(255,255,255,0.02)', borderColor: selId===svc.id ? 'rgba(201,168,76,0.25)' : 'rgba(255,255,255,0.05)', opacity: svc.visible ? 1 : 0.45 }}>
+                  <div className="w-11 h-11 rounded-xl shrink-0 overflow-hidden border border-white/8 flex items-center justify-center text-xl" style={{background:'rgba(255,255,255,0.04)'}}>
+                    {svc.img ? <img src={svc.img} alt={svc.name} className="w-full h-full object-cover"/> : svc.emoji}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-bold text-white truncate">{svc.name || 'Untitled'}</p>
+                      {svc.price && <span className="text-[9px] font-bold shrink-0" style={{color:'rgba(201,168,76,0.70)'}}>{svc.price}</span>}
+                    </div>
+                    <p className="text-[10px] text-white/28 truncate mt-0.5">{svc.description || 'No description'}</p>
+                  </div>
+                  <div className="flex items-center gap-0.5 shrink-0">
+                    <button onClick={() => { updateExtraService({...svc, visible:!svc.visible}); onRefresh() }} className="p-1.5 rounded-lg text-white/22 hover:text-white cursor-pointer transition-colors" title={svc.visible?'Hide':'Show'}>
+                      {svc.visible ? <Eye className="w-3.5 h-3.5"/> : <EyeOff className="w-3.5 h-3.5"/>}
+                    </button>
+                    <button onClick={() => startEdit(svc)} className="p-1.5 rounded-lg text-white/22 hover:text-[#C9A84C] cursor-pointer transition-colors">
+                      <Pencil className="w-3.5 h-3.5"/>
+                    </button>
+                    <button onClick={() => handleDelete(svc.id)} className="p-1.5 rounded-lg text-white/22 hover:text-red-400 cursor-pointer transition-colors">
+                      <Trash2 className="w-3.5 h-3.5"/>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Right: edit panel */}
+        {selId ? (
+          <div className="rounded-2xl border p-4 sm:p-5 space-y-4 xl:sticky xl:top-20" style={{background:'rgba(14,14,20,0.97)', borderColor:'rgba(201,168,76,0.15)'}}>
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] tracking-[0.18em] text-[#C9A84C]/60 uppercase font-bold">{isNew ? 'New Service' : 'Edit Service'}</p>
+              <button onClick={() => setSelId(null)} className="p-1.5 text-white/25 hover:text-white cursor-pointer rounded-lg transition-colors"><X className="w-4 h-4"/></button>
+            </div>
+
+            <div className="grid grid-cols-[1fr_72px] gap-2">
+              <div>
+                <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Name</label>
+                <input value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} placeholder="e.g. Balloon Art" className="w-full rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/18 focus:outline-none transition-colors" style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(201,168,76,0.15)'}} onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
+              </div>
+              <div>
+                <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Emoji</label>
+                <input value={form.emoji} onChange={e=>setForm(f=>({...f,emoji:e.target.value}))} maxLength={4} className="w-full rounded-xl px-2 py-2.5 text-white/90 text-center text-xl focus:outline-none transition-colors" style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(201,168,76,0.15)'}} onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Price <span className="text-white/18 normal-case tracking-normal font-normal">(e.g. From ₹500)</span></label>
+              <input value={form.price} onChange={e=>setForm(f=>({...f,price:e.target.value}))} placeholder="From ₹500" className="w-full rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/18 focus:outline-none transition-colors" style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(201,168,76,0.15)'}} onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
+            </div>
+
+            <div>
+              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Description</label>
+              <textarea value={form.description} onChange={e=>setForm(f=>({...f,description:e.target.value}))} rows={2} placeholder="Short description shown on the website..." className="w-full rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/18 focus:outline-none resize-none transition-colors" style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(201,168,76,0.15)'}} onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
+            </div>
+
+            <div>
+              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">Photo <span className="text-white/18 normal-case tracking-normal font-normal">(optional)</span></label>
+              {form.img ? (
+                <div className="relative h-28 rounded-xl overflow-hidden border border-white/8 group">
+                  <img src={form.img} alt="" className="w-full h-full object-cover"/>
+                  <button onClick={()=>setForm(f=>({...f,img:''}))} className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/65 text-white/70 hover:text-white flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
+                    <X className="w-3 h-3"/>
+                  </button>
+                </div>
+              ) : (
+                <button onClick={()=>fileRef.current?.click()} disabled={uploading} className="w-full h-20 rounded-xl border-2 border-dashed flex items-center justify-center gap-2 text-xs transition-all cursor-pointer" style={{borderColor:'rgba(255,255,255,0.08)',color:'rgba(255,255,255,0.22)'}}>
+                  {uploading ? <RefreshCw className="w-4 h-4 animate-spin"/> : <><Upload className="w-4 h-4"/> Upload Photo</>}
+                </button>
+              )}
+              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e=>e.target.files?.[0] && handleImg(e.target.files[0])}/>
+            </div>
+
+            <div>
+              <label className="block text-[10px] tracking-[0.18em] text-[#C9A84C]/55 uppercase font-bold mb-1.5">WhatsApp Enquiry Message</label>
+              <input value={form.whatsappMsg} onChange={e=>setForm(f=>({...f,whatsappMsg:e.target.value}))} placeholder="Hi! I'd like to know about Balloon Art..." className="w-full rounded-xl px-3 py-2.5 text-white/90 text-sm placeholder-white/18 focus:outline-none transition-colors" style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(201,168,76,0.15)'}} onFocus={e=>e.target.style.borderColor='rgba(201,168,76,0.45)'} onBlur={e=>e.target.style.borderColor='rgba(201,168,76,0.15)'}/>
+            </div>
+
+            <div className="flex items-center justify-between p-3 rounded-xl border" style={{background:'rgba(255,255,255,0.02)',borderColor:'rgba(255,255,255,0.06)'}}>
+              <p className="text-[11px] text-white/55 font-medium">Visible on website</p>
+              <button type="button" onClick={()=>setForm(f=>({...f,visible:!f.visible}))} className="relative w-10 h-5 rounded-full transition-all cursor-pointer" style={{background:form.visible?'#10B981':'rgba(255,255,255,0.12)'}}>
+                <span className="absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all" style={{left:form.visible?'calc(100% - 18px)':'2px'}}/>
+              </button>
+            </div>
+
+            <button onClick={handleSave} className="w-full flex items-center justify-center gap-2 bg-[#C9A84C] hover:bg-[#E8C96B] text-[#04140E] font-bold text-[10px] tracking-[0.18em] uppercase py-3 rounded-full transition-all hover:scale-[1.02] cursor-pointer shadow-[0_4px_16px_rgba(201,168,76,0.28)]">
+              <CheckCircle2 className="w-4 h-4"/> Save Service
+            </button>
+          </div>
+        ) : (
+          <div className="rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 p-10 text-center xl:min-h-[200px]" style={{borderColor:'rgba(201,168,76,0.09)'}}>
+            <Layers className="w-7 h-7" style={{color:'rgba(201,168,76,0.18)'}}/>
+            <p className="text-sm font-serif text-white/22">Select a service to edit</p>
+            <p className="text-[11px] text-white/15 max-w-[180px] leading-relaxed">Or click "Add Service" to create a new one.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ── Guide Tab ─────────────────────────────────────────────────────────────────
 
 function GuideTab({ onGoMedia, onGoSettings }: { onGoMedia: () => void; onGoSettings: () => void }) {
@@ -2300,7 +2534,7 @@ function GuideTab({ onGoMedia, onGoSettings }: { onGoMedia: () => void; onGoSett
   return (
     <div className="space-y-5 w-full">
       {/* Header */}
-      <div className="rounded-2xl border border-[#C9A84C]/20 p-5 flex flex-col sm:flex-row items-start gap-4" style={{ background:'linear-gradient(135deg,rgba(10,35,24,0.95),rgba(15,50,30,0.9))' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/20 p-5 flex flex-col sm:flex-row items-start gap-4" style={{ background:'linear-gradient(135deg,rgba(14,14,20,0.97),rgba(20,20,28,0.92))' }}>
         <div className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 border border-[#C9A84C]/25" style={{ background:'rgba(201,168,76,0.1)' }}>
           <BookOpen className="w-5 h-5 text-[#C9A84C]"/>
         </div>
@@ -2330,7 +2564,7 @@ function GuideTab({ onGoMedia, onGoSettings }: { onGoMedia: () => void; onGoSett
       </div>
 
       {/* ── Visual Quick-Start Flow ── */}
-      <div className="rounded-2xl border border-[#C9A84C]/15 p-4 space-y-3" style={{ background:'rgba(10,35,24,0.7)' }}>
+      <div className="rounded-2xl border border-[#C9A84C]/15 p-4 space-y-3" style={{ background:'rgba(14,14,20,0.72)' }}>
         <p className="text-[10px] tracking-[0.2em] text-[#C9A84C]/60 uppercase font-bold">Visual Walkthrough — How the admin panel works</p>
 
         {/* Step 1 — Sidebar navigation */}
@@ -2503,12 +2737,13 @@ function AdminPanel() {
     { id:'hero'      as Tab, label:'Hero Carousel',  icon:Home,      sub:`${data.heroImages.length} images` },
     { id:'media'     as Tab, label:'Image Converter',icon:ImageIcon2 },
     { id:'schedule'  as Tab, label:'Schedule',        icon:CalendarDays },
+    { id:'extras'    as Tab, label:'Extra Services',  icon:Sparkles, ownerOnly:true },
     { id:'settings'  as Tab, label:'Settings',       icon:Settings,  ownerOnly:true },
     { id:'guide'     as Tab, label:'Starter Guide',  icon:BookOpen },
   ] as NavItem[]).filter(n => !n.ownerOnly || userRole === 'owner')
 
   return (
-    <div className="min-h-screen" style={{ background:'#03100A' }}>
+    <div className="min-h-screen" style={{ background:'#09090E' }}>
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 bg-black/60 lg:hidden" onClick={() => setSidebarOpen(false)}/>
@@ -2517,7 +2752,7 @@ function AdminPanel() {
       {/* ── Sidebar — always fixed, never scrolls ── */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 flex flex-col w-56 sm:w-60 border-r border-[#C9A84C]/10 transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
-        style={{ background:'linear-gradient(180deg,#061A0F 0%,#04140E 100%)' }}
+        style={{ background:'linear-gradient(180deg,#0D0D16 0%,#080812 100%)' }}
       >
         {/* Logo */}
         <div className="flex items-center gap-2.5 px-4 py-4 border-b border-[#C9A84C]/10 shrink-0">
@@ -2583,7 +2818,7 @@ function AdminPanel() {
         {/* Top bar — sticky inside scrolling column */}
         <header
           className="flex items-center gap-3 px-4 sm:px-6 py-3.5 border-b border-[#C9A84C]/10 sticky top-0 z-30 shrink-0"
-          style={{ background:'rgba(3,16,10,0.97)', backdropFilter:'blur(12px)' }}
+          style={{ background:'rgba(9,9,15,0.97)', backdropFilter:'blur(12px)' }}
         >
           <button onClick={() => setSidebarOpen(true)}
             className="lg:hidden p-2 rounded-xl border border-white/10 text-white/40 hover:text-white cursor-pointer shrink-0">
@@ -2635,6 +2870,8 @@ function AdminPanel() {
 
           {tab === 'schedule' && <ScheduleTab data={data} show={show} onRefresh={refresh}/>}
 
+          {tab === 'extras' && userRole === 'owner' && <ExtraServicesTab data={data} show={show} onRefresh={refresh}/>}
+
           {tab === 'settings' && userRole === 'owner' && <SettingsTab data={data} show={show}/>}
 
           {tab === 'guide' && <GuideTab onGoMedia={() => setTab('media')} onGoSettings={() => setTab('settings')}/>}
@@ -2667,3 +2904,4 @@ function AdminPanel() {
     </div>
   )
 }
+

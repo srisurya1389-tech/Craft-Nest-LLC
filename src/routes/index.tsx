@@ -196,6 +196,144 @@ const GALLERY_ITEMS: { id: number; src: string; category: Exclude<GalleryCat, 'a
   { id: 159, src: 'https://res.cloudinary.com/diancfp03/image/upload/v1781812665/WhatsApp_Image_2026-06-18_at_5.58.13_PM_jkwvb4.jpg',   category: 'arts', caption: 'Handpainted Earrings' },
 ]
 
+// ── Extra Services Public Section ─────────────────────────────────────────────
+type ExtraServicePublic = { id:string; name:string; emoji:string; price:string; description:string; img:string; whatsappMsg:string; visible:boolean }
+
+function ExtraServicesSection() {
+  const [services, setServices] = useState<ExtraServicePublic[]>([])
+  const [template, setTemplate] = useState<'mosaic'|'strips'|'showcase'>('mosaic')
+  const [openId,   setOpenId]   = useState<string|null>(null)
+  const [waNum,    setWaNum]    = useState('14704527988')
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('craftnest_admin_data')
+      if (!raw) return
+      const d = JSON.parse(raw)
+      setServices((d.extraServices ?? []).filter((s: ExtraServicePublic) => s.visible))
+      setTemplate(d.extraServicesTemplate ?? 'mosaic')
+      if (d.settings?.whatsappNumber) setWaNum(d.settings.whatsappNumber)
+    } catch {}
+  }, [])
+
+  if (services.length === 0) return null
+
+  const wa = (svc: ExtraServicePublic) =>
+    `https://wa.me/${waNum}?text=${encodeURIComponent(svc.whatsappMsg || `Hi! I'd like to know more about ${svc.name}`)}`
+
+  // Mosaic — Bento Grid
+  if (template === 'mosaic') return (
+    <section id="extra-services" className="relative py-16 md:py-24 px-4 sm:px-6 md:px-12 lg:px-16 border-b border-[#C9A84C]/20" style={{background:'radial-gradient(ellipse 80% 80% at 50% 100%, #0A2E1A 0%, #040D0A 65%, #020808 100%)'}}>
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.25em] text-[#C9A84C] uppercase mb-3 block">OUR OFFERINGS</span>
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-[42px] text-white font-medium tracking-wide">More Ways to Celebrate</h2>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 auto-rows-[180px] md:auto-rows-[200px] gap-3 md:gap-4">
+          {services.map((svc, i) => (
+            <a key={svc.id} href={wa(svc)} target="_blank" rel="noopener noreferrer"
+              className={`group relative overflow-hidden rounded-2xl border border-[#C9A84C]/10 cursor-pointer transition-all duration-300 hover:border-[#C9A84C]/35 hover:shadow-[0_0_35px_rgba(201,168,76,0.14)] ${i===0?'col-span-2 row-span-2':'col-span-1'}`}
+              style={{background:'rgba(10,28,18,0.95)'}}>
+              {svc.img
+                ? <img src={svc.img} alt={svc.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-107"/>
+                : <div className="absolute inset-0 flex items-center justify-center text-5xl md:text-6xl">{svc.emoji}</div>}
+              <div className={`absolute inset-x-0 bottom-0 p-4 ${svc.img ? 'bg-gradient-to-t from-black/90 via-black/40 to-transparent' : ''}`}>
+                <div className="flex items-end justify-between gap-2">
+                  <div>
+                    <h3 className="font-serif text-white font-medium text-base md:text-lg leading-tight">{svc.name}</h3>
+                    {i===0 && svc.description && <p className="text-white/50 text-xs mt-0.5 line-clamp-2">{svc.description}</p>}
+                  </div>
+                  {svc.price && <span className="shrink-0 text-[10px] font-bold text-[#C9A84C] bg-[#C9A84C]/10 border border-[#C9A84C]/20 px-2 py-1 rounded-full">{svc.price}</span>}
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+
+  // Strips — Alternating
+  if (template === 'strips') return (
+    <section id="extra-services" className="relative border-b border-[#C9A84C]/20" style={{background:'#020808'}}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-16 md:py-24">
+        <div className="text-center mb-12">
+          <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.25em] text-[#C9A84C] uppercase mb-3 block">OUR OFFERINGS</span>
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-[42px] text-white font-medium tracking-wide">More Ways to Celebrate</h2>
+        </div>
+      </div>
+      {services.map((svc, i) => (
+        <div key={svc.id} className={`flex flex-col md:flex-row ${i%2===1?'md:flex-row-reverse':''} border-t border-[#C9A84C]/8 group`} style={{background: i%2===0 ? 'rgba(8,20,14,0.98)' : 'rgba(4,10,8,0.98)'}}>
+          <div className="w-full md:w-[55%] relative overflow-hidden" style={{minHeight:'280px'}}>
+            {svc.img
+              ? <img src={svc.img} alt={svc.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
+              : <div className="absolute inset-0 flex items-center justify-center text-7xl" style={{background:'rgba(10,30,20,0.9)'}}>{svc.emoji}</div>}
+            <div className={`absolute inset-0 ${i%2===0 ? 'bg-gradient-to-r from-transparent to-black/25' : 'bg-gradient-to-l from-transparent to-black/25'}`}/>
+          </div>
+          <div className="w-full md:w-[45%] flex items-center px-6 md:px-12 py-8">
+            <div>
+              <div className="text-4xl mb-3">{svc.emoji}</div>
+              <h3 className="font-serif text-white text-xl md:text-2xl lg:text-3xl font-medium mb-2">{svc.name}</h3>
+              {svc.description && <p className="text-white/42 text-sm leading-relaxed mb-5">{svc.description}</p>}
+              <div className="flex items-center gap-3 flex-wrap">
+                {svc.price && <span className="text-[#C9A84C] font-bold">{svc.price}</span>}
+                <a href={wa(svc)} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-[0.2em] uppercase text-[#04140E] bg-[#C9A84C] hover:bg-[#E8C96B] px-5 py-2 rounded-full transition-all hover:scale-105">
+                  Enquire Now →
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </section>
+  )
+
+  // Showcase — Numbered accordion
+  return (
+    <section id="extra-services" className="relative py-16 md:py-24 px-4 sm:px-6 md:px-12 lg:px-16 border-b border-[#C9A84C]/20" style={{background:'radial-gradient(ellipse 80% 80% at 50% 100%, #0A2E1A 0%, #040D0A 65%, #020808 100%)'}}>
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-12">
+          <span className="text-[10px] md:text-xs font-sans font-bold tracking-[0.25em] text-[#C9A84C] uppercase mb-3 block">OUR OFFERINGS</span>
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-[42px] text-white font-medium tracking-wide">More Ways to Celebrate</h2>
+        </div>
+        <div className="divide-y divide-[#C9A84C]/10">
+          {services.map((svc, i) => (
+            <div key={svc.id}>
+              <button onClick={() => setOpenId(openId===svc.id ? null : svc.id)}
+                className="w-full flex items-center gap-4 py-5 text-left cursor-pointer group">
+                <span className="text-[11px] font-black tabular-nums shrink-0 w-7" style={{color:'rgba(201,168,76,0.45)'}}>0{i+1}</span>
+                <h3 className="flex-1 font-serif text-white text-xl md:text-2xl font-medium group-hover:text-[#E8C96B] transition-colors">{svc.name}</h3>
+                {svc.price && <span className="text-[#C9A84C] font-bold text-sm shrink-0">{svc.price}</span>}
+                <span className="text-white/25 text-xl shrink-0 transition-transform duration-300" style={{transform: openId===svc.id ? 'rotate(90deg)' : 'none'}}>›</span>
+              </button>
+              {openId===svc.id && (
+                <div className="flex flex-col sm:flex-row gap-5 pb-7 pl-11 pr-2">
+                  {svc.img && (
+                    <div className="w-full sm:w-52 h-36 rounded-xl overflow-hidden shrink-0 border border-[#C9A84C]/10">
+                      <img src={svc.img} alt={svc.name} className="w-full h-full object-cover"/>
+                    </div>
+                  )}
+                  <div>
+                    {!svc.img && <div className="text-4xl mb-3">{svc.emoji}</div>}
+                    {svc.description && <p className="text-white/42 text-sm leading-relaxed mb-4">{svc.description}</p>}
+                    <a href={wa(svc)} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-[0.2em] uppercase text-[#04140E] bg-[#C9A84C] hover:bg-[#E8C96B] px-5 py-2 rounded-full transition-all hover:scale-105">
+                      Enquire Now →
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 function Home() {
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -1032,6 +1170,8 @@ function Home() {
           )}
         </div>
       </section>
+
+      <ExtraServicesSection/>
 
       {/* Our Arts & Crafts Section — Bento Masonry Gallery */}
       <section
